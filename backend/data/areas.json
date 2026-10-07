@@ -1,0 +1,7 @@
+[
+  { "area_id": "AREA-001", "area_name": "Sector 15", "city": "Noida", "pin_prefixes": ["2013"], "city_type": "Local" },
+  { "area_id": "AREA-002", "area_name": "Salt Lake", "city": "Kolkata", "pin_prefixes": ["7000"], "city_type": "Upcountry" },
+  { "area_id": "AREA-003", "area_name": "Banjara Hills", "city": "Hyderabad", "pin_prefixes": ["5000"], "city_type": "Local" },
+  { "area_id": "AREA-004", "area_name": "Connaught Place", "city": "New Delhi", "pin_prefixes": ["1100"], "city_type": "Local" },
+  { "area_id": "AREA-005", "area_name": "Andheri", "city": "Mumbai", "pin_prefixes": ["4000"], "city_type": "Local" }
+]

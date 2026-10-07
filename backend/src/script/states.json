@@ -1,0 +1,2144 @@
+{
+  "meta": {
+    "bot_name": "Roshni",
+    "company": "American Standard",
+    "default_language": "english",
+    "languages": {
+      "english": "ENGLISH",
+      "hindi": "HINDI"
+    },
+    "default_max_retries": 3,
+    "max_total_invalid": 6,
+    "max_state_visits": 10,
+    "max_depth": 40,
+    "resume_window_hours": 24,
+    "phone_pattern": "^[6-9]\\d{9}$",
+    "country_calling_code": "91",
+    "persona": "Roshni is a warm, concise voice assistant for American Standard service complaints (sanitaryware: faucets, showers, flush systems). She never invents policies, prices, visit times or ticket numbers.",
+    "lexicon": {
+      "yes": [
+        "yes",
+        "yeah",
+        "yep",
+        "yup",
+        "correct",
+        "right",
+        "sure",
+        "ok",
+        "okay",
+        "haan",
+        "han",
+        "haa",
+        "sahi",
+        "theek",
+        "thik",
+        "bilkul",
+        "exactly"
+      ],
+      "no": [
+        "no",
+        "nope",
+        "nahi",
+        "nahin",
+        "nhi",
+        "nai",
+        "wrong",
+        "galat",
+        "incorrect",
+        "not"
+      ],
+      "digit_words": {
+        "zero": 0,
+        "shunya": 0,
+        "one": 1,
+        "ek": 1,
+        "two": 2,
+        "do": 2,
+        "three": 3,
+        "teen": 3,
+        "four": 4,
+        "chaar": 4,
+        "char": 4,
+        "five": 5,
+        "paanch": 5,
+        "panch": 5,
+        "six": 6,
+        "chhe": 6,
+        "chhah": 6,
+        "seven": 7,
+        "saat": 7,
+        "eight": 8,
+        "aath": 8,
+        "nine": 9,
+        "nau": 9
+      },
+      "digit_multipliers": {
+        "double": 2,
+        "dabal": 2,
+        "triple": 3
+      },
+      "name_filler": [
+        "my",
+        "name",
+        "is",
+        "i",
+        "am",
+        "this",
+        "its",
+        "it's",
+        "the",
+        "mera",
+        "meri",
+        "naam",
+        "hai",
+        "hoon",
+        "main",
+        "mai",
+        "me",
+        "last",
+        "first",
+        "surname",
+        "full",
+        "please",
+        "ji",
+        "sir",
+        "madam",
+        "mam",
+        "speaking",
+        "myself",
+        "aur",
+        "and",
+        "yeh",
+        "ye",
+        "toh",
+        "to",
+        "hello",
+        "hi",
+        "namaste",
+        "hun",
+        "hu",
+        "hain",
+        "he",
+        "are"
+      ],
+      "not_a_name": [
+        "yes",
+        "no",
+        "haan",
+        "nahi",
+        "ok",
+        "okay",
+        "hindi",
+        "english",
+        "same",
+        "different",
+        "tap",
+        "mixer",
+        "shower",
+        "american",
+        "standard",
+        "grohe",
+        "dealer",
+        "customer",
+        "end",
+        "homeowner",
+        "contractor",
+        "plumber",
+        "architect",
+        "someone",
+        "else"
+      ],
+      "relations": [
+        "my",
+        "mera",
+        "mere",
+        "meri",
+        "brother",
+        "sister",
+        "wife",
+        "husband",
+        "father",
+        "mother",
+        "son",
+        "daughter",
+        "friend",
+        "neighbour",
+        "neighbor",
+        "uncle",
+        "aunty",
+        "aunt",
+        "cousin",
+        "bhai",
+        "behen",
+        "bhabhi",
+        "papa",
+        "mummy",
+        "mom",
+        "dad",
+        "dost",
+        "tenant",
+        "owner",
+        "landlord",
+        "driver",
+        "watchman",
+        "security",
+        "someone",
+        "somebody",
+        "koi",
+        "wala",
+        "wali",
+        "ka",
+        "ki",
+        "ke"
+      ],
+      "self_words": [
+        "me",
+        "myself",
+        "main",
+        "mai",
+        "khud",
+        "self"
+      ]
+    },
+    "messages": {
+      "invalid": {
+        "ENGLISH": [
+          "Hmm, that doesn't look like what I need.",
+          "I'm not sure that fits my question.",
+          "Let me put that another way.",
+          "I just need one detail from you to move ahead."
+        ],
+        "HINDI": [
+          "Hmm, yeh mere sawaal ka jawab nahi lag raha.",
+          "Mujhe lagta hai main apni baat theek se samjha nahi paayi.",
+          "Chaliye main ise doosre tareeke se poochti hoon.",
+          "Aage badhne ke liye mujhe bas ek jaankari chahiye."
+        ]
+      },
+      "no_input": {
+        "ENGLISH": "I didn't hear anything.",
+        "HINDI": "Mujhe kuch sunai nahi diya."
+      },
+      "off_topic": {
+        "ENGLISH": [
+          "I can only help with your service complaint, so let's get that sorted.",
+          "That's outside what I can help with on this call.",
+          "I'd love to help, but on this call I can only handle your complaint."
+        ],
+        "HINDI": [
+          "Main sirf aapki service complaint mein madad kar sakti hoon, chaliye use poora karte hain.",
+          "Yeh is call mein mere dayre se bahar hai.",
+          "Is call mein main sirf aapki complaint dekh sakti hoon."
+        ]
+      },
+      "smalltalk": {
+        "ENGLISH": "Happy to help.",
+        "HINDI": "Zaroor, main madad ke liye hoon."
+      },
+      "wait": {
+        "ENGLISH": "Sure, take your time.",
+        "HINDI": "Zaroor, aap apna samay lijiye."
+      },
+      "update": {
+        "ENGLISH": "Sure, let's update the {label}.",
+        "HINDI": "Zaroor, chaliye {label} update karte hain."
+      },
+      "recall": {
+        "ENGLISH": "Here is what I have noted: {facts}.",
+        "HINDI": "Maine yeh note kiya hai: {facts}."
+      },
+      "recall_missing": {
+        "ENGLISH": "I don't have that detail yet.",
+        "HINDI": "Abhi mere paas yeh detail nahi hai."
+      },
+      "recall_private": {
+        "ENGLISH": "I'm not able to read that out on the call.",
+        "HINDI": "Main yeh call par bata nahi sakti."
+      },
+      "warranty": {
+        "ENGLISH": "Warranty eligibility and any applicable charges will be confirmed after the technician's inspection.",
+        "HINDI": "Warranty aur agar koi charges applicable honge, woh inspection ke baad confirm kiye jayenge."
+      },
+      "end_unregistered": {
+        "ENGLISH": "Understood.",
+        "HINDI": "Theek hai."
+      },
+      "language_switched": {
+        "ENGLISH": "Sure, we will continue in English.",
+        "HINDI": "Zaroor, hum Hindi mein baat karenge."
+      },
+      "need_label": {
+        "ENGLISH": "I just need your {label} to continue.",
+        "HINDI": "Aage badhne ke liye mujhe aapka {label} chahiye."
+      }
+    },
+    "post_registration_updates": "jump"
+  },
+  "lanes": [
+    {
+      "id": "STARTUP",
+      "label": "Startup"
+    },
+    {
+      "id": "IDENTITY",
+      "label": "Identity"
+    },
+    {
+      "id": "PHONE",
+      "label": "Phone"
+    },
+    {
+      "id": "NEW_CUSTOMER",
+      "label": "New customer"
+    },
+    {
+      "id": "TICKET",
+      "label": "Ticket"
+    },
+    {
+      "id": "PRODUCT",
+      "label": "Product"
+    },
+    {
+      "id": "ADDRESS",
+      "label": "Address"
+    },
+    {
+      "id": "CONTACT",
+      "label": "Contact"
+    },
+    {
+      "id": "REGISTRATION",
+      "label": "Registration"
+    },
+    {
+      "id": "CLOSURE",
+      "label": "Closure"
+    },
+    {
+      "id": "TRANSFER",
+      "label": "Transfer"
+    },
+    {
+      "id": "INFO",
+      "label": "Info",
+      "on_demand": true
+    }
+  ],
+  "slots": {
+    "language": {
+      "type": "enum",
+      "description": "hindi, english, or other (other = unsupported language)",
+      "values": [
+        "hindi",
+        "english",
+        "other"
+      ],
+      "synonyms": {
+        "hindi": [
+          "hindi",
+          "हिंदी",
+          "हिन्दी",
+          "hinglish"
+        ],
+        "english": [
+          "english",
+          "अंग्रेज़ी",
+          "अंग्रेजी",
+          "angrezi"
+        ],
+        "other": [
+          "tamil",
+          "telugu",
+          "marathi",
+          "bengali",
+          "bangla",
+          "kannada",
+          "malayalam",
+          "gujarati",
+          "punjabi",
+          "odia",
+          "urdu",
+          "assamese",
+          "nepali",
+          "konkani",
+          "sindhi",
+          "bhojpuri",
+          "maithili",
+          "french",
+          "spanish",
+          "german",
+          "arabic",
+          "chinese",
+          "japanese",
+          "russian",
+          "portuguese"
+        ]
+      },
+      "group": "language",
+      "label": "language",
+      "volunteer": true
+    },
+    "identity_confirmed": {
+      "type": "boolean",
+      "description": "true/false - the registered name read to the caller is correct",
+      "label": "identity"
+    },
+    "service_number_choice": {
+      "type": "enum",
+      "description": "same = complaint is for the calling number, different = another number / someone else",
+      "values": [
+        "same",
+        "different"
+      ],
+      "synonyms": {
+        "different": [
+          "different",
+          "someone else",
+          "another number",
+          "other number",
+          "alag",
+          "doosra",
+          "dusra",
+          "kisi aur",
+          "not this number"
+        ],
+        "same": [
+          "same",
+          "calling from",
+          "this number",
+          "isi number",
+          "usi number",
+          "my number"
+        ]
+      },
+      "group": "service_number",
+      "label": "service number"
+    },
+    "service_number": {
+      "type": "digits",
+      "description": "10-digit service number (different-number path)",
+      "length": 10,
+      "prefill": false,
+      "group": "service_number",
+      "label": "service number"
+    },
+    "final_service_number": {
+      "type": "system",
+      "description": "Resolved service number used for the complaint",
+      "speak": "digits",
+      "collector": "SERVICE_NUMBER_CHOICE",
+      "persist": false,
+      "group": "service_number",
+      "label": "service number"
+    },
+    "caller_type": {
+      "type": "enum",
+      "description": "homeowner, contractor, plumber, architect, other",
+      "values": [
+        "homeowner",
+        "contractor",
+        "plumber",
+        "architect",
+        "other"
+      ],
+      "synonyms": {
+        "homeowner": [
+          "end customer",
+          "homeowner",
+          "customer",
+          "owner"
+        ],
+        "other": [
+          "dealer",
+          "someone else",
+          "other"
+        ],
+        "contractor": [
+          "contractor"
+        ],
+        "plumber": [
+          "plumber"
+        ],
+        "architect": [
+          "architect"
+        ]
+      },
+      "resume": true,
+      "group": "new_customer",
+      "label": "caller type",
+      "volunteer": true
+    },
+    "first_name": {
+      "type": "name",
+      "description": "Customer first / given name ONLY. If the caller gives a full name, put the first word here and the rest in last_name.",
+      "resume": true,
+      "group": "new_customer",
+      "label": "first name"
+    },
+    "last_name": {
+      "type": "name",
+      "description": "Customer last name (surname). Fill it whenever a full name is said, e.g. 'Nikhil Pandita' -> first_name Nikhil, last_name Pandita.",
+      "resume": true,
+      "group": "new_customer",
+      "label": "last name"
+    },
+    "product": {
+      "type": "enum",
+      "description": "Sanitation product the complaint is about",
+      "values": [
+        "health faucet",
+        "flush valve",
+        "flush tank",
+        "sensor product",
+        "faucet",
+        "mixer",
+        "shower",
+        "cistern",
+        "tap"
+      ],
+      "strict": false,
+      "resume": true,
+      "group": "product",
+      "label": "product",
+      "volunteer": true
+    },
+    "brand": {
+      "type": "enum",
+      "description": "american_standard | grohe (omit if not said)",
+      "values": [
+        "american_standard",
+        "grohe"
+      ],
+      "synonyms": {
+        "american_standard": [
+          "american",
+          "american standard",
+          "amercan"
+        ],
+        "grohe": [
+          "grohe",
+          "grow",
+          "groh",
+          "groe"
+        ]
+      },
+      "resume": true,
+      "group": "product",
+      "label": "brand",
+      "volunteer": true
+    },
+    "selected_address_id": {
+      "type": "choice",
+      "description": "Id of the saved address the caller picked",
+      "prefill": false,
+      "group": "address",
+      "label": "saved address"
+    },
+    "address_confirmed": {
+      "type": "boolean",
+      "description": "true/false - the address read back is correct",
+      "group": "address",
+      "label": "address confirmation"
+    },
+    "street": {
+      "type": "text",
+      "description": "Street / road / house or flat number",
+      "format": "title",
+      "resume": true,
+      "group": "address",
+      "label": "street",
+      "keywords": [
+        "street",
+        "road"
+      ]
+    },
+    "area": {
+      "type": "text",
+      "description": "Locality / neighbourhood (not the building name)",
+      "format": "title",
+      "resume": true,
+      "group": "address",
+      "label": "area",
+      "keywords": [
+        "area",
+        "locality"
+      ]
+    },
+    "city": {
+      "type": "text",
+      "description": "City",
+      "format": "title",
+      "resume": true,
+      "group": "address",
+      "label": "city",
+      "keywords": [
+        "city"
+      ]
+    },
+    "state": {
+      "type": "text",
+      "description": "State / UT",
+      "format": "title",
+      "resume": true,
+      "group": "address",
+      "label": "state",
+      "keywords": [
+        "state"
+      ]
+    },
+    "pin_code": {
+      "type": "pin",
+      "description": "6-digit PIN code",
+      "length": 6,
+      "speak": "digits",
+      "resume": true,
+      "group": "address",
+      "label": "pin code",
+      "keywords": [
+        "pin",
+        "pincode"
+      ]
+    },
+    "area_id": {
+      "type": "system",
+      "description": "Mapped service area id",
+      "group": "address",
+      "persist": false
+    },
+    "area_name": {
+      "type": "system",
+      "description": "Mapped service area name",
+      "group": "address",
+      "persist": false
+    },
+    "city_type": {
+      "type": "system",
+      "description": "Local | Upcountry",
+      "group": "address",
+      "persist": false
+    },
+    "address_type": {
+      "type": "enum",
+      "description": "residential | commercial | construction site",
+      "values": [
+        "residential",
+        "commercial",
+        "construction site"
+      ],
+      "synonyms": {
+        "commercial": [
+          "commercial",
+          "office",
+          "shop",
+          "showroom",
+          "dukaan",
+          "dukan",
+          "business"
+        ],
+        "construction site": [
+          "project",
+          "construction"
+        ],
+        "residential": [
+          "residential",
+          "home",
+          "house",
+          "flat",
+          "apartment",
+          "ghar",
+          "villa"
+        ]
+      },
+      "resume": true,
+      "group": "address_type",
+      "label": "address type",
+      "volunteer": true,
+      "exhaust_default": "residential"
+    },
+    "contact_person_at_site": {
+      "type": "name",
+      "description": "Person the technician should ask for at site (a name, not a relationship). If the caller says it is themselves, use the caller's full name.",
+      "resume": true,
+      "group": "contact_person",
+      "label": "site contact person",
+      "self_reference": true
+    },
+    "site_contact_number": {
+      "type": "digits",
+      "description": "10-digit number the technician should call",
+      "length": 10,
+      "prefill": false,
+      "speak": "digits",
+      "group": "contact_number",
+      "label": "contact number"
+    },
+    "call_rating": {
+      "type": "enum",
+      "description": "0-5 rating of the call, or declined",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "declined"
+      ],
+      "label": "rating"
+    },
+    "ticket_id": {
+      "type": "system",
+      "description": "Internal ticket id (never spoken)",
+      "speak": false,
+      "persist": false,
+      "label": "ticket"
+    }
+  },
+  "groups": {
+    "language": {
+      "label": "language",
+      "inline": true
+    },
+    "service_number": {
+      "label": "service number",
+      "entry": "SERVICE_NUMBER_CHOICE",
+      "return_before": [
+        "CAPTURE_PRODUCT"
+      ],
+      "clear": [
+        "service_number_choice",
+        "service_number",
+        "final_service_number",
+        "identity_confirmed"
+      ],
+      "keywords": [
+        "service number",
+        "another number",
+        "different number"
+      ]
+    },
+    "new_customer": {
+      "label": "caller details",
+      "entry": "CAPTURE_CALLER_TYPE",
+      "return_before": [
+        "CAPTURE_PRODUCT"
+      ],
+      "requires_flag": "new_customer_context",
+      "keywords": [
+        "name",
+        "surname"
+      ]
+    },
+    "product": {
+      "label": "product",
+      "entry": "CAPTURE_PRODUCT",
+      "return_before": [
+        "ADDRESS_ROUTER"
+      ],
+      "keywords": [
+        "product",
+        "brand",
+        "tap",
+        "faucet",
+        "shower",
+        "mixer"
+      ]
+    },
+    "address": {
+      "label": "address",
+      "entry": "ADDRESS_COLLECT",
+      "return_before": [
+        "CONTACT_PERSON"
+      ],
+      "clear": [
+        "address_confirmed",
+        "selected_address_id",
+        "area_id",
+        "area_name",
+        "city_type"
+      ],
+      "keywords": [
+        "address",
+        "pin",
+        "pincode",
+        "street",
+        "area",
+        "city",
+        "state",
+        "locality"
+      ]
+    },
+    "address_type": {
+      "label": "address type",
+      "entry": "ADDRESS_TYPE",
+      "return_before": [
+        "CONTACT_PERSON"
+      ],
+      "keywords": [
+        "residential",
+        "commercial"
+      ]
+    },
+    "contact_person": {
+      "label": "site contact person",
+      "entry": "CONTACT_PERSON",
+      "return_before": [
+        "CONTACT_NUMBER"
+      ],
+      "keywords": [
+        "contact person",
+        "site contact"
+      ]
+    },
+    "contact_number": {
+      "label": "contact number",
+      "entry": "CONTACT_NUMBER",
+      "return_before": [
+        "REGISTRATION_READINESS_GATE"
+      ],
+      "keywords": [
+        "contact number",
+        "technician call"
+      ]
+    }
+  },
+  "intents": {
+    "answer": {
+      "description": "The utterance answers, confirms or denies what the pending question asked (even partly, or with extra details volunteered).",
+      "action": {
+        "type": "answer"
+      }
+    },
+    "update": {
+      "description": "Caller wants to change/correct a detail given EARLIER that is not the one currently being asked. Fill update_targets.",
+      "action": {
+        "type": "update"
+      },
+      "keywords": [
+        "change",
+        "correct that",
+        "actually",
+        "instead",
+        "not that",
+        "galat",
+        "badal",
+        "update"
+      ]
+    },
+    "recall": {
+      "description": "Caller asks to hear back a detail already given/noted (address, number, name...). Fill recall_targets.",
+      "action": {
+        "type": "recall"
+      },
+      "keywords": [
+        "what did i",
+        "what's my",
+        "what is my",
+        "read back",
+        "repeat my",
+        "what have you noted",
+        "kya bataya"
+      ]
+    },
+    "repeat": {
+      "description": "Caller did not hear/understand and asks you to repeat the last question.",
+      "action": {
+        "type": "repeat"
+      },
+      "keywords": [
+        "repeat",
+        "say that again",
+        "come again",
+        "pardon",
+        "dobara",
+        "phir se bolo",
+        "once more"
+      ]
+    },
+    "wait": {
+      "description": "Caller asks you to wait / hold on a moment.",
+      "action": {
+        "type": "wait"
+      },
+      "keywords": [
+        "wait",
+        "hold on",
+        "one minute",
+        "just a minute",
+        "ruko",
+        "ek minute"
+      ]
+    },
+    "end_call": {
+      "description": "Caller wants to finish / hang up the call.",
+      "action": {
+        "type": "end_call"
+      },
+      "keywords": [
+        "bye",
+        "goodbye",
+        "hang up",
+        "that's all",
+        "thats all",
+        "nothing else",
+        "disconnect",
+        "end the call"
+      ]
+    },
+    "smalltalk": {
+      "description": "Greeting, thanks, or a harmless question about who you are.",
+      "action": {
+        "type": "smalltalk"
+      },
+      "keywords": [
+        "hello",
+        "hi",
+        "hey",
+        "thanks",
+        "thank you",
+        "who are you",
+        "namaste"
+      ]
+    },
+    "off_topic": {
+      "description": "Understandable but unrelated to this service call (weather, jokes, other products...).",
+      "action": {
+        "type": "invalid",
+        "reason": "off_topic"
+      }
+    },
+    "nonsense": {
+      "description": "Unintelligible, random words, gibberish or speech-recognition noise.",
+      "action": {
+        "type": "invalid",
+        "reason": "nonsense"
+      }
+    },
+    "no_input": {
+      "description": "Empty, silence markers or only filler sounds.",
+      "action": {
+        "type": "invalid",
+        "reason": "no_input"
+      }
+    },
+    "waiver": {
+      "description": "Asks to waive/reduce/discount the visit charge.",
+      "action": {
+        "type": "transfer",
+        "reason": "service_charge_waiver",
+        "set": {
+          "asked_to_waive_charges": true
+        }
+      },
+      "keywords": [
+        "waive",
+        "waiver",
+        "discount",
+        "concession",
+        "remove the charge",
+        "reduce the charge",
+        "charges kam",
+        "charges maaf",
+        "charges free"
+      ]
+    },
+    "human": {
+      "description": "Explicitly asks for a human agent / senior executive.",
+      "action": {
+        "type": "transfer",
+        "reason": "irate_or_human_requested"
+      },
+      "keywords": [
+        "human agent",
+        "live agent",
+        "real person",
+        "senior executive",
+        "transfer me",
+        "talk to a person",
+        "speak to someone",
+        "speak to an agent",
+        "representative",
+        "insaan",
+        "kisi se baat"
+      ]
+    },
+    "irate": {
+      "description": "Abusive, furious or threatening language.",
+      "action": {
+        "type": "transfer",
+        "reason": "irate_or_human_requested"
+      },
+      "keywords": [
+        "stupid",
+        "idiot",
+        "useless",
+        "rubbish",
+        "bakwas",
+        "bakwaas",
+        "worst",
+        "harass",
+        "fed up",
+        "bewakoof"
+      ]
+    },
+    "profile": {
+      "description": "Wants to change their registered profile (registered name, number, email) - NOT the service address for this complaint.",
+      "action": {
+        "type": "transfer",
+        "reason": "profile_update"
+      },
+      "keywords": [
+        "update my profile",
+        "change my profile",
+        "registered name",
+        "registered number",
+        "registered email",
+        "account details"
+      ]
+    },
+    "charges": {
+      "description": "Asks about visit/service charges or price.",
+      "action": {
+        "type": "info",
+        "state": "SERVICE_CHARGE_INFO",
+        "handler": "charges"
+      },
+      "keywords": [
+        "charge",
+        "charges",
+        "fee",
+        "cost",
+        "price",
+        "paisa",
+        "paise",
+        "rupees",
+        "kitna"
+      ]
+    },
+    "warranty": {
+      "description": "Asks about warranty/guarantee.",
+      "action": {
+        "type": "info",
+        "state": "WARRANTY_INFO",
+        "handler": "llm",
+        "fallback_message": "warranty"
+      },
+      "keywords": [
+        "warrant",
+        "guarantee"
+      ]
+    },
+    "technician_details": {
+      "description": "Asks who the technician is / their name or number.",
+      "action": {
+        "type": "info",
+        "state": "TECHNICIAN_DETAILS",
+        "handler": "template"
+      },
+      "keywords": [
+        "technician name",
+        "technician number",
+        "engineer name",
+        "engineer number",
+        "who is the technician",
+        "who is my technician"
+      ]
+    },
+    "timing": {
+      "description": "Asks when the technician will come/call.",
+      "action": {
+        "type": "info",
+        "state": "TECHNICIAN_TIMING",
+        "handler": "template"
+      },
+      "keywords": [
+        "when will the technician",
+        "when will he come",
+        "kab aayega",
+        "kab ayega",
+        "how long",
+        "what time",
+        "how soon",
+        "timing"
+      ]
+    },
+    "ticket_number": {
+      "description": "Asks for the complaint/ticket/reference number.",
+      "action": {
+        "type": "info",
+        "state": "CLOSING",
+        "handler": "template",
+        "template_key": "ticket_number_asked_template"
+      },
+      "keywords": [
+        "ticket number",
+        "complaint number",
+        "reference number",
+        "docket number",
+        "case number",
+        "ticket id"
+      ]
+    }
+  },
+  "states": {
+    "OPENING": {
+      "prompt": "Speak welcome, recording disclosure and intro once, then ask Hindi or English. If a record exists for the calling number use the 'welcome back' variant (identity + language together). If only one part is answered, ask only the missing part.",
+      "required_slots": [
+        "language"
+      ],
+      "optional_slots": [
+        "identity_confirmed"
+      ],
+      "skippable": false,
+      "spoken_once": true,
+      "reply_template": {
+        "ENGLISH": "Welcome to American Standard. This call will be recorded for quality and training purposes. This is Roshni. Are you comfortable in Hindi or English?"
+      },
+      "reply_template_variants": {
+        "flags.customer_record_exists": {
+          "ENGLISH": "Welcome back to American Standard. This call will be recorded for quality and training purposes. My name is Roshni. I can see this number is registered under {first_name} {last_name}. Is that correct? Are you comfortable in Hindi or English?"
+        }
+      },
+      "transitions": [
+        {
+          "condition": "slots.language.requested_unsupported",
+          "goto": "TRANSFER_TO_AGENT",
+          "set": {
+            "transfer_reason": "unsupported_language"
+          }
+        }
+      ],
+      "next": "LANGUAGE_LOCK",
+      "type": "customer_facing",
+      "lane": "STARTUP",
+      "followup_template": {
+        "ENGLISH": "Are you comfortable in Hindi or English?",
+        "HINDI": "Aap Hindi mein comfortable hain ya English mein?"
+      },
+      "exhaust_defaults": {
+        "language": "english"
+      }
+    },
+    "LANGUAGE_LOCK": {
+      "prompt": "Silent. Lock the chosen language before any customer-facing sentence, then acknowledge briefly in that language.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "router",
+      "tools": [
+        {
+          "name": "manage_call_settings",
+          "when": "on_enter",
+          "args": {
+            "action": "switch_language",
+            "language": "{slots.language}",
+            "reason": "Customer explicitly confirmed preferred language"
+          }
+        }
+      ],
+      "sets": {
+        "Preferred_Language": "{slots.language}"
+      },
+      "transitions": [
+        {
+          "condition": "flags.customer_record_exists and slots.identity_confirmed is None",
+          "goto": "CONFIRM_CALLING_NUMBER_IDENTITY"
+        }
+      ],
+      "next": "SERVICE_NUMBER_CHOICE",
+      "lane": "STARTUP",
+      "announce_template": {
+        "ENGLISH": "Thank you. We will continue in English.",
+        "HINDI": "Theek hai, hum Hindi mein baat karenge."
+      },
+      "announce_extra": [
+        {
+          "when": "flags.resumed_previous",
+          "template": {
+            "ENGLISH": "I can also see our earlier call got disconnected, so I have kept the details you already shared.",
+            "HINDI": "Mujhe dikh raha hai ki pichhli call beech mein cut ho gayi thi, isliye aapki di hui details maine save rakhi hain."
+          }
+        }
+      ]
+    },
+    "CONFIRM_CALLING_NUMBER_IDENTITY": {
+      "prompt": "Ask only whether the registered name is correct.",
+      "required_slots": [
+        "identity_confirmed"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "reply_template": {
+        "ENGLISH": "I can see this number is registered under {first_name} {last_name}. Is that correct?",
+        "HINDI": "Mujhe dikh raha hai ki yeh number {first_name} {last_name} ke naam par registered hai. Kya yeh sahi hai?"
+      },
+      "transitions": [
+        {
+          "condition": "slots.identity_confirmed == false",
+          "goto": "CAPTURE_CALLER_TYPE",
+          "assumption": "Prompt does not define 'no' here; treated as new-customer context, same as CASE C."
+        }
+      ],
+      "next": "SERVICE_NUMBER_CHOICE",
+      "type": "customer_facing",
+      "lane": "IDENTITY"
+    },
+    "SERVICE_NUMBER_CHOICE": {
+      "prompt": "Ask whether the complaint is for the number they are calling from or a different number / someone else. Stop and wait.",
+      "required_slots": [
+        "service_number_choice"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "Is this complaint for the number you are calling from, or for a different number?",
+        "HINDI": "Kya yeh complaint isi number ke liye hai jisse aap call kar rahe hain, ya kisi aur number ke liye?"
+      },
+      "transitions": [
+        {
+          "condition": "slots.service_number_choice == 'different'",
+          "goto": "DIFFERENT_NUMBER_CAPTURE",
+          "on_transition": "reset_service_context"
+        },
+        {
+          "condition": "slots.service_number_choice == 'same' and flags.customer_record_exists",
+          "goto": "TICKET_CHECK",
+          "set": {
+            "Final_Service_Customer_Resolved": true
+          }
+        },
+        {
+          "condition": "slots.service_number_choice == 'same' and not flags.customer_record_exists",
+          "goto": "CAPTURE_CALLER_TYPE"
+        }
+      ],
+      "next": null,
+      "type": "customer_facing",
+      "lane": "IDENTITY",
+      "on_leave": "resolve_service_number"
+    },
+    "DIFFERENT_NUMBER_CAPTURE": {
+      "prompt": "Ask for the complete ten digit number. Use only digits actually spoken. Look up after every attempt. Read the validated number back once and confirm.",
+      "required_slots": [
+        "service_number"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "confirm": true,
+      "rerun_on_correction": true,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "reply_template": {
+        "ENGLISH": "Please tell me the complete ten digit number.",
+        "HINDI": "Kripya poora ten digit number bataiye."
+      },
+      "confirm_template": {
+        "ENGLISH": "I heard {digits_spoken}. Is that correct?",
+        "HINDI": "Maine suna {digits_spoken}. Kya yeh sahi hai?"
+      },
+      "tools": [
+        {
+          "name": "manage_call_settings",
+          "when": "before_asking",
+          "args": {
+            "action": "prepare_for_slow_input",
+            "reason": "User is about to dictate their ten digit phone number"
+          },
+          "unless": "flags.slow_input_active"
+        },
+        {
+          "name": "fetch_customer_details_by_phone_number",
+          "when": "after_each_dictation",
+          "args": {
+            "phone": "{digits_spoken}"
+          },
+          "on_result": {
+            "INVALID_PHONE": "ask_full_number_again",
+            "CUSTOMER_FOUND": "confirm_number",
+            "CUSTOMER_NOT_FOUND": "confirm_number",
+            "CRM_LOOKUP_ERROR": "retry_then_fallback_never_treat_as_new_customer"
+          }
+        },
+        {
+          "name": "manage_call_settings",
+          "when": "after_confirmation",
+          "args": {
+            "action": "finalize_slow_input",
+            "reason": "User has successfully provided and confirmed the full ten digit number"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "condition": "flags.lookup_result in ['INVALID_PHONE','CRM_LOOKUP_ERROR'] or not flags.number_confirmed",
+          "goto": "DIFFERENT_NUMBER_CAPTURE"
+        },
+        {
+          "condition": "flags.lookup_result == 'CUSTOMER_FOUND' and flags.number_confirmed",
+          "goto": "CONFIRM_RETURNED_IDENTITY"
+        },
+        {
+          "condition": "flags.lookup_result == 'CUSTOMER_NOT_FOUND' and flags.number_confirmed",
+          "goto": "CAPTURE_CALLER_TYPE"
+        }
+      ],
+      "next": null,
+      "type": "customer_facing",
+      "lane": "PHONE",
+      "flow": "dictation"
+    },
+    "CONFIRM_RETURNED_IDENTITY": {
+      "prompt": "Confirm the returned customer's identity once. Do not re-greet.",
+      "required_slots": [
+        "identity_confirmed"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "This number is registered under {first_name} {last_name}. Is that correct?",
+        "HINDI": "Yeh number {first_name} {last_name} ke naam par registered hai. Kya yeh sahi hai?"
+      },
+      "transitions": [
+        {
+          "condition": "slots.identity_confirmed == true",
+          "goto": "TICKET_CHECK",
+          "set": {
+            "Final_Service_Customer_Resolved": true
+          }
+        },
+        {
+          "condition": "slots.identity_confirmed == false",
+          "goto": "CAPTURE_CALLER_TYPE"
+        }
+      ],
+      "next": null,
+      "type": "customer_facing",
+      "lane": "IDENTITY"
+    },
+    "CAPTURE_CALLER_TYPE": {
+      "prompt": "Store silently if known; else ask once.",
+      "required_slots": [
+        "caller_type"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "max_retries": 1,
+      "on_exhausted": "store_as_Other",
+      "reply_template": {
+        "ENGLISH": "Are you an end customer, a dealer, or someone else?",
+        "HINDI": "Aap end customer hain, dealer hain, ya koi aur?"
+      },
+      "next": "CAPTURE_FIRST_NAME",
+      "type": "customer_facing",
+      "lane": "NEW_CUSTOMER"
+    },
+    "CAPTURE_FIRST_NAME": {
+      "prompt": "Ask for the name once. Two or more tokens = first + last. Unclear: one recovery, then store as heard. Never repeat the name.",
+      "required_slots": [
+        "first_name"
+      ],
+      "optional_slots": [
+        "last_name"
+      ],
+      "skippable": true,
+      "single_probe": true,
+      "max_retries": 1,
+      "on_exhausted": "store_best_plausible_and_continue",
+      "reply_template": {
+        "ENGLISH": "May I have your full name, please?",
+        "HINDI": "Kripya apna poora naam bataiye."
+      },
+      "recovery_template": {
+        "ENGLISH": "Sorry, could you repeat your name slowly?",
+        "HINDI": "Maaf kijiye, kripya apna naam dheere se dobara bataiye."
+      },
+      "next": "CAPTURE_LAST_NAME",
+      "type": "customer_facing",
+      "lane": "NEW_CUSTOMER"
+    },
+    "CAPTURE_LAST_NAME": {
+      "prompt": "Ask only if last name is still missing. No last name = reuse first name.",
+      "required_slots": [
+        "last_name"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "single_probe": true,
+      "max_retries": 1,
+      "on_exhausted": "store_best_plausible_and_continue",
+      "reply_template": {
+        "ENGLISH": "And your last name, please?",
+        "HINDI": "Aur aapka last name?"
+      },
+      "sets": {
+        "Final_Service_Customer_Resolved": true
+      },
+      "next": "CAPTURE_PRODUCT",
+      "type": "customer_facing",
+      "lane": "NEW_CUSTOMER"
+    },
+    "TICKET_CHECK": {
+      "prompt": "Silent. Only for the final service customer's matched tickets. First match wins. Use deletewithinthirty as supplied. Never speak ticket IDs.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "router",
+      "guard": "flags.Final_Service_Customer_Resolved",
+      "transitions": [
+        {
+          "order": 1,
+          "condition": "flags.has_open_ticket",
+          "goto": "TRANSFER_TO_AGENT",
+          "set": {
+            "transfer_reason": "open_ticket",
+            "resume_state": "CAPTURE_PRODUCT"
+          }
+        },
+        {
+          "order": 2,
+          "condition": "flags.has_cancelled_within_30d",
+          "goto": "TRANSFER_TO_AGENT",
+          "set": {
+            "transfer_reason": "cancelled_within_30_days"
+          }
+        },
+        {
+          "order": 3,
+          "condition": "flags.has_closed_ticket",
+          "goto": "CAPTURE_PRODUCT"
+        },
+        {
+          "order": 4,
+          "condition": "True",
+          "goto": "CAPTURE_PRODUCT"
+        }
+      ],
+      "next": "CAPTURE_PRODUCT",
+      "lane": "TICKET",
+      "hook": "refresh_ticket_flags"
+    },
+    "CAPTURE_PRODUCT": {
+      "prompt": "Ask which product the complaint is about. Never ask about the problem. Capture silently if already said. Ask once.",
+      "required_slots": [
+        "product"
+      ],
+      "optional_slots": [
+        "brand"
+      ],
+      "skippable": true,
+      "single_probe": true,
+      "max_retries": 0,
+      "on_exhausted": "store_as_heard_and_lock",
+      "reply_template": {
+        "ENGLISH": "Which product is the complaint about?",
+        "HINDI": "Yeh complaint kis product ke baare mein hai?"
+      },
+      "next": "CAPTURE_BRAND",
+      "type": "customer_facing",
+      "lane": "PRODUCT"
+    },
+    "CAPTURE_BRAND": {
+      "prompt": "Ask the brand once, separately from product. Unclear: closest of Grohe / American Standard, else NA.",
+      "required_slots": [
+        "brand"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "single_probe": true,
+      "max_retries": 0,
+      "on_exhausted": "map_closest_candidate_else_NA",
+      "reply_template": {
+        "ENGLISH": "Which brand is this product?",
+        "HINDI": "Yeh product kis brand ka hai?"
+      },
+      "sets": {
+        "Charges_Remarks1": "Warranty to be Verified"
+      },
+      "next": "ADDRESS_ROUTER",
+      "type": "customer_facing",
+      "lane": "PRODUCT"
+    },
+    "ADDRESS_ROUTER": {
+      "prompt": "Silent. Count addresses of the final service customer only.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "router",
+      "transitions": [
+        {
+          "condition": "flags.address_count >= 2",
+          "goto": "ADDRESS_SELECT"
+        },
+        {
+          "condition": "flags.address_count == 1",
+          "goto": "ADDRESS_CONFIRM_EXISTING"
+        },
+        {
+          "condition": "flags.address_count == 0 or flags.new_customer_context",
+          "goto": "ADDRESS_COLLECT",
+          "set": {
+            "address_scenario": "C"
+          }
+        }
+      ],
+      "next": "ADDRESS_COLLECT",
+      "lane": "ADDRESS",
+      "hook": "count_addresses"
+    },
+    "ADDRESS_SELECT": {
+      "prompt": "Say multiple addresses are registered and ask which one. Do not read the list unless asked. Accept only an unambiguous choice.",
+      "required_slots": [
+        "selected_address_id"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "reply_template": {
+        "ENGLISH": "I can see more than one address registered. Which one should the technician visit: {address_choices}?",
+        "HINDI": "Mujhe aapke naam par ek se zyada address dikh rahe hain. Technician kis address par aaye: {address_choices}?"
+      },
+      "next": "ADDRESS_CONFIRM_EXISTING",
+      "type": "customer_facing",
+      "lane": "ADDRESS"
+    },
+    "ADDRESS_CONFIRM_EXISTING": {
+      "prompt": "Scenario A. Read the on-file address exactly and ask if the technician should visit it. No area lookup.",
+      "required_slots": [
+        "address_confirmed"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "confirm": true,
+      "reply_template": {
+        "ENGLISH": "Should the technician visit {address_readback}?",
+        "HINDI": "Kya technician {address_readback} par visit kare?"
+      },
+      "reply_template_variants": {
+        "flags.address_count == 1": {
+          "ENGLISH": "I have your address on file as {address_readback}. Is that correct?",
+          "HINDI": "Mere paas aapka address {address_readback} registered hai. Kya yeh sahi hai?"
+        }
+      },
+      "sets": {
+        "address_scenario": "A"
+      },
+      "transitions": [
+        {
+          "condition": "slots.address_confirmed == true",
+          "goto": "ADDRESS_TYPE",
+          "note": "address_type is prefilled from Customer_Type on file, so this state is normally skipped."
+        },
+        {
+          "condition": "slots.address_confirmed == false",
+          "goto": "ADDRESS_COLLECT",
+          "set": {
+            "address_scenario": "B"
+          }
+        }
+      ],
+      "next": "ADDRESS_TYPE",
+      "type": "customer_facing",
+      "lane": "ADDRESS",
+      "on_leave": "adopt_saved_address"
+    },
+    "ADDRESS_COLLECT": {
+      "prompt": "Scenario B/C. Ask for the full address (B: only changed fields). Check each field. Ask only for missing or unclear fields. Pin = exactly 6 spoken digits. Area must be a locality, not the building name.",
+      "required_slots": [
+        "street",
+        "area",
+        "city",
+        "state",
+        "pin_code"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "rerun_on_correction": true,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "reply_template": {
+        "ENGLISH": "Please tell me your complete address, including street, area, city, state and six digit pin code.",
+        "HINDI": "Kripya apna poora address bataiye, jisme street, area, city, state aur six digit pin code shamil ho."
+      },
+      "slot_followups": {
+        "street": {
+          "ENGLISH": "What is your street or road name?",
+          "HINDI": "Aapki street ya road ka naam kya hai?"
+        },
+        "area": {
+          "ENGLISH": "What is the name of your area or locality — not the building name?",
+          "HINDI": "Aapke building ke area ya locality ka naam kya hai?"
+        },
+        "city": {
+          "ENGLISH": "Which city is this?",
+          "HINDI": "Yeh kaun sa city hai?"
+        },
+        "state": {
+          "ENGLISH": "Which state is this?",
+          "HINDI": "Yeh kaun sa state hai?"
+        },
+        "pin_code": {
+          "ENGLISH": "Please tell me the complete six digit pin code.",
+          "HINDI": "Kripya poora six digit pin code bataiye."
+        }
+      },
+      "tools": [
+        {
+          "name": "manage_call_settings",
+          "when": "before_asking",
+          "args": {
+            "action": "prepare_for_slow_input",
+            "reason": "User is about to dictate their complete service address"
+          },
+          "unless": "flags.slow_input_active"
+        }
+      ],
+      "next": "ADDRESS_CONFIRM_NEW",
+      "type": "customer_facing",
+      "lane": "ADDRESS",
+      "accept_prefill": true
+    },
+    "ADDRESS_CONFIRM_NEW": {
+      "prompt": "NEW. Read the collected address back once (pin digit by digit in English) and ask for confirmation. Any correction returns to ADDRESS_COLLECT for that field only, slow mode stays on. Only after a yes: finalize slow mode.",
+      "required_slots": [
+        "address_confirmed"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "confirm": true,
+      "rerun_on_correction": true,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "guard": "all of street, area, city, state set and pin_code matches ^\\d{6}$",
+      "reply_template": {
+        "ENGLISH": "Let me confirm your address: {street}, {area}, {city}, {state}, pin code {pin_digits}. Is that correct?",
+        "HINDI": "Main aapka address confirm kar leti hoon: {street}, {area}, {city}, {state}, pin code {pin_digits}. Kya yeh sahi hai?"
+      },
+      "tools": [
+        {
+          "name": "manage_call_settings",
+          "when": "after_confirmation",
+          "args": {
+            "action": "finalize_slow_input",
+            "reason": "User has completed and confirmed the full service address including the 6-digit PIN code"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "condition": "slots.address_confirmed == true",
+          "goto": "AREA_MAPPING"
+        },
+        {
+          "condition": "slots.address_confirmed == false",
+          "goto": "ADDRESS_COLLECT",
+          "note": "Re-ask only the corrected field."
+        }
+      ],
+      "next": "AREA_MAPPING",
+      "type": "customer_facing",
+      "lane": "ADDRESS",
+      "on_leave": "run_after_confirmation_tools",
+      "flow": "readback_confirm"
+    },
+    "AREA_MAPPING": {
+      "prompt": "Silent call right after address confirmation. Use only the returned Area_Name / Area_Id. Exact match: announce it. No exact match: do not announce anything.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "router",
+      "guard": "address confirmed and pin_code matches ^\\d{6}$",
+      "tools": [
+        {
+          "name": "fetch_nearest_areas",
+          "when": "on_enter",
+          "args": {
+            "street": "{slots.street}",
+            "area": "{slots.area}",
+            "city": "{slots.city}",
+            "state": "{slots.state}",
+            "pin_code": "{slots.pin_code}"
+          },
+          "on_result": {
+            "exact_match": "set area_id, area_name; speak reply_template",
+            "no_exact_match": "set area_mapped=false; continue silently (service team maps it internally)"
+          }
+        }
+      ],
+      "reply_template": {
+        "ENGLISH": "{area_name} is the mapped area for your technician visit.",
+        "HINDI": "{area_name} aapke technician visit ke liye mapped area hai."
+      },
+      "assumption": "Prompt only defines the exact-match case. No-match handling is a default.",
+      "next": "ADDRESS_TYPE",
+      "lane": "ADDRESS",
+      "hook": "map_area"
+    },
+    "ADDRESS_TYPE": {
+      "prompt": "Ask once if not already known or prefilled. Lock the answer; never re-ask.",
+      "required_slots": [
+        "address_type"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "single_probe": true,
+      "max_retries": 1,
+      "on_exhausted": "store_as_heard_and_lock",
+      "reply_template": {
+        "ENGLISH": "Is this address residential, commercial, or a residential project site?",
+        "HINDI": "Kya yeh address residential hai, commercial hai, ya residential project site?"
+      },
+      "prefill": {
+        "address_type": "from Customer_Type on file for Scenario A (Residential/Commercial)"
+      },
+      "next": "CONTACT_PERSON",
+      "type": "customer_facing",
+      "lane": "ADDRESS"
+    },
+    "CONTACT_PERSON": {
+      "prompt": "Resolve the contact person before any phone number. A relationship alone ('my brother') is not a name.",
+      "required_slots": [
+        "contact_person_at_site"
+      ],
+      "optional_slots": [],
+      "skippable": true,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "reply_template": {
+        "ENGLISH": "Who will be the contact person at the site?",
+        "HINDI": "Site par contact person kaun hoga?"
+      },
+      "reply_template_variants": {
+        "flags.ticket_has_contact_person": {
+          "ENGLISH": "Should we keep {contact_person} as the contact person, or update it?",
+          "HINDI": "Kya {contact_person} hi contact person rahenge, ya aap badalna chahenge?"
+        }
+      },
+      "slot_followups": {
+        "contact_person_at_site": {
+          "ENGLISH": "Could you tell me the person's name?",
+          "HINDI": "Kripya unka naam bataiye."
+        }
+      },
+      "next": "CONTACT_NUMBER",
+      "type": "customer_facing",
+      "lane": "CONTACT"
+    },
+    "CONTACT_NUMBER": {
+      "prompt": "Ask whether to use the known service number. If another number: take exactly ten spoken digits, read back once, confirm. Never use the customer lookup tool here.",
+      "required_slots": [
+        "site_contact_number"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "confirm": true,
+      "rerun_on_correction": true,
+      "max_retries": 3,
+      "on_exhausted": "RATING_GATE",
+      "reply_template": {
+        "ENGLISH": "Should the technician use this same number to reach you?",
+        "HINDI": "Kya technician isi number par aapse contact kare?"
+      },
+      "alternate_ask_template": {
+        "ENGLISH": "Please tell me the ten digit contact number.",
+        "HINDI": "Kripya ten digit contact number bataiye."
+      },
+      "confirm_template": {
+        "ENGLISH": "I heard {digits_spoken}. Is that correct?",
+        "HINDI": "Maine suna {digits_spoken}. Kya yeh sahi hai?"
+      },
+      "default_value": "{final_service_number}",
+      "tools": [
+        {
+          "name": "manage_call_settings",
+          "when": "before_asking_alternate_number",
+          "args": {
+            "action": "prepare_for_slow_input",
+            "reason": "User is about to dictate an alternate technician contact number"
+          },
+          "unless": "flags.slow_input_active"
+        },
+        {
+          "name": "manage_call_settings",
+          "when": "after_confirmation",
+          "args": {
+            "action": "finalize_slow_input",
+            "reason": "User confirmed the final ten-digit technician contact number"
+          }
+        }
+      ],
+      "forbidden_tools": [
+        "fetch_customer_details_by_phone_number"
+      ],
+      "next": "REGISTRATION_READINESS_GATE",
+      "type": "customer_facing",
+      "lane": "CONTACT",
+      "flow": "dictation_choice"
+    },
+    "REGISTRATION_READINESS_GATE": {
+      "prompt": "Silent. If any required value is unresolved, go to the state that collects the earliest missing one. Otherwise register.",
+      "required_slots": [
+        "final_service_number",
+        "product",
+        "brand",
+        "street",
+        "area",
+        "city",
+        "state",
+        "pin_code",
+        "address_type",
+        "contact_person_at_site",
+        "site_contact_number"
+      ],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "gate",
+      "conditional_required_slots": {
+        "flags.new_customer_context": [
+          "caller_type",
+          "first_name",
+          "last_name"
+        ],
+        "flags.area_mapped": [
+          "area_id",
+          "area_name"
+        ]
+      },
+      "accept_as_heard": [
+        "product",
+        "brand",
+        "first_name",
+        "last_name",
+        "address_type"
+      ],
+      "on_missing": "goto_state_that_collects_earliest_missing_slot",
+      "transitions": [
+        {
+          "condition": "all required slots resolved",
+          "goto": "REGISTER_COMPLAINT"
+        }
+      ],
+      "next": "REGISTER_COMPLAINT",
+      "lane": "REGISTRATION"
+    },
+    "REGISTER_COMPLAINT": {
+      "prompt": "Announce registration and ask the rating in the same turn, then stop and wait. Never speak a ticket number or a visit time.",
+      "required_slots": [],
+      "optional_slots": [
+        "call_rating"
+      ],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "Your complaint has been registered and escalated to the service team. The technician will contact you to confirm the visit. Please show the invoice during the visit. Warranty eligibility and any applicable charges will be confirmed after the inspection. Before we end the call, how would you rate this conversation on a scale of zero to five, where zero means extremely poor and five means excellent?",
+        "HINDI": "Aapki complaint register ho gayi hai aur service team ko forward kar di gayi hai. Technician visit confirm karne ke liye aapse contact karega. Visit ke dauran kripya apna invoice dikhaiyega. Warranty aur agar koi charges applicable honge, woh inspection ke baad confirm kiye jayenge. Call khatam karne se pehle, kripya batayein ki aap is conversation ko zero se five tak kitni rating denge, jahan zero ka matlab extremely poor aur five ka matlab excellent hai?"
+      },
+      "sets": {
+        "Rating_Asked": true,
+        "complaint_registered": true
+      },
+      "on_response_sets": {
+        "Rating_Resolved": true
+      },
+      "transitions": [
+        {
+          "condition": "flags.asked_about_timing",
+          "goto": "TECHNICIAN_TIMING"
+        }
+      ],
+      "next": "CLOSING",
+      "type": "customer_facing",
+      "lane": "REGISTRATION",
+      "hook": "create_ticket",
+      "on_leave": "resolve_rating",
+      "resolves_on_any_reply": true,
+      "reask_state": "RATING_GATE",
+      "max_retries": 1,
+      "on_exhausted": "skip_and_continue"
+    },
+    "TECHNICIAN_TIMING": {
+      "prompt": "Only if the customer asks about timing.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "The technician will contact you in the next six working hours to fix the visit appointment.",
+        "HINDI": "Technician agle six working hours mein aapse contact karke visit appointment fix karega."
+      },
+      "next": "CLOSING",
+      "type": "customer_facing",
+      "lane": "CLOSURE"
+    },
+    "RATING_GATE": {
+      "prompt": "Ask the rating once, then stop and wait. Any answer or decline resolves it.",
+      "required_slots": [],
+      "optional_slots": [
+        "call_rating"
+      ],
+      "skippable": true,
+      "skip_if": "flags.Rating_Asked",
+      "reply_template": {
+        "ENGLISH": "Before we end the call, please rate your overall experience from zero to five.",
+        "HINDI": "Call khatam karne se pehle, kripya apne overall experience ko zero se five tak rate kijiye."
+      },
+      "sets": {
+        "Rating_Asked": true
+      },
+      "on_response_sets": {
+        "Rating_Resolved": true
+      },
+      "transitions": [
+        {
+          "condition": "flags.closing_variant == 'status_enquiry'",
+          "goto": "CLOSING_STATUS_ENQUIRY"
+        }
+      ],
+      "next": "CLOSING",
+      "type": "customer_facing",
+      "lane": "CLOSURE",
+      "on_leave": "resolve_rating",
+      "resolves_on_any_reply": true,
+      "max_retries": 1,
+      "on_exhausted": "skip_and_continue"
+    },
+    "CLOSING": {
+      "prompt": "Close once, after the rating is resolved.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "guard": "flags.Rating_Resolved",
+      "reply_template": {
+        "ENGLISH": "Thank you for calling American Standard. You'll receive the details by SMS and, after your complaint is closed, a feedback link by SMS or WhatsApp. Goodbye.",
+        "HINDI": "American Standard ko call karne ke liye dhanyavaad. Aapko details SMS par milengi aur complaint close hone ke baad feedback link SMS ya WhatsApp par aayega. Goodbye."
+      },
+      "ticket_number_asked_template": {
+        "ENGLISH": "You will receive your complaint number and ticket details via WhatsApp after this call.",
+        "HINDI": "Aapko complaint number aur ticket details is call ke baad WhatsApp par mil jayenge."
+      },
+      "next": null,
+      "type": "customer_facing",
+      "lane": "CLOSURE"
+    },
+    "CLOSING_STATUS_ENQUIRY": {
+      "prompt": "Close after the rating for a status enquiry.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "guard": "flags.Rating_Resolved",
+      "reply_template": {
+        "ENGLISH": "Thank you for calling American Standard. Once your ticket is closed, you'll receive a feedback link by SMS or WhatsApp. Goodbye.",
+        "HINDI": "American Standard ko call karne ke liye dhanyavaad. Aapka ticket close hone ke baad aapko feedback link SMS ya WhatsApp par milega. Goodbye."
+      },
+      "next": null,
+      "type": "customer_facing",
+      "lane": "CLOSURE"
+    },
+    "TRANSFER_TO_AGENT": {
+      "prompt": "Speak the announcement for transfer_reason once, then call the transfer tool at once. Never transfer silently or ask anything else.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template_by_reason": {
+        "open_ticket": {
+          "ENGLISH": "I can see there is already an open service request for you. Let me connect you to a Senior Executive.",
+          "HINDI": "Mujhe dikh raha hai ki aapki ek service request pehle se open hai. Main aapko Senior Executive se connect karti hoon."
+        },
+        "cancelled_within_30_days": {
+          "ENGLISH": "I can see your earlier service request was recently cancelled. Let me connect you to a Senior Executive.",
+          "HINDI": "Mujhe dikh raha hai ki aapki pichhli service request haal hi mein cancel hui thi. Main aapko Senior Executive se connect karti hoon."
+        },
+        "unsupported_language": {
+          "ENGLISH": "Let me connect you to a Senior Executive who can assist you.",
+          "HINDI": "Main aapko ek Senior Executive se connect karti hoon jo aapki madad kar sakte hain."
+        },
+        "irate_or_human_requested": {
+          "ENGLISH": "I understand. Let me connect you to a Senior Executive.",
+          "HINDI": "Main samajhti hoon. Main aapko Senior Executive se connect karti hoon."
+        },
+        "profile_update": {
+          "ENGLISH": "For updating your account details, let me connect you to a Senior Executive.",
+          "HINDI": "Aapke account details update karne ke liye main aapko Senior Executive se connect karti hoon."
+        },
+        "service_charge_waiver": {
+          "ENGLISH": "For this request, let me connect you to a Senior Executive.",
+          "HINDI": "Is request ke liye main aapko Senior Executive se connect karti hoon."
+        },
+        "unsupported_request": {
+          "ENGLISH": "Let me connect you to a Senior Executive who can help with this.",
+          "HINDI": "Main aapko Senior Executive se connect karti hoon jo is mein madad kar sakte hain."
+        }
+      },
+      "reason_language_note": "unsupported_language announcement is spoken in the current supported language.",
+      "tools": [
+        {
+          "name": "initiate_warm_transfer",
+          "when": "after_announcement",
+          "args": {
+            "reason": "{transfer_reason}"
+          },
+          "on_result": {
+            "success": "TRANSFER_COMPLETE",
+            "Transfers are currently disabled outside of configured business hours.": "CLOSING_CALLBACK",
+            "Transfer to Senior Executive failed. Continue helping the customer yourself.": "failed"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "condition": "flags.transfer_result == 'success'",
+          "goto": "TRANSFER_COMPLETE"
+        },
+        {
+          "condition": "flags.transfer_result == 'outside_business_hours'",
+          "goto": "CLOSING_CALLBACK"
+        },
+        {
+          "condition": "flags.transfer_result == 'failed' and transfer_reason == 'cancelled_within_30_days'",
+          "goto": "CLOSING_TRANSFER_FAILED"
+        },
+        {
+          "condition": "flags.transfer_result == 'failed'",
+          "goto": "RESUME_AFTER_FAILED_TRANSFER"
+        }
+      ],
+      "next": null,
+      "type": "customer_facing",
+      "lane": "TRANSFER",
+      "hook": "transfer"
+    },
+    "RESUME_AFTER_FAILED_TRANSFER": {
+      "prompt": "Silent. Continue yourself from resume_state (the last pending state); no second transfer unless a new request needs one.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "type": "router",
+      "transitions": [
+        {
+          "condition": "True",
+          "goto": "{resume_state}"
+        }
+      ],
+      "next": "CAPTURE_PRODUCT",
+      "assumption": "resume_state is set by the runtime to the state active when the transfer was triggered; TICKET_CHECK sets it to CAPTURE_PRODUCT.",
+      "lane": "TRANSFER"
+    },
+    "TRANSFER_COMPLETE": {
+      "prompt": "Terminal. Stop speaking. No questions, rating or new complaints.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "terminal": true,
+      "next": null,
+      "type": "customer_facing",
+      "lane": "TRANSFER"
+    },
+    "CLOSING_CALLBACK": {
+      "prompt": "Say the callback line, add that the team will call back in working hours, end with Goodbye. No rating, no second transfer.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "Our Senior Executive is currently unavailable. We will arrange a callback for you during business hours. Goodbye.",
+        "HINDI": "Hamare Senior Executive abhi available nahi hain. Hum business hours mein aapko callback arrange karenge. Goodbye."
+      },
+      "next": null,
+      "type": "customer_facing",
+      "lane": "TRANSFER"
+    },
+    "CLOSING_TRANSFER_FAILED": {
+      "prompt": "Tell the customer the transfer could not be done and end with Goodbye.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "reply_template": {
+        "ENGLISH": "I'm sorry, I couldn't connect you to a Senior Executive right now. Please call us again shortly. Goodbye.",
+        "HINDI": "Maaf kijiye, main abhi aapko Senior Executive se connect nahi kar pa rahi hoon. Kripya thodi der baad dobara call kijiye. Goodbye."
+      },
+      "next": null,
+      "type": "customer_facing",
+      "lane": "TRANSFER"
+    },
+    "WARRANTY_INFO": {
+      "prompt": "On demand only. Answer from the knowledge base. Say eligibility and charges are confirmed after technician inspection. Never promise free repair or parts.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "on_demand": true,
+      "return_to": "LAST_PENDING_STATE",
+      "next": null,
+      "type": "customer_facing",
+      "lane": "INFO"
+    },
+    "SERVICE_CHARGE_INFO": {
+      "prompt": "On demand only. Row = Customer_Type x Call_Type; never ask the customer. If cityType is unavailable, do not quote. Waiver request = transfer.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "on_demand": true,
+      "return_to": "LAST_PENDING_STATE",
+      "reply_template": {
+        "ENGLISH": "The service charges for your location are {charge_cash} rupees for cash payment and {charge_online} rupees for online payment.",
+        "HINDI": "Aapki location ke liye service charges cash payment par {charge_cash} rupees aur online payment par {charge_online} rupees hain."
+      },
+      "no_city_type_template": {
+        "ENGLISH": "The charges will be confirmed after location verification.",
+        "HINDI": "Charges location verify hone ke baad confirm kiye jayenge."
+      },
+      "concession_template": {
+        "ENGLISH": "As of now, we can offer a reduced visiting charge of 300 rupees for cash payment or 200 rupees for online payment.",
+        "HINDI": "Abhi ke liye hum reduced visiting charge offer kar sakte hain: cash payment par 300 rupees ya online payment par 200 rupees."
+      },
+      "charge_table": {
+        "Local+Residential": {
+          "cash": 450,
+          "online": 350
+        },
+        "Upcountry+Residential": {
+          "cash": 550,
+          "online": 450
+        },
+        "Local+Commercial": {
+          "cash": 600,
+          "online": 500
+        },
+        "Upcountry+Commercial": {
+          "cash": 700,
+          "online": 600
+        }
+      },
+      "transitions": [
+        {
+          "condition": "flags.asked_to_waive_charges",
+          "goto": "TRANSFER_TO_AGENT",
+          "set": {
+            "transfer_reason": "service_charge_waiver"
+          }
+        }
+      ],
+      "next": null,
+      "type": "customer_facing",
+      "lane": "INFO"
+    },
+    "TECHNICIAN_DETAILS": {
+      "prompt": "On demand only. Just registered: details come over WhatsApp. Existing ticket: read name and number. Several tickets: ask which one.",
+      "required_slots": [],
+      "optional_slots": [],
+      "skippable": false,
+      "on_demand": true,
+      "return_to": "LAST_PENDING_STATE",
+      "reply_template": {
+        "ENGLISH": "The assigned technician's name and contact details will be shared with you over WhatsApp shortly after this call.",
+        "HINDI": "Assigned technician ka naam aur contact details is call ke baad jaldi hi WhatsApp par share kiye jayenge."
+      },
+      "reply_template_variants": {
+        "flags.ticket_has_technician": {
+          "ENGLISH": "The technician assigned to your service request is {technician_name}, and you can reach them at {technician_number}.",
+          "HINDI": "Aapki service request ke liye assigned technician {technician_name} hain, aur aap unse {technician_number} par contact kar sakte hain."
+        }
+      },
+      "next": null,
+      "type": "customer_facing",
+      "lane": "INFO"
+    }
+  }
+}

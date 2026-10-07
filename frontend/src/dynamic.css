@@ -1,0 +1,30 @@
+/* additions for the dynamic debugger — existing style.css / flow.css stay untouched */
+.callerBox { display: flex; flex-direction: column; gap: 2px; font-size: 11px; opacity: .9; }
+.callerBox input { width: 120px; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(128,128,128,.4); background: transparent; color: inherit; font: inherit; letter-spacing: .5px; }
+.notice { margin: 8px 0; padding: 8px 12px; border-radius: 10px; font-size: 13px; border: 1px solid rgba(128,128,128,.35); }
+.notice.ok { border-color: #2e9d62; background: rgba(46,157,98,.12); }
+.notice.jump { border-color: #b7791f; background: rgba(183,121,31,.14); }
+.laneStrip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.laneChip { padding: 4px 12px; border-radius: 999px; font-size: 12px; border: 1px solid rgba(128,128,128,.35); opacity: .55; transition: all .25s; }
+.laneChip.visited { opacity: .9; }
+.laneChip.demand { border-style: dashed; }
+.laneChip.active { opacity: 1; font-weight: 600; background: #3b6ef5; border-color: #3b6ef5; color: #fff; box-shadow: 0 0 0 3px rgba(59,110,245,.25); transform: translateY(-1px); }
+.chips, .eventList { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.eventList { padding: 8px; }
+.chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(128,128,128,.35); }
+.chip.lane { background: rgba(59,110,245,.15); border-color: #3b6ef5; }
+.chip.jump { background: rgba(183,121,31,.18); border-color: #b7791f; }
+.chip.warn { background: rgba(214,158,46,.18); border-color: #d69e2e; }
+.chip.bad { background: rgba(229,62,62,.15); border-color: #e53e3e; }
+.chip.ok { background: rgba(46,157,98,.15); border-color: #2e9d62; }
+.chip.tool, .chip.intent, .chip.slot { background: rgba(128,128,128,.12); }
+.chip.muted { opacity: .6; }
+.retryMeter { display: flex; align-items: center; gap: 4px; margin: 8px 0; font-size: 12px; }
+.retryMeter i { width: 14px; height: 6px; border-radius: 3px; background: rgba(128,128,128,.3); }
+.retryMeter i.used { background: #e53e3e; }
+.retryMeter span { margin-left: 6px; opacity: .8; }
+.llmGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; padding: 10px; }
+.llmCard { border: 1px solid rgba(128,128,128,.3); border-radius: 10px; padding: 10px; }
+.llmHead { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.llmHead em { margin-left: auto; opacity: .7; font-style: normal; font-size: 12px; }
+.composer .secondary { margin-left: 6px; }

@@ -1,0 +1,60 @@
+/* Flow path + lane list fixes. Import AFTER style.css. */
+
+/* path of visited states: wraps, never overlaps, never scrolls sideways */
+.flowRail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 4px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: visible;
+}
+.flowNode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #9aa4b8;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.flowNode::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.flowNode.silent { border-style: dashed; }
+.flowNode.silent small { opacity: 0.7; font-style: italic; }
+.flowNode.current {
+  color: #fff;
+  border-color: #f5b041;
+  background: rgba(245, 176, 65, 0.14);
+}
+.flowNode.current::before { background: #f5b041; opacity: 1; }
+.flowArrow { color: #4b556b; font-size: 12px; }
+
+/* lane list: contained scroll area with dark scrollbars */
+.laneList {
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 20px 16px;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: #2b3550 transparent;
+}
+.laneList::-webkit-scrollbar { width: 8px; }
+.laneList::-webkit-scrollbar-track { background: transparent; }
+.laneList::-webkit-scrollbar-thumb { background: #2b3550; border-radius: 8px; }
+.laneGroup.current .laneName { color: #f5b041; }
+.stateRow { overflow-wrap: anywhere; }
