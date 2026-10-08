@@ -9,7 +9,8 @@ import { captureAndRespond, slotSpecs } from "../llm/capture.js";
 import { sanitizeCaptured } from "./slots.js";
 import { digitsFrom } from "../utils/digits.js";
 import { splitFullName, surnameAfter } from "../utils/names.js";
-import { yesNo } from "../utils/yesno.js";
+import { yesNo, isBareYesNo } from "../utils/yesno.js";
+import { repairAddress, ADDRESS_KEYS } from "../utils/address.js";
 import { isFilled, round } from "../utils/text.js";
 import { addressOptions } from "./render.js";
 import { enter, ask, wants, resolveCurrent, triggerTransfer, beginJump, becomeNewCustomer } from "./flow.js";
@@ -23,7 +24,7 @@ const SOFT = new Set(["smalltalk", "wait", "repeat", "recall", "info", "update"]
 
 function buildContext(s) {
   const cfg = STATES[s.state];
-  const expected = [...wants(cfg)].filter((k) => SLOTS[k]);
+  const expected = [...wants(cfg, s)].filter((k) => SLOTS[k]);
   const opts = addressOptions(s);
   return {
     state: s.state, lane: s.lane, language: s.language,
@@ -37,18 +38,22 @@ function buildContext(s) {
 }
 
 function mayOverwrite(s, k) {
-  const def = SLOTS[k], want = wants(STATES[s.state]);
+  const def = SLOTS[k], want = wants(STATES[s.state], s);
   const groupHere = [...want].some((x) => SLOTS[x]?.group && SLOTS[x].group === def.group);
   return want.has(k) || groupHere || !!GROUPS[def.group]?.inline || !!s.jump?.slots.includes(k);
 }
 
 // Fill empties anywhere (future steps); overwrite only what the current step / an active jump is about.
+const mentions = (text, words) => words.some((w) => hasWord(text, String(w).toLowerCase()));
+
 function applySlots(s, captured, ex) {
-  const want = wants(STATES[s.state]);
+  const want = wants(STATES[s.state], s);
   for (const [k, v] of Object.entries(captured)) {
     const def = SLOTS[k], cur = s.slots[k];
     if (def.type === "digits") continue;                                  // dictated numbers go through the FSM (lookup + read-back)
     if (def.prefill === false && !want.has(k)) continue;
+    // e.g. address_type: "house" inside an address is not the caller saying the place is residential
+    if (def.explicit_when_volunteered && !want.has(k) && !s.jump?.slots.includes(k) && !mentions(String(ex.raw).toLowerCase(), def.explicit_when_volunteered)) { ev(s, "slot_ignored", { slot: k, why: "not stated explicitly" }); continue; }
     const g = GROUPS[def.group];
     if (g?.requires_flag && !s.flags[g.requires_flag] && !want.has(k)) { ev(s, "slot_ignored", { slot: k, why: g.requires_flag }); continue; }
     const may = mayOverwrite(s, k);
@@ -151,15 +156,37 @@ async function runTurn(s, rawText) {
   const expectedAll = ctx2.expected_slots;
   const expectedNonDigit = expectedAll.filter((k) => SLOTS[k].type !== "digits");
   const tasks = buildTasks(s, cls, { expectsAnswer: expectedNonDigit.length > 0 });
+  // A bare "yes" / "no" / "haan" to an either/or question ("Hindi or English?", "residential or commercial?",
+  // "this number or a different one?") does not pick an option. Never let it fill a slot; ask the caller to choose.
+  const wantNow = wants(cfg, s);
+  const bareYN = isBareYesNo(text);
+  const choiceQuestion = bareYN && !cfg.flow && !cfg.resolves_on_any_reply
+    && ![...wantNow].some((k) => SLOTS[k]?.type === "boolean")
+    && expectedNonDigit.some((k) => ["enum", "choice"].includes(SLOTS[k].type))
+    && !cls.intents.some((i) => ["transfer", "info", "recall", "update", "repeat", "wait", "end_call"].includes(actionOf(i).type));
   let cap = { slots: {}, lead: "", source: "skipped", ms: 0 };
-  if (expectedNonDigit.length || tasks.length) {
+  if (choiceQuestion) { ev(s, "yes_no_to_choice", { state: s.state }); cap.source = "rule"; }
+  else if (expectedNonDigit.length || tasks.length) {
     cap = await captureAndRespond({ text, ctx: { ...ctx2, asking_slot: s.asking_slot }, specs: slotSpecs(expectedNonDigit, ctx2), tasks, classification: cls, language: s.language });
     if (cap.source === "fallback") ev(s, "llm_fallback", { call: "capture", error: cap.error });
   }
   if (cap.rejected?.length) ev(s, "slots_rejected", { slots: cap.rejected });
+  // a bare yes/no can only answer a boolean question
+  if (bareYN) {
+    const keep = Object.fromEntries(Object.entries(cap.slots).filter(([k]) => SLOTS[k]?.type === "boolean"));
+    if (Object.keys(keep).length !== Object.keys(cap.slots).length) { ev(s, "slots_discarded", { slots: Object.keys(cap.slots).filter((k) => !(k in keep)), why: "bare yes/no is not a choice" }); cap = { ...cap, slots: keep }; }
+  }
   // slots only count when the classifier judged the utterance an answer (or an update)
   const usable = cls.intents.includes("answer") || cls.intents.includes("update");
   if (!usable && Object.keys(cap.slots).length) { ev(s, "slots_discarded", { slots: Object.keys(cap.slots), why: "classifier: not an answer" }); cap = { ...cap, slots: {} }; }
+  // address fields: fix a street that swallowed the city / pin, and fill fields the model left out ("house 45, sector 62, noida ...")
+  // (at the read-back step any field may be corrected: "no, the city is Ghaziabad")
+  const addrExpected = STATES[s.state].flow === "readback_confirm" ? ADDRESS_KEYS : [...wantNow].filter((k) => ADDRESS_KEYS.includes(k));
+  if (usable && !bareYN && addrExpected.length && !choiceQuestion) {
+    const fixed = repairAddress(cap.slots, text, { expected: addrExpected });
+    const delta = Object.keys(fixed).filter((k) => fixed[k] !== cap.slots[k]);
+    if (delta.length) { ev(s, "address_repaired", { fields: delta }); cap = { ...cap, slots: fixed }; }
+  }
   s.metrics.capture_ms = cap.ms; s.llm.capture = cap;
 
   // implicit update: the caller restated a filled detail with a DIFFERENT value outside the step that owns it
@@ -176,7 +203,10 @@ async function runTurn(s, rawText) {
 
   // ---------------- apply + FSM ----------------
   const short = text.split(/\s+/).length <= 6;
-  const ex = { raw: text, digits: digitsFrom(text), yn: usable ? (yesNo(text) ?? (short ? cls.yes_no : null)) : null,
+  const lexYn = yesNo(text), llmYn = short ? cls.yes_no : null;
+  // a plain "yes"/"haan" is certain; otherwise trust the model's reading over the keyword lexicon (e.g. "house no 45" is not a "no")
+  const yn = !usable ? null : bareYN ? (lexYn ?? llmYn) : cls.source === "llm" ? (llmYn ?? lexYn) : (lexYn ?? llmYn);
+  const ex = { raw: text, digits: digitsFrom(text), yn,
     slots: {}, changed: [], gained: 0, volunteered: 0, fresh: s.freshEntry === s.state };
   const lang = cls.language && cls.language !== "other" ? { language: cls.language } : {};
   const switchedFrom = s.language;
@@ -190,7 +220,7 @@ async function runTurn(s, rawText) {
   }
   applySlots(s, vals, ex);
   // plain yes/no answers to boolean questions
-  if (ex.yn) for (const k of STATES[s.state].required_slots.concat(s.flags.customer_record_exists ? STATES[s.state].optional_slots : [])) {
+  if (ex.yn) for (const k of wants(STATES[s.state], s)) {
     if (SLOTS[k]?.type === "boolean" && !isFilled(s.slots[k]) && !(k in ex.slots)) applySlots(s, { [k]: ex.yn === "yes" }, ex);
   }
   const languageSwitched = !!lang.language && s.language !== switchedFrom;
@@ -198,7 +228,7 @@ async function runTurn(s, rawText) {
   if (languageSwitched) tasks.push({ type: "language_switch", language: s.language, note: "Confirm briefly that you will continue in this language." });
   const invalid = cls.intents.map((i) => actionOf(i)).find((a) => a.type === "invalid");
   ex.soft = languageSwitched || (!ex.progress && !invalid && cls.intents.some((i) => SOFT.has(actionOf(i).type)));
-  ex.invalidReason = invalid?.reason;
+  ex.invalidReason = invalid?.reason ?? (choiceQuestion && !ex.progress ? "pick_one" : undefined);
   if (ex.progress) s.invalid_streak = 0;
 
   const llmAnswered = !!cap.lead && cap.source === "llm" && tasks.some((t) => t.type === "answer_question");

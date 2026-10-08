@@ -65,9 +65,12 @@ export const listCustomers = () => [...customers.values()].map(clone);
 export const getCustomer = (phone) => clone(customers.get(digits(phone)));
 export const listCalls = (limit = 50) => clone(calls.slice(-limit).reverse());
 
+const cityKey = (c) => String(c || "").toLowerCase().replace(/^new\s+/, "").replace(/[^a-z]/g, "");
 export function mapArea({ pin_code, city, area }) {
-  const hit = areas.find((a) => (pin_code && a.pin_prefixes?.some((p) => String(pin_code).startsWith(p))))
-    || areas.find((a) => city && area && a.city.toLowerCase() === String(city).toLowerCase() && a.area_name.toLowerCase() === String(area).toLowerCase());
+  // a pin prefix alone is not enough: the city the caller gave must agree, otherwise a Noida pin would map any city to "Sector 15"
+  const sameCity = (a) => !city || cityKey(a.city) === cityKey(city);
+  const hit = areas.find((a) => pin_code && sameCity(a) && a.pin_prefixes?.some((p) => String(pin_code).startsWith(p)))
+    || areas.find((a) => city && area && cityKey(a.city) === cityKey(city) && a.area_name.toLowerCase() === String(area).toLowerCase());
   return hit ? { status: "EXACT_MATCH", area_id: hit.area_id, area_name: hit.area_name, city_type: hit.city_type } : { status: "NO_EXACT_MATCH" };
 }
 export const nextTicketId = () => `T-${++ticketSeq}`;

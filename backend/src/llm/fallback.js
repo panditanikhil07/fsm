@@ -2,10 +2,13 @@
 // states.json) so the bot still works without an API key, just less smartly.
 import { INTENTS, GROUPS, SLOTS } from "../script/index.js";
 import { digitsFrom } from "../utils/digits.js";
-import { yesNo } from "../utils/yesno.js";
+import { yesNo, isBareYesNo } from "../utils/yesno.js";
 import { hasWord, norm, titleCase } from "../utils/text.js";
 import { nameTokens, isSelfReference } from "../utils/names.js";
+import { parseAddress, ADDRESS_KEYS } from "../utils/address.js";
 
+const NOT_AN_ANSWER = /\?|\b(don'?t know|do not know|not sure|no idea|what|why|how|who|when|nahi pata|pata nahi|kya|kyun|kaun)\b/i;
+const bare = (t) => isBareYesNo(t);
 const anyKeyword = (t, kws = []) => kws.some((k) => (k.includes(" ") ? t.includes(k) : hasWord(t, k)));
 
 export function fallbackClassify(text, ctx) {
@@ -48,15 +51,20 @@ export function fallbackCapture(text, ctx, specs) {
       case "boolean": { const y = yesNo(t); if (y) out[s.name] = y === "yes"; break; }
       case "enum": {
         const table = { ...Object.fromEntries((def.values || []).map((v) => [v, [v.replace(/_/g, " ")]])), ...(def.synonyms || {}) };
+        let best = null;
         for (const [value, words] of Object.entries(table)) {
           const all = [...new Set([...(words || []), ...((def.synonyms || {})[value] || [])])];
-          if (all.some((w) => hasWord(t, w.toLowerCase()) || hasWord(t, `${w.toLowerCase()}s`))) { out[s.name] = value; break; }
+          for (const w of all) {
+            const lw = w.toLowerCase();
+            if ((hasWord(t, lw) || hasWord(t, `${lw}s`)) && (!best || lw.length > best.len)) best = { value, len: lw.length };
+          }
         }
+        if (best) out[s.name] = best.value;
         if (!out[s.name] && s.name === "call_rating") { const m = t.match(/\b([0-5])\b/) || []; if (m[1]) out.call_rating = m[1]; else if (/\b(skip|decline|no rating|pass)\b/.test(t)) out.call_rating = "declined"; }
-        if (!out[s.name] && s.name === "service_number_choice") { const y = yesNo(t); if (y) out[s.name] = y === "yes" ? "same" : "different"; }
+        // NOTE: a bare yes/no is deliberately NOT mapped onto an either/or enum (same/different number, residential/commercial...).
         break;
       }
-      case "pin": { const d = String(text).match(/(?<!\d)\d{6}(?!\d)/)?.[0] || digitsFrom(text); if (d.length === 6) out[s.name] = d; break; }
+      case "pin": { const pin = parseAddress(text, { wanted: ["pin_code"] }).pin_code; if (pin) out[s.name] = pin; break; }   // never glue house / sector numbers into a "pin"
       case "name": {
         if (s.name === "last_name" && specs.some((x) => x.name === "first_name" && x.expected)) break;   // handled with first_name
         const self = def.self_reference && isSelfReference(text) && ctx.caller_name;
@@ -79,17 +87,12 @@ export function fallbackCapture(text, ctx, specs) {
       default: break;
     }
   }
-  // free-text address fields: "city Noida", comma list, or a direct answer to the slot we just asked for
-  if (textSlots.length) {
-    const labelRe = /\b(street|area|locality|city|state)\s*(?:is|:)?\s+([a-z0-9 .\-/]+?)(?=,|\b(?:street|area|locality|city|state|pin\s*code|pincode)\b|$)/gi;
-    let m;
-    while ((m = labelRe.exec(String(text)))) { const k = m[1].toLowerCase() === "locality" ? "area" : m[1].toLowerCase(); if (textSlots.some((x) => x.name === k)) out[k] ||= titleCase(m[2].trim()); }
-    const stripped = String(text).replace(/\b\d{6}\b/g, " ").replace(/\b(pin\s*code|pincode|pin)\b/gi, " ");
-    const parts = stripped.split(",").map((p) => p.trim()).filter(Boolean);
-    const missing = textSlots.filter((x) => !out[x.name]);
-    const isAnswer = !yesNo(t) || parts.join(" ").split(/\s+/).length > 2;      // a bare yes/no is never an address part
-    if (isAnswer && ctx.asking_slot && textSlots.some((x) => x.name === ctx.asking_slot) && !out[ctx.asking_slot] && parts.length <= 1 && parts[0]) out[ctx.asking_slot] = titleCase(parts[0]);
-    else if (isAnswer && parts.length >= 2 && missing.length >= 2 && !textSlots.some((x) => out[x.name])) missing.forEach((x, i) => { if (parts[i]) out[x.name] = titleCase(parts[i]); });
+  // free-text address fields: one sentence, comma list, "city Noida" labels, or a direct answer to the slot we just asked for
+  if (textSlots.length && !bare(text)) {
+    const wanted = ADDRESS_KEYS.filter((k) => textSlots.some((x) => x.name === k) || (k === "pin_code" && specs.some((x) => x.name === k && x.expected)));
+    const lone = !NOT_AN_ANSWER.test(text) && String(text).split(/\s+/).length <= 8;
+    const parsed = parseAddress(text, { asking: lone ? ctx.asking_slot : null, wanted });
+    for (const [k, v] of Object.entries(parsed)) out[k] ||= v;
   }
   return out;
 }

@@ -21,7 +21,8 @@ Rules:
 - Judge it against pending_question and expected_slots. Include "answer" ONLY if the utterance actually contains the information asked for (or volunteers other call details). A question or request ("can you speak Hindi?", "who are you?") is NOT an answer.
 - Use "update" when the caller changes/corrects a detail that is NOT what is being asked right now. This includes restating or giving a different value for a slot that is already in filled_slots ("my name is Nikhil" when a name is filled, "pin is 110001" when a pin is filled), even without the word "change". Put that slot or its group in update_targets. A correction of the value being asked about is just "answer".
 - "recall" only when they ask to hear previously given details back.
-- yes_no: set when the utterance is a yes/no style reply (any language/Hinglish), else null.
+- yes_no: set when the utterance is a yes/no style reply (any language/Hinglish), else null. "no" as an abbreviation of "number" ("house no 45", "flat no. 3") is NOT a no.
+- A bare yes/no to an either/or question ("Hindi or English?", "residential or commercial?") is still intent "answer" with yes_no set; never invent a language or option from it.
 - language: set whenever the caller says or asks for a language to be used ("can you speak Hindi?", "Hindi mein baat karo", "English please"), even phrased as a question. Then intents need not include "answer".
 - Mixed Hindi/English/Devanagari is normal. For a very short reply (1-3 words) to the pending question prefer "answer" over "nonsense".
 - Never return an empty intents array.`;

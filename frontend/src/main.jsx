@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
 import './flow.css';
 import './dynamic.css';
+import './layout.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
@@ -55,8 +56,11 @@ function App() {
   const [script, setScript] = useState({ states: {}, lanes: [], slot_descriptions: {}, meta: {} });
   const [tab, setTab] = useState('slots');
   const [error, setError] = useState('');
-  const [caller, setCaller] = useState('9000000000');
+  const [caller, setCaller] = useState('9540923207');
   const [known, setKnown] = useState([]);
+
+  const messagesRef = useRef(null);
+  const inputRef = useRef(null);
 
   const refreshKnown = () => call('/customers').then(setKnown).catch(() => setKnown([]));
 
@@ -109,6 +113,17 @@ function App() {
   const jump = data?.jump;
   const lastItem = hist[hist.length - 1];
 
+  // keep the newest turn in view: scroll the message list to the bottom whenever a turn is added or a request starts/finishes
+  useEffect(() => {
+    const el = messagesRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+  }, [hist.length, busy, error]);
+
+  // put the cursor back in the input after each reply so you can keep typing
+  useEffect(() => {
+    if (!busy && !terminal) inputRef.current?.focus();
+  }, [busy, terminal]);
+
   const lanes = useMemo(() => (script.lanes || []).map((l) => l.id), [script.lanes]);
   const laneIdx = lanes.indexOf(activeLane);
   const currentSide = laneIdx < 0 ? 'center' : laneIdx < lanes.length / 3 ? 'left' : laneIdx < (2 * lanes.length) / 3 ? 'center' : 'right';
@@ -135,6 +150,20 @@ function App() {
   const prompt = terminal ? lastItem?.assistant || greeting : data?.assistant || greeting;
   const turnEvents = (data?.events || []).map(eventChip).filter(Boolean);
   const llm = data?.llm || {};
+
+  const extraction = lastItem
+    ? { extracted: lastItem.extracted, intents: lastItem.intents, path: lastItem.path, lane: `${lastItem.lane_from} → ${lastItem.lane}` }
+    : {};
+
+  const tabs = [
+    ['slots', 'Slots', filled],
+    ['events', 'Events', turnEvents.length],
+    ['llm', 'LLM calls'],
+    ['flags', 'Flags'],
+    ['tools', 'Tools', data?.tool_calls?.length || 0],
+    ['history', 'Trace', hist.length],
+    ['extract', 'Extraction'],
+  ];
 
   return (
     <div className="app">
@@ -185,10 +214,12 @@ function App() {
             <span className="statePill">{activeLane} <i>/</i> {activeState}</span>
           </div>
 
-          <div className="assistantPrompt">
-            <span>{script.meta?.bot_name?.toUpperCase() || 'ROSHNI'}</span>
-            <p>{prompt || (terminal ? 'Call ended.' : 'No active assistant response yet.')}</p>
-          </div>
+          {hist.length === 0 && (
+            <div className="assistantPrompt">
+              <span>{script.meta?.bot_name?.toUpperCase() || 'ROSHNI'}</span>
+              <p>{prompt || (terminal ? 'Call ended.' : 'No active assistant response yet.')}</p>
+            </div>
+          )}
 
           <div className="summaryBar">
             <div className="summaryItem"><label>Caller</label><strong>{data?.caller_number || '—'}</strong></div>
@@ -201,7 +232,7 @@ function App() {
             </div>
           </div>
 
-          <div className="messages">
+          <div className="messages" ref={messagesRef}>
             {hist.length === 0 ? (
               <div className="empty">No turns yet. Reply to the greeting above.</div>
             ) : hist.map((h, i) => (
@@ -226,6 +257,7 @@ function App() {
 
           <div className="composer">
             <input
+              ref={inputRef}
               autoFocus value={text} disabled={terminal}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && send()}
@@ -234,6 +266,55 @@ function App() {
             <button disabled={busy || terminal || !text.trim()} onClick={() => send()}>{busy ? 'Running…' : 'Send'}</button>
             <button className="secondary" disabled={busy || terminal} onClick={() => send(true)} title="Caller says nothing">Silence</button>
           </div>
+        </section>
+
+        <section className="panel inspector">
+          <div className="tabs">
+            {tabs.map(([id, label, n]) => (
+              <button key={id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}{n !== undefined && <em>{n}</em>}</button>
+            ))}
+          </div>
+
+          {tab === 'slots' && (
+            <div className="slotGrid">
+              {slotKeys.map((key) => (
+                <div className={'slot ' + (isSet(slots[key]) ? 'filled' : '')} key={key}>
+                  <code>{key}</code><strong>{show(slots[key])}</strong><small>{slotDescriptions[key] || ''}</small>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab === 'events' && (
+            <div className="eventList">
+              {turnEvents.length === 0 ? <div className="empty">No events for the last turn.</div> : turnEvents.map((c, i) => <span key={i} className={'chip ' + c.tone}>{c.text}</span>)}
+            </div>
+          )}
+
+          {tab === 'llm' && (
+            <div className="llmGrid">
+              <LlmCard title="1 · Classifier" tone={llm.classifier?.source} ms={llm.classifier?.ms} body={llm.classifier && { intents: llm.classifier.intents, update_targets: llm.classifier.update_targets, recall_targets: llm.classifier.recall_targets, yes_no: llm.classifier.yes_no, language: llm.classifier.language, reason: llm.classifier.reason, error: llm.classifier.error }} />
+              <LlmCard title="2 · Slot capture + response" tone={llm.capture?.source} ms={llm.capture?.ms} body={llm.capture && { slots: llm.capture.slots, rejected_no_evidence: llm.capture.rejected, lead: llm.capture.lead, error: llm.capture.error }} />
+            </div>
+          )}
+
+          {tab === 'flags' && (
+            <div className="slotGrid">
+              {Object.entries(flags).map(([key, value]) => (
+                <div className={'slot ' + (value ? 'filled' : '')} key={key}><code>{key}</code><strong>{show(value)}</strong></div>
+              ))}
+              {data?.customer_data && Object.keys(data.customer_data).length > 0 && (
+                <div className="slot filled" style={{ gridColumn: '1 / -1' }}>
+                  <code>customer_data (retrieved from the JSON store by phone number)</code>
+                  <pre>{JSON.stringify(data.customer_data, null, 2)}</pre>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === 'tools' && <ToolList calls={data?.tool_calls || []} />}
+          {tab === 'history' && <Trace hist={hist} />}
+          {tab === 'extract' && <pre>{JSON.stringify(extraction, null, 2)}</pre>}
         </section>
 
         <aside className="side">
@@ -285,60 +366,7 @@ function App() {
             </div>
           </section>
         </aside>
-
-        <section className="panel inspector">
-          <div className="tabs">
-            {[['slots', 'Slots', filled], ['events', 'Events', turnEvents.length], ['llm', 'LLM calls'], ['flags', 'Flags'], ['tools', 'Tools', data?.tool_calls?.length || 0], ['history', 'Trace', hist.length]].map(([id, label, n]) => (
-              <button key={id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}{n !== undefined && <em>{n}</em>}</button>
-            ))}
-          </div>
-
-          {tab === 'slots' && (
-            <div className="slotGrid">
-              {slotKeys.map((key) => (
-                <div className={'slot ' + (isSet(slots[key]) ? 'filled' : '')} key={key}>
-                  <code>{key}</code><strong>{show(slots[key])}</strong><small>{slotDescriptions[key] || ''}</small>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {tab === 'events' && (
-            <div className="eventList">
-              {turnEvents.length === 0 ? <div className="empty">No events for the last turn.</div> : turnEvents.map((c, i) => <span key={i} className={'chip ' + c.tone}>{c.text}</span>)}
-            </div>
-          )}
-
-          {tab === 'llm' && (
-            <div className="llmGrid">
-              <LlmCard title="1 · Classifier" tone={llm.classifier?.source} ms={llm.classifier?.ms} body={llm.classifier && { intents: llm.classifier.intents, update_targets: llm.classifier.update_targets, recall_targets: llm.classifier.recall_targets, yes_no: llm.classifier.yes_no, language: llm.classifier.language, reason: llm.classifier.reason, error: llm.classifier.error }} />
-              <LlmCard title="2 · Slot capture + response" tone={llm.capture?.source} ms={llm.capture?.ms} body={llm.capture && { slots: llm.capture.slots, rejected_no_evidence: llm.capture.rejected, lead: llm.capture.lead, error: llm.capture.error }} />
-            </div>
-          )}
-
-          {tab === 'flags' && (
-            <div className="slotGrid">
-              {Object.entries(flags).map(([key, value]) => (
-                <div className={'slot ' + (value ? 'filled' : '')} key={key}><code>{key}</code><strong>{show(value)}</strong></div>
-              ))}
-              {data?.customer_data && Object.keys(data.customer_data).length > 0 && (
-                <div className="slot filled" style={{ gridColumn: '1 / -1' }}>
-                  <code>customer_data (retrieved from the JSON store by phone number)</code>
-                  <pre>{JSON.stringify(data.customer_data, null, 2)}</pre>
-                </div>
-              )}
-            </div>
-          )}
-
-          {tab === 'tools' && <ToolList calls={data?.tool_calls || []} />}
-          {tab === 'history' && <Trace hist={hist} />}
-        </section>
       </div>
-
-      <section className="panel liveMeta">
-        <div className="metaTitle">Live extraction (last turn)</div>
-        <pre>{JSON.stringify(lastItem ? { extracted: lastItem.extracted, intents: lastItem.intents, path: lastItem.path, lane: `${lastItem.lane_from} → ${lastItem.lane}` } : {}, null, 2)}</pre>
-      </section>
     </div>
   );
 }

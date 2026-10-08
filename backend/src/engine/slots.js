@@ -2,7 +2,7 @@
 import { SLOTS, META } from "../script/index.js";
 import { digitsFrom, normalizeMobile, validMobile } from "../utils/digits.js";
 import { nameTokens } from "../utils/names.js";
-import { titleCase, isFilled } from "../utils/text.js";
+import { titleCase, isFilled, hasWord } from "../utils/text.js";
 
 const YES = new Set(META.lexicon.yes), NO = new Set(META.lexicon.no);
 
@@ -21,7 +21,12 @@ export function normalizeSlot(name, value, ctx = {}) {
       const s = String(v).toLowerCase().replace(/\s+/g, def.values?.some((x) => x.includes("_")) ? "_" : " ");
       if (def.values?.includes(s)) return s;
       for (const [canon, words] of Object.entries(def.synonyms || {})) if (words.includes(s)) return canon;
-      return def.strict === false ? String(v).toLowerCase() : undefined;
+      if (def.strict === false) return String(v).toLowerCase();
+      // "a residential project site" -> the longest known word / phrase contained in what was returned
+      let best = null;
+      for (const [canon, words] of Object.entries({ ...Object.fromEntries((def.values || []).map((x) => [x, [x.replace(/_/g, " ")]])), ...(def.synonyms || {}) }))
+        for (const w of [...words, ...((def.synonyms || {})[canon] || [])]) if (hasWord(s, w.toLowerCase()) && (!best || w.length > best.len)) best = { canon, len: w.length };
+      return best?.canon;
     }
     case "digits": { const d = normalizeMobile(String(v).replace(/\D/g, "") || digitsFrom(v)); return def.length === 10 ? (validMobile(d) ? d : undefined) : d.length === def.length ? d : undefined; }
     case "pin": { const d = String(v).replace(/\D/g, ""); return d.length === def.length ? d : undefined; }

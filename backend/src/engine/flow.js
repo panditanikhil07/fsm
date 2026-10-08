@@ -13,7 +13,10 @@ import { fallbackCapture } from "../llm/fallback.js";
 
 const STOP = Symbol("stop");
 const maxRetries = (cfg) => cfg.max_retries ?? META.default_max_retries;
-export const wants = (cfg) => new Set([...cfg.required_slots, ...cfg.optional_slots]);
+export const wants = (cfg, s) => new Set([
+  ...cfg.required_slots,
+  ...cfg.optional_slots.filter((k) => !s || !SLOTS[k]?.only_when || evalCond(SLOTS[k].only_when, s)),
+]);
 export const isEnding = (cfg) =>
   !!cfg.terminal || (cfg.type === "customer_facing" && !cfg.on_demand && cfg.next == null && !(cfg.transitions || []).length && !cfg.required_slots.length);
 

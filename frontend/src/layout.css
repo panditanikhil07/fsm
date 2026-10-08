@@ -1,0 +1,145 @@
+/* layout.css — import LAST (after dynamic.css) so it overrides earlier rules.
+   The page fits the viewport; only the conversation, inspector and lane list scroll internally. */
+
+html, body, #root { height: 100%; }
+body { margin: 0; overflow: hidden; }
+
+/* ---- dark, thin scrollbars (removes the white native bars) ---- */
+* { scrollbar-width: thin; scrollbar-color: #2b3652 transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #2b3652; border-radius: 8px; }
+*::-webkit-scrollbar-thumb:hover { background: #3b4a70; }
+
+.app {
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- compact header ---- */
+.top { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top h1 { margin: 0; font-size: 18px; line-height: 1.2; }
+.top p { display: none; }
+.topActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topActions button { font-size: 13px; padding: 6px 12px; line-height: 1.2; height: auto; }
+.topActions .live { font-size: 12px; white-space: nowrap; }
+.callerBox { display: flex; flex-direction: column; gap: 2px; font-size: 11px; }
+.callerBox input { width: 120px; font-size: 13px; padding: 5px 8px; box-sizing: border-box; }
+
+.notice, .app > .empty { flex: none; margin: 0; padding: 6px 10px; font-size: 13px; }
+.laneStrip { flex: none; display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+.laneChip { flex: none; font-size: 12px; padding: 4px 12px; }
+
+/* ---- main grid: conversation | inspector | status ---- */
+.dashboard {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 0.8fr);
+  grid-template-areas: none;
+  gap: 10px;
+}
+.dashboard > * { grid-area: auto; grid-column: auto; grid-row: auto; min-width: 0; min-height: 0; overflow: hidden; }
+
+/* ---- conversation: messages scroll, composer stays pinned ---- */
+.conversation { display: flex; flex-direction: column; }
+.conversation > * { flex: none; }
+.conversation .assistantPrompt { max-height: 22%; overflow-y: auto; }
+.conversation .summaryBar {
+  display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; padding: 8px 0;
+}
+.conversation .summaryItem { flex: none; padding: 6px 10px; }
+.conversation .summaryItem strong { font-size: 14px; }
+
+.conversation .messages {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 12px;
+}
+.conversation .turn { flex: none; height: auto; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.conversation .bubble { height: auto; min-height: 0; max-width: 88%; box-sizing: border-box; overflow-wrap: anywhere; }
+.conversation .bubble p { margin: 4px 0; }
+.conversation .bubble.user { align-self: flex-end; }
+.conversation .bubble.bot { align-self: flex-start; max-width: 94%; }
+.conversation .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.conversation .composer { flex: none; display: flex; gap: 8px; padding: 10px 12px; }
+.conversation .composer input { flex: 1; min-width: 0; font-size: 14px; padding: 9px 12px; }
+.conversation .composer button { font-size: 14px; padding: 8px 14px; height: auto; }
+
+/* ---- inspector: tabs fixed, body scrolls ---- */
+.inspector { display: flex; flex-direction: column; }
+.inspector .tabs { flex: none; display: flex; flex-wrap: wrap; gap: 2px; overflow: visible; }
+.inspector .tabs button { white-space: nowrap; padding: 8px 10px; font-size: 13px; }
+.inspector .tabs button em { margin-left: 5px; font-style: normal; font-size: 11px; }
+.inspector > :not(.tabs) {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 10px; box-sizing: border-box;
+}
+.inspector pre, .llmCard pre, .tool pre, .traceRow pre {
+  font-size: 11px; max-height: 260px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; margin: 4px 0;
+}
+
+/* slot / flag cards: auto-height, wrap text, never overlap */
+.inspector .slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: auto;
+  align-content: start;
+  gap: 8px;
+}
+.inspector .slot {
+  height: auto; min-height: 0; min-width: 0; overflow: hidden;
+  display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; box-sizing: border-box;
+}
+.inspector .slot code { font-size: 11px; overflow-wrap: anywhere; }
+.inspector .slot strong { font-size: 14px; overflow-wrap: anywhere; }
+.inspector .slot small { font-size: 10.5px; line-height: 1.35; opacity: .65; overflow-wrap: anywhere; }
+
+.inspector .eventList { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.inspector .llmGrid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+/* ---- status column ---- */
+.side { display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.side > .panel { flex: none; min-width: 0; }
+.side > .lane { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.side > .lane > * { flex: none; }
+.side > .lane .laneList { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+
+.side .metricGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; padding: 8px 10px; }
+.side .metric { min-width: 0; padding: 6px 8px; overflow: hidden; }
+.side .metric strong { font-size: 17px; white-space: nowrap; background: none; }
+.side .metric small { font-size: 11px; margin-left: 3px; }
+.side .metric span { display: block; font-size: 11px; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.side .heroState { padding: 6px 12px; }
+.side .heroState strong { font-size: 18px; }
+.side .flowRail { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; max-height: 76px; overflow-y: auto; padding: 6px 12px; }
+.side .flowNode { padding: 2px 6px; }
+.side .flowNode small { font-size: 10px; }
+.side .laneName { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .6; margin: 8px 0 2px; }
+.side .stateRow { font-size: 12px; padding: 2px 0; display: flex; gap: 8px; }
+.side .stateRow span { width: 10px; flex: none; }
+
+/* ---- narrower screens: stack panels and let the page scroll ---- */
+@media (max-width: 1100px) {
+  body { overflow: auto; }
+  .app { height: auto; min-height: 100dvh; }
+  .dashboard { display: flex; flex-direction: column; }
+  .dashboard > .conversation { height: 75dvh; }
+  .dashboard > .inspector { height: 60dvh; }
+  .dashboard > .side { overflow: visible; }
+  .side > .lane { flex: none; min-height: 320px; }
+}

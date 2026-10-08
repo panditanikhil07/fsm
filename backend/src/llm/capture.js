@@ -17,6 +17,13 @@ Do TWO things for the caller's latest utterance and return JSON only: {"slots":{
    - boolean -> true/false. enum -> exactly one of its values. pin -> 6 digits. digits -> only digits spoken.
    - Slots with expected=true answer the pending question. ALSO fill every OTHER slot in slot_specs that the utterance clearly states
      (e.g. asked for caller type but they also say their name or product -> return those too). Never leave a clearly stated detail out.
+   - A bare "yes" / "no" / "haan" / "nahi" is NOT an answer to an either/or question ("Hindi or English?", "residential or commercial?",
+     "this number or a different one?", caller type, which saved address). Return no slot for it; it can only answer a boolean slot.
+   - address_type: only when the caller explicitly says what kind of place it is (residential / commercial / office / shop / project or construction site).
+     Words inside an address such as "house", "flat", "apartment" do NOT count; never infer it.
+   - Address: split what was said across the right slots, even when it is said in one sentence or in a different order. street = house / flat / plot number plus
+     street, road or building ("House 45", "12 MG Road"); area = locality / sector / colony ("Sector 62", "Gaur City"); city; state (expand "UP" to "Uttar Pradesh");
+     pin_code. Never put the city, state or pin code inside street. "house no 45" means house number 45, it is not a "no".
    - Names: a full name like "Nikhil Pandita" => first_name "Nikhil" AND last_name "Pandita" (both, always).
    - If the caller corrects a value, return the NEW value.
 2) "lead": 0-2 short spoken sentences that handle everything in "tasks" (acknowledge, answer, redirect, read back).

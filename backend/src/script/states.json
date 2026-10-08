@@ -146,7 +146,43 @@
         "plumber",
         "architect",
         "someone",
-        "else"
+        "else",
+        "residential",
+        "commercial",
+        "office",
+        "shop",
+        "showroom",
+        "home",
+        "house",
+        "flat",
+        "apartment",
+        "ghar",
+        "villa",
+        "project",
+        "site",
+        "construction",
+        "business",
+        "dukaan",
+        "dukan",
+        "number",
+        "yeah",
+        "yep",
+        "yup",
+        "sure",
+        "correct",
+        "right",
+        "han",
+        "haa",
+        "theek",
+        "thik",
+        "bilkul",
+        "nope",
+        "nai",
+        "nhi",
+        "nahin",
+        "wrong",
+        "galat",
+        "exactly"
       ],
       "relations": [
         "my",
@@ -270,6 +306,16 @@
       "need_label": {
         "ENGLISH": "I just need your {label} to continue.",
         "HINDI": "Aage badhne ke liye mujhe aapka {label} chahiye."
+      },
+      "pick_one": {
+        "ENGLISH": [
+          "A yes or no doesn't tell me which one, so please choose one of the options.",
+          "I need you to pick one of the options, please."
+        ],
+        "HINDI": [
+          "Sirf haan ya na se mujhe pata nahi chalta ki kaun sa, kripya options mein se ek chuniye.",
+          "Kripya options mein se ek batayiye."
+        ]
       }
     },
     "post_registration_updates": "jump"
@@ -382,7 +428,8 @@
     "identity_confirmed": {
       "type": "boolean",
       "description": "true/false - the registered name read to the caller is correct",
-      "label": "identity"
+      "label": "identity",
+      "only_when": "flags.customer_record_exists and not flags.new_customer_context"
     },
     "service_number_choice": {
       "type": "enum",
@@ -543,7 +590,7 @@
     },
     "street": {
       "type": "text",
-      "description": "Street / road / house or flat number",
+      "description": "House / flat / plot number plus street, road or building name, e.g. 'House 45' or '12 MG Road'. Never put the locality, city, state or pin code in here.",
       "format": "title",
       "resume": true,
       "group": "address",
@@ -555,7 +602,7 @@
     },
     "area": {
       "type": "text",
-      "description": "Locality / neighbourhood (not the building name)",
+      "description": "Locality / sector / colony / neighbourhood, e.g. 'Sector 62' or 'Gaur City' (not the building name, not the city).",
       "format": "title",
       "resume": true,
       "group": "address",
@@ -567,7 +614,7 @@
     },
     "city": {
       "type": "text",
-      "description": "City",
+      "description": "City or town only, e.g. 'Noida'.",
       "format": "title",
       "resume": true,
       "group": "address",
@@ -578,7 +625,7 @@
     },
     "state": {
       "type": "text",
-      "description": "State / UT",
+      "description": "State / UT only, e.g. 'Uttar Pradesh' (expand abbreviations such as UP).",
       "format": "title",
       "resume": true,
       "group": "address",
@@ -620,7 +667,7 @@
     },
     "address_type": {
       "type": "enum",
-      "description": "residential | commercial | construction site",
+      "description": "residential | commercial | construction site. ONLY when the caller explicitly says what kind of place it is. NEVER infer it from words inside an address such as 'house', 'flat' or 'apartment'; a bare yes/no is not an answer.",
       "values": [
         "residential",
         "commercial",
@@ -637,8 +684,13 @@
           "business"
         ],
         "construction site": [
+          "construction site",
+          "project site",
+          "residential project site",
+          "residential project",
           "project",
-          "construction"
+          "construction",
+          "site"
         ],
         "residential": [
           "residential",
@@ -654,7 +706,19 @@
       "group": "address_type",
       "label": "address type",
       "volunteer": true,
-      "exhaust_default": "residential"
+      "exhaust_default": "residential",
+      "explicit_when_volunteered": [
+        "residential",
+        "commercial",
+        "office",
+        "shop",
+        "showroom",
+        "dukaan",
+        "dukan",
+        "business",
+        "construction",
+        "project site"
+      ]
     },
     "contact_person_at_site": {
       "type": "name",

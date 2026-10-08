@@ -48,10 +48,10 @@ export function fallbackLead(s, tasks, cls) {
   const parts = [];
   for (const t of tasks) {
     if (t.type === "invalid") {
-      const key = t.reason === "no_input" ? "no_input" : t.reason === "off_topic" ? "off_topic" : "invalid";
+      const key = t.reason === "no_input" ? "no_input" : t.reason === "off_topic" ? "off_topic" : t.reason === "pick_one" ? "pick_one" : "invalid";
       const label = neededLabel(s);
       // alternate between a generic reaction and naming exactly what is needed
-      const useLabel = key !== "no_input" && label && (s.invalid_streak + (s.retries[s.state] || 0)) % 2 === 1;
+      const useLabel = key !== "no_input" && key !== "pick_one" && label && (s.invalid_streak + (s.retries[s.state] || 0)) % 2 === 1;
       parts.push(useLabel ? msg(s, "need_label", { label }) : msg(s, key));
     }
     else if (t.type === "smalltalk") parts.push(msg(s, "smalltalk"));
