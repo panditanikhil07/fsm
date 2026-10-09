@@ -1,6 +1,5 @@
 // LLM call #1 — CLASSIFIER. Decides *what the caller is doing* (intents, update/recall targets,
 // yes/no, language switch). It never extracts slot values; that is call #2.
-import { config } from "../config.js";
 import { INTENTS, GROUPS, SLOTS, META } from "../script/index.js";
 import { chat, parseJson, llmEnabled } from "./client.js";
 import { fallbackClassify } from "./fallback.js";
@@ -43,7 +42,7 @@ export async function classify(text, ctx) {
   let result = null, source = "llm", error = null;
   if (llmEnabled()) {
     try {
-      const out = parseJson(await chat({ model: config.llm.classifierModel, system: SYSTEM(), user: { utterance: text, ...ctx }, maxTokens: 220 }));
+      const out = parseJson(await chat({ tier: "classifier", system: SYSTEM(), user: { utterance: text, ...ctx }, maxTokens: 220 }));
       if (out) result = sanitize(out);
     } catch (e) { error = e.message; }
   }

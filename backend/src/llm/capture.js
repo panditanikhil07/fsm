@@ -1,7 +1,6 @@
 // LLM call #2 — SLOT CAPTURE + RESPONSE. One request returns the slot values the caller actually
 // said and the conversational "lead" (acknowledgement / answer / polite redirect). The engine then
 // runs the FSM with the captured slots and appends the scripted next question from states.json.
-import { config } from "../config.js";
 import { META, SLOTS } from "../script/index.js";
 import { chat, parseJson, llmEnabled } from "./client.js";
 import { fallbackCapture } from "./fallback.js";
@@ -86,7 +85,7 @@ export async function captureAndRespond({ text, ctx, specs, tasks, classificatio
   if (llmEnabled()) {
     try {
       const out = parseJson(await chat({
-        model: config.llm.model, temperature: 0.3, maxTokens: 380, system: SYSTEM(language),
+        tier: "main", temperature: 0.3, maxTokens: 380, system: SYSTEM(language),
         user: { utterance: text, classification: { intents: classification.intents, yes_no: classification.yes_no }, ...ctx, slot_specs: specs, tasks },
       }));
       if (out) {

@@ -1,25 +1,17 @@
-import { config } from "../config.js";
+// Provider-agnostic facade. classifier.js / capture.js only talk to this file; the actual vendor
+// (OpenAI, Gemini, ...) lives in ./providers and is chosen by config.llm.provider.
+import { getProvider } from "./providers/index.js";
 
-export const llmEnabled = () => !!config.llm.apiKey;
+export const llmEnabled = () => getProvider().enabled();
+export const llmProvider = () => getProvider().name;
 
-// One OpenAI-compatible chat call with a hard timeout. Throws on any failure so callers can fall back.
-export async function chat({ model, system, user, json = true, temperature = 0, maxTokens = 400 }) {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), config.llm.timeoutMs);
-  try {
-    const res = await fetch(`${config.llm.baseUrl}/chat/completions`, {
-      method: "POST", signal: ctrl.signal,
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.llm.apiKey}` },
-      body: JSON.stringify({
-        model, temperature, max_tokens: maxTokens,
-        ...(json ? { response_format: { type: "json_object" } } : {}),
-        messages: [{ role: "system", content: system }, { role: "user", content: typeof user === "string" ? user : JSON.stringify(user) }],
-      }),
-    });
-    if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
-    const data = await res.json();
-    return String(data?.choices?.[0]?.message?.content ?? "");
-  } finally { clearTimeout(timer); }
+// One chat call with a hard timeout. Throws on any failure so callers can fall back.
+//   tier: "main" | "classifier"  -> resolves the model name from the active provider's config
+//   model: optional explicit override of the tier-resolved model
+export async function chat({ tier = "main", model, system, user, json = true, temperature = 0, maxTokens = 400 }) {
+  const provider = getProvider();
+  let result = await provider.chat({ model: model || provider.model(tier), system, user, json, temperature, maxTokens });
+  return result;
 }
 
 export function parseJson(text) {

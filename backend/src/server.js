@@ -85,4 +85,4 @@ setInterval(async () => {
   }
 }, 60_000).unref();
 
-app.listen(config.port, () => console.log(`Roshni FSM backend on http://localhost:${config.port}  (LLM: ${llmEnabled() ? config.llm.model : "off → rule fallback"})`));
+app.listen(config.port, () => console.log(`Roshni FSM backend on http://localhost:${config.port}  (LLM: ${llmEnabled() ? config.llm.provider : "off → rule fallback"})`));
