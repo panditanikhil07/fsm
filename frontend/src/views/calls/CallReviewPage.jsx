@@ -3,7 +3,9 @@ import { navigate } from '../../hooks/useRoute';
 import { api } from '../../api/client';
 import TopBar from '../../components/TopBar';
 
-const DONE_OUTCOMES = new Set(['completed', 'transferred', 'callback_requested']);
+const DONE_OUTCOMES = new Set(['completed', 'transferred', 'callback_requested', 'dropped']);
+const OUTCOME_FILTERS = ['all', ...DONE_OUTCOMES];
+const PAGE_SIZES = [10, 25, 50];
 const REVIEW_OPTIONS = [
   { value: 'right', label: 'Pass' },
   { value: 'wrong', label: 'Needs work' },
@@ -24,6 +26,11 @@ const btn =
 
 const outcomeLabel = (o) => (o || 'incomplete').replace(/_/g, ' ');
 
+const getTranscript = (call) => {
+  const t = call?.transcript || call?.history;
+  return Array.isArray(t) ? t : [];
+};
+
 function ReviewBadge({ value }) {
   if (value === 'right') return <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Pass</span>;
   if (value === 'wrong') return <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-medium text-rose-800 dark:bg-rose-950 dark:text-rose-300">Needs work</span>;
@@ -39,11 +46,18 @@ export default function CallReviewPage({ path, script }) {
   const [rating, setRating] = useState('');
   const [note, setNote] = useState('');
 
+  // list filter + pagination
+  const [outcomeFilter, setOutcomeFilter] = useState('all');
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+  const [page, setPage] = useState(1);
+
   const loadCalls = async () => {
     try {
       setLoading(true);
       const items = await api.listCalls(200);
-      const done = (items || []).filter((call) => DONE_OUTCOMES.has(call.outcome));
+      const done = (items || []).filter(
+        (call) => DONE_OUTCOMES.has(call.outcome) && getTranscript(call).length >= 1
+      );
       setCalls(done);
     } catch {
       setCalls([]);
@@ -59,6 +73,22 @@ export default function CallReviewPage({ path, script }) {
     [calls, selectedId]
   );
 
+  const filteredCalls = useMemo(
+    () => (outcomeFilter === 'all' ? calls : calls.filter((c) => c.outcome === outcomeFilter)),
+    [calls, outcomeFilter]
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filteredCalls.length / pageSize));
+  const currentPage = Math.min(page, totalPages); // clamps if the list shrinks
+
+  const pageCalls = useMemo(
+    () => filteredCalls.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [filteredCalls, currentPage, pageSize]
+  );
+
+  const rangeStart = filteredCalls.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(currentPage * pageSize, filteredCalls.length);
+
   useEffect(() => {
     if (!selectedCall) {
       setRating('');
@@ -69,7 +99,7 @@ export default function CallReviewPage({ path, script }) {
     setNote(selectedCall.review?.note || '');
   }, [selectedCall]);
 
-  const transcript = selectedCall?.transcript || selectedCall?.history || [];
+  const transcript = getTranscript(selectedCall);
 
   const handleSaveReview = async () => {
     if (!selectedCall) return;
@@ -102,16 +132,37 @@ export default function CallReviewPage({ path, script }) {
 
         {!selectedCall ? (
           <main className={`${card} overflow-hidden`}>
-            <div className="flex items-baseline justify-between border-b border-slate-200 px-5 py-3.5 dark:border-slate-800">
-              <h2 className="text-sm font-semibold">Completed calls</h2>
-              <span className="text-xs text-slate-500 dark:text-slate-400">{calls.length} saved</span>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-3.5 dark:border-slate-800">
+              <div className="flex items-baseline gap-3">
+                <h2 className="text-sm font-semibold">Completed calls</h2>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                  {filteredCalls.length}{outcomeFilter !== 'all' ? ` of ${calls.length}` : ''} saved
+                </span>
+              </div>
+
+              <label className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                Outcome
+                <select
+                  value={outcomeFilter}
+                  onChange={(e) => { setOutcomeFilter(e.target.value); setPage(1); }}
+                  className="h-9 rounded-lg border border-slate-300 bg-white px-2.5 text-sm capitalize text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                >
+                  {OUTCOME_FILTERS.map((o) => (
+                    <option key={o} value={o}>{o === 'all' ? 'All outcomes' : outcomeLabel(o)}</option>
+                  ))}
+                </select>
+              </label>
             </div>
 
             <div className="max-h-[75vh] overflow-auto">
               {loading ? (
                 <p className="px-5 py-12 text-center text-sm text-slate-500">Loading done calls…</p>
-              ) : calls.length === 0 ? (
-                <p className="px-5 py-12 text-center text-sm text-slate-500">No completed calls yet. Finish a call in the test console and it will show up here.</p>
+              ) : filteredCalls.length === 0 ? (
+                <p className="px-5 py-12 text-center text-sm text-slate-500">
+                  {calls.length === 0
+                    ? 'No completed calls yet. Finish a call in the test console and it will show up here.'
+                    : 'No calls match this outcome.'}
+                </p>
               ) : (
                 <table className="min-w-full border-collapse text-left text-sm">
                   <thead className="sticky top-0 z-10 bg-slate-50 text-xs font-semibold text-slate-500 dark:bg-slate-900 dark:text-slate-400">
@@ -123,7 +174,7 @@ export default function CallReviewPage({ path, script }) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                    {calls.map((call) => (
+                    {pageCalls.map((call) => (
                       <tr
                         key={call.call_id}
                         tabIndex={0}
@@ -145,6 +196,46 @@ export default function CallReviewPage({ path, script }) {
                 </table>
               )}
             </div>
+
+            {!loading && filteredCalls.length > 0 && (
+              <nav
+                aria-label="Pagination"
+                className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-5 py-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400"
+              >
+                <span>Showing {rangeStart}–{rangeEnd} of {filteredCalls.length}</span>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="flex items-center gap-2">
+                    Rows
+                    <select
+                      value={pageSize}
+                      onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
+                      className="h-8 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                    >
+                      {PAGE_SIZES.map((n) => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                  </label>
+
+                  <button
+                    type="button"
+                    className={`${btn} !h-8 disabled:cursor-not-allowed disabled:opacity-50`}
+                    disabled={currentPage <= 1}
+                    onClick={() => setPage(currentPage - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span aria-live="polite">Page {currentPage} of {totalPages}</span>
+                  <button
+                    type="button"
+                    className={`${btn} !h-8 disabled:cursor-not-allowed disabled:opacity-50`}
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setPage(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </nav>
+            )}
           </main>
         ) : (
           <section className={`${card} overflow-hidden`}>
