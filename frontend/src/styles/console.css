@@ -1,0 +1,352 @@
+/* Console styles — consolidated from style.css, flow.css, dynamic.css, layout.css (original cascade order preserved). */
+
+/* ===== style.css ===== */
+:root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e9edf7; background: #080b12; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at 70% 0, #151b2a 0, #080b12 42%); min-width: 1100px; }
+.app { max-width: 1700px; margin: auto; padding: 28px; }
+.top { display: flex; justify-content: space-between; gap: 30px; align-items: flex-start; margin-bottom: 20px; }
+.eyebrow { font-size: 11px; letter-spacing: 0.18em; color: #8791a8; font-weight: 800; }
+.top h1 { margin: 7px 0 5px; font-size: 30px; }
+.top p { margin: 0; color: #7f899e; font-size: 13px; }
+.topActions { display: flex; align-items: center; gap: 14px; }
+.live { font-size: 12px; color: #8ff0b4; }
+.live.dead { color: #ff8e9a; }
+.panel { background: rgba(17, 22, 33, 0.88); border: 1px solid #252d3e; border-radius: 15px; box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2); }
+button, select, input { font: inherit; }
+.secondary, .composer button { border: 1px solid #39445b; background: #20283a; color: #eef3ff; border-radius: 9px; padding: 10px 14px; cursor: pointer; }
+.scenario { display: flex; align-items: center; gap: 14px; padding: 12px 15px; margin-bottom: 18px; }
+.scenario > div:first-child { margin-right: auto; display: flex; flex-direction: column; }
+.scenario > div:first-child span { font-size: 11px; color: #7f899e; margin-top: 3px; }
+.select { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #8993a8; }
+.select select { background: #0d121c; color: #dfe6f4; border: 1px solid #30394d; border-radius: 8px; padding: 8px; }
+.dashboard { display: grid; grid-template-columns: minmax(600px, 1.5fr) minmax(330px, 0.75fr); gap: 18px; }
+.conversation { grid-row: span 2; min-height: 760px; display: flex; flex-direction: column; }
+.panelTitle { padding: 16px 18px; border-bottom: 1px solid #252d3e; display: flex; justify-content: space-between; align-items: center; }
+.panelTitle div { display: flex; flex-direction: column; }
+.panelTitle small { color: #727e94; font-size: 11px; margin-top: 3px; }
+.statePill { font-size: 11px; background: #141b2a; border: 1px solid #303a51; padding: 7px 10px; border-radius: 20px; color: #b7c2d7; }
+.statePill i { color: #4c566b; font-style: normal; }
+.assistantPrompt { margin: 16px 18px; padding: 14px 16px; border: 1px solid #29334a; background: #0d131f; border-radius: 11px; }
+.assistantPrompt span { font-size: 10px; font-weight: 800; color: #9aa6bd; letter-spacing: 0.12em; }
+.assistantPrompt p { margin: 6px 0 0; font-size: 14px; line-height: 1.5; }
+.summaryBar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 0 18px 14px; }
+.summaryItem { border: 1px solid #2a3448; background: rgba(17, 24, 35, 0.9); border-radius: 10px; padding: 10px 12px; }
+.summaryItem label { display: block; font-size: 10px; color: #8290a8; text-transform: uppercase; letter-spacing: 0.12em; }
+.summaryItem strong { display: block; margin-top: 6px; font-size: 13px; color: #edf2ff; }
+.messages { padding: 0 18px 15px; overflow: auto; max-height: 505px; }
+.turn { margin: 15px 0; display: flex; flex-direction: column; gap: 8px; }
+.bubble { padding: 11px 13px; border-radius: 10px; max-width: 82%; font-size: 13px; line-height: 1.45; }
+.bubble label { display: block; font-size: 9px; letter-spacing: 0.1em; color: #7e8aa0; font-weight: 800; margin-bottom: 4px; }
+.bubble p { margin: 0; }
+.bubble small { display: block; color: #68758c; margin-top: 7px; font-size: 10px; }
+.user { align-self: flex-end; background: #1a2232; border: 1px solid #303b51; }
+.bot { align-self: flex-start; background: #111925; border: 1px solid #283246; }
+.composer { margin-top: auto; padding: 14px; border-top: 1px solid #252d3e; display: flex; gap: 9px; }
+.composer input { flex: 1; background: #0a0f17; border: 1px solid #30394d; border-radius: 9px; color: #edf2fb; padding: 12px 13px; outline: none; }
+.composer input:focus { border-color: #5f6e8c; }
+.composer button:disabled { opacity: 0.4; cursor: not-allowed; }
+.side { display: flex; flex-direction: column; gap: 18px; }
+.metrics { min-height: 180px; }
+.metricGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #252d3e; }
+.metric { padding: 15px; background: #111621; }
+.metric strong { font-size: 18px; }
+.metric strong small { font-size: 10px; color: #737f94; margin-left: 2px; }
+.metric span { display: block; color: #707b91; font-size: 10px; margin-top: 5px; }
+.heroState { padding: 17px 18px; border-bottom: 1px solid #252d3e; }
+.heroState span { display: block; color: #7f8ba1; font-size: 10px; letter-spacing: 0.12em; }
+.heroState strong { display: block; margin-top: 4px; font-size: 18px; }
+.graphBadge { display: inline-flex; margin-top: 8px; padding: 3px 8px; border-radius: 999px; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+.graphBadge.left { background: rgba(107, 149, 255, 0.15); color: #9cb7ff; }
+.graphBadge.center { background: rgba(76, 211, 164, 0.12); color: #94f0c7; }
+.graphBadge.right { background: rgba(255, 170, 102, 0.12); color: #ffc985; }
+.graphRail { display: flex; gap: 8px; padding: 12px 12px 0; overflow: auto; }
+.graphNode { display: flex; align-items: center; gap: 6px; min-width: 110px; padding: 7px 8px; border-radius: 999px; border: 1px solid #2a3449; background: rgba(17, 24, 35, 0.8); color: #afbdd4; }
+.graphNode.current { border-color: #90a7d8; background: rgba(79, 122, 218, 0.15); color: #edf3ff; }
+.graphNode.past { opacity: 0.75; }
+.graphNode.future { opacity: 0.5; }
+.graphDot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+.laneList { padding: 10px 12px; max-height: 390px; overflow: auto; }
+.laneGroup { margin-bottom: 12px; }
+.laneName { font-size: 9px; letter-spacing: 0.12em; color: #67738a; margin: 5px 6px; }
+.stateRow { padding: 6px 8px; border-radius: 7px; color: #7e899d; font-size: 11px; }
+.stateRow span { display: inline-block; width: 13px; color: #8ee6ad; }
+.stateRow.current { background: #192337; color: #e8eef9; border: 1px solid #34425d; }
+.inspector { grid-column: 1 / -1; min-height: 300px; }
+.tabs { display: flex; border-bottom: 1px solid #252d3e; padding: 0 10px; }
+.tabs button { background: none; border: 0; color: #7c879b; padding: 13px 14px; font-size: 12px; cursor: pointer; border-bottom: 2px solid transparent; }
+.tabs button.active { color: #eef3ff; border-color: #91a7d8; }
+.tabs em { font-style: normal; background: #222b3c; border-radius: 10px; padding: 2px 6px; margin-left: 5px; font-size: 9px; }
+.slotGrid { padding: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-height: 520px; overflow: auto; }
+.slot { padding: 10px; border: 1px solid #252d3e; border-radius: 8px; background: #0e141f; min-height: 75px; }
+.slot.filled { border-color: #354966; background: #111a29; }
+.slot code { display: block; color: #8190a9; font-size: 10px; }
+.slot strong { display: block; margin: 6px 0; color: #6d778b; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot.filled strong { color: #dce5f4; }
+.slot small { color: #626e82; font-size: 9px; }
+.toolList, .trace { padding: 15px; max-height: 520px; overflow: auto; }
+.tool { border: 1px solid #252d3e; background: #0e141f; border-radius: 9px; padding: 12px; margin-bottom: 9px; }
+.tool > div { display: flex; justify-content: space-between; }
+.tool b { font-size: 12px; }
+.tool span { font-size: 10px; color: #89e0ab; }
+.tool small { color: #69758b; font-size: 9px; }
+.tool pre, .trace pre { white-space: pre-wrap; color: #aab5c8; font-size: 10px; margin: 5px 0 8px; }
+.empty { padding: 30px; color: #69758b; text-align: center; }
+.traceRow { display: grid; grid-template-columns: 32px 1fr 20px 1fr 70px; gap: 8px; align-items: center; border-bottom: 1px solid #202837; padding: 10px; font-size: 10px; }
+.traceRow b { color: #8996ad; }
+.traceRow span { color: #7b879d; }
+.traceRow i { color: #536078; }
+.traceRow strong { color: #dce5f3; }
+.traceRow em { color: #8adfa9; font-style: normal; text-align: right; }
+.traceRow pre { grid-column: 2 / -1; }
+.liveMeta { margin-top: 18px; padding: 14px 16px; }
+.metaTitle { color: #9aa6bd; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.liveMeta pre { margin: 0; white-space: pre-wrap; font-size: 11px; background: #0b1017; border: 1px solid #283246; border-radius: 8px; padding: 12px; color: #dfeaf7; }
+@media (max-width: 1200px) {
+  body { min-width: 0; }
+  .app { padding: 18px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .conversation { grid-row: auto; }
+  .side { display: grid; grid-template-columns: 1fr 1fr; }
+  .slotGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+
+/* ===== flow.css ===== */
+/* Flow path + lane list fixes. Import AFTER style.css. */
+
+/* path of visited states: wraps, never overlaps, never scrolls sideways */
+.flowRail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 4px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: visible;
+}
+.flowNode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #9aa4b8;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.flowNode::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.flowNode.silent { border-style: dashed; }
+.flowNode.silent small { opacity: 0.7; font-style: italic; }
+.flowNode.current {
+  color: #fff;
+  border-color: #f5b041;
+  background: rgba(245, 176, 65, 0.14);
+}
+.flowNode.current::before { background: #f5b041; opacity: 1; }
+.flowArrow { color: #4b556b; font-size: 12px; }
+
+/* lane list: contained scroll area with dark scrollbars */
+.laneList {
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 20px 16px;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: #2b3550 transparent;
+}
+.laneList::-webkit-scrollbar { width: 8px; }
+.laneList::-webkit-scrollbar-track { background: transparent; }
+.laneList::-webkit-scrollbar-thumb { background: #2b3550; border-radius: 8px; }
+.laneGroup.current .laneName { color: #f5b041; }
+.stateRow { overflow-wrap: anywhere; }
+/* ===== dynamic.css ===== */
+/* additions for the dynamic debugger — existing style.css / flow.css stay untouched */
+.callerBox { display: flex; flex-direction: column; gap: 2px; font-size: 11px; opacity: .9; }
+.callerBox input { width: 120px; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(128,128,128,.4); background: transparent; color: inherit; font: inherit; letter-spacing: .5px; }
+.notice { margin: 8px 0; padding: 8px 12px; border-radius: 10px; font-size: 13px; border: 1px solid rgba(128,128,128,.35); }
+.notice.ok { border-color: #2e9d62; background: rgba(46,157,98,.12); }
+.notice.jump { border-color: #b7791f; background: rgba(183,121,31,.14); }
+.laneStrip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.laneChip { padding: 4px 12px; border-radius: 999px; font-size: 12px; border: 1px solid rgba(128,128,128,.35); opacity: .55; transition: all .25s; }
+.laneChip.visited { opacity: .9; }
+.laneChip.demand { border-style: dashed; }
+.laneChip.active { opacity: 1; font-weight: 600; background: #3b6ef5; border-color: #3b6ef5; color: #fff; box-shadow: 0 0 0 3px rgba(59,110,245,.25); transform: translateY(-1px); }
+.chips, .eventList { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.eventList { padding: 8px; }
+.chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(128,128,128,.35); }
+.chip.lane { background: rgba(59,110,245,.15); border-color: #3b6ef5; }
+.chip.jump { background: rgba(183,121,31,.18); border-color: #b7791f; }
+.chip.warn { background: rgba(214,158,46,.18); border-color: #d69e2e; }
+.chip.bad { background: rgba(229,62,62,.15); border-color: #e53e3e; }
+.chip.ok { background: rgba(46,157,98,.15); border-color: #2e9d62; }
+.chip.tool, .chip.intent, .chip.slot { background: rgba(128,128,128,.12); }
+.chip.muted { opacity: .6; }
+.retryMeter { display: flex; align-items: center; gap: 4px; margin: 8px 0; font-size: 12px; }
+.retryMeter i { width: 14px; height: 6px; border-radius: 3px; background: rgba(128,128,128,.3); }
+.retryMeter i.used { background: #e53e3e; }
+.retryMeter span { margin-left: 6px; opacity: .8; }
+.llmGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; padding: 10px; }
+.llmCard { border: 1px solid rgba(128,128,128,.3); border-radius: 10px; padding: 10px; }
+.llmHead { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.llmHead em { margin-left: auto; opacity: .7; font-style: normal; font-size: 12px; }
+.composer .secondary { margin-left: 6px; }
+/* ===== layout.css ===== */
+/* layout.css — import LAST (after dynamic.css) so it overrides earlier rules.
+   The page fits the viewport; only the conversation, inspector and lane list scroll internally. */
+
+html, body, #root { height: 100%; }
+body { margin: 0; overflow: hidden; }
+
+/* ---- dark, thin scrollbars (removes the white native bars) ---- */
+* { scrollbar-width: thin; scrollbar-color: #2b3652 transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #2b3652; border-radius: 8px; }
+*::-webkit-scrollbar-thumb:hover { background: #3b4a70; }
+
+.app {
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  margin: 0;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- compact header ---- */
+.top { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top h1 { margin: 0; font-size: 18px; line-height: 1.2; }
+.top p { display: none; }
+.topActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topActions button { font-size: 13px; padding: 6px 12px; line-height: 1.2; height: auto; }
+.topActions .live { font-size: 12px; white-space: nowrap; }
+.callerBox { display: flex; flex-direction: column; gap: 2px; font-size: 11px; }
+.callerBox input { width: 120px; font-size: 13px; padding: 5px 8px; box-sizing: border-box; }
+
+.notice, .app > .empty { flex: none; margin: 0; padding: 6px 10px; font-size: 13px; }
+.laneStrip { flex: none; display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+.laneChip { flex: none; font-size: 12px; padding: 4px 12px; }
+
+/* ---- main grid: conversation | inspector | status ---- */
+.dashboard {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 0.8fr);
+  grid-template-areas: none;
+  gap: 10px;
+}
+.dashboard > * { grid-area: auto; grid-column: auto; grid-row: auto; min-width: 0; min-height: 0; overflow: hidden; }
+
+/* ---- conversation: messages scroll, composer stays pinned ---- */
+.conversation { display: flex; flex-direction: column; }
+.conversation > * { flex: none; }
+.conversation .assistantPrompt { max-height: 22%; overflow-y: auto; }
+.conversation .summaryBar {
+  display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; padding: 8px 0;
+}
+.conversation .summaryItem { flex: none; padding: 6px 10px; }
+.conversation .summaryItem strong { font-size: 14px; }
+
+.conversation .messages {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 12px;
+}
+.conversation .turn { flex: none; height: auto; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.conversation .bubble { height: auto; min-height: 0; max-width: 88%; box-sizing: border-box; overflow-wrap: anywhere; }
+.conversation .bubble p { margin: 4px 0; }
+.conversation .bubble.user { align-self: flex-end; }
+.conversation .bubble.bot { align-self: flex-start; max-width: 94%; }
+.conversation .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.conversation .composer { flex: none; display: flex; gap: 8px; padding: 10px 12px; }
+.conversation .composer input { flex: 1; min-width: 0; font-size: 14px; padding: 9px 12px; }
+.conversation .composer button { font-size: 14px; padding: 8px 14px; height: auto; }
+
+/* ---- inspector: tabs fixed, body scrolls ---- */
+.inspector { display: flex; flex-direction: column; }
+.inspector .tabs { flex: none; display: flex; flex-wrap: wrap; gap: 2px; overflow: visible; }
+.inspector .tabs button { white-space: nowrap; padding: 8px 10px; font-size: 13px; }
+.inspector .tabs button em { margin-left: 5px; font-style: normal; font-size: 11px; }
+.inspector > :not(.tabs) {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 10px; box-sizing: border-box;
+}
+.inspector pre, .llmCard pre, .tool pre, .traceRow pre {
+  font-size: 11px; max-height: 260px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; margin: 4px 0;
+}
+
+/* slot / flag cards: auto-height, wrap text, never overlap */
+.inspector .slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: auto;
+  align-content: start;
+  gap: 8px;
+}
+.inspector .slot {
+  height: auto; min-height: 0; min-width: 0; overflow: hidden;
+  display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; box-sizing: border-box;
+}
+.inspector .slot code { font-size: 11px; overflow-wrap: anywhere; }
+.inspector .slot strong { font-size: 14px; overflow-wrap: anywhere; }
+.inspector .slot small { font-size: 10.5px; line-height: 1.35; opacity: .65; overflow-wrap: anywhere; }
+
+.inspector .eventList { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.inspector .llmGrid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+/* ---- status column ---- */
+.side { display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.side > .panel { flex: none; min-width: 0; }
+.side > .lane { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.side > .lane > * { flex: none; }
+.side > .lane .laneList { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+
+.side .metricGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; padding: 8px 10px; }
+.side .metric { min-width: 0; padding: 6px 8px; overflow: hidden; }
+.side .metric strong { font-size: 17px; white-space: nowrap; background: none; }
+.side .metric small { font-size: 11px; margin-left: 3px; }
+.side .metric span { display: block; font-size: 11px; opacity: .65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.side .heroState { padding: 6px 12px; }
+.side .heroState strong { font-size: 18px; }
+.side .flowRail { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; max-height: 76px; overflow-y: auto; padding: 6px 12px; }
+.side .flowNode { padding: 2px 6px; }
+.side .flowNode small { font-size: 10px; }
+.side .laneName { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .6; margin: 8px 0 2px; }
+.side .stateRow { font-size: 12px; padding: 2px 0; display: flex; gap: 8px; }
+.side .stateRow span { width: 10px; flex: none; }
+
+/* ---- narrower screens: stack panels and let the page scroll ---- */
+@media (max-width: 1100px) {
+  body { overflow: auto; }
+  .app { height: auto; min-height: 100dvh; }
+  .dashboard { display: flex; flex-direction: column; }
+  .dashboard > .conversation { height: 75dvh; }
+  .dashboard > .inspector { height: 60dvh; }
+  .dashboard > .side { overflow: visible; }
+  .side > .lane { flex: none; min-height: 320px; }
+}

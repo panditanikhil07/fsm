@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { randomUUID } from "node:crypto";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { config } from "./config.js";
 import { publicScript } from "./script/index.js";
 import { createSession, snapshot } from "./engine/session.js";
@@ -75,6 +77,92 @@ app.patch("/api/customers/:phone/tickets/:ticket", async (req, res) => {
   return t ? res.json(t) : bad(res, 404, "Ticket not found");
 });
 app.get("/api/calls", (req, res) => res.json(listCalls(Number(req.query.limit) || 50)));
+
+// ---- scripts (debug / admin) ----
+const scriptsDir = path.join(config.dataDir, "scripts");
+fs.mkdir(scriptsDir, { recursive: true }).catch(console.error);
+
+function normalizeScript(script) {
+  if (!script || typeof script !== "object") return script;
+  const { _layout, ...clean } = script;
+  return {
+    meta: clean.meta || {},
+    lanes: clean.lanes || [],
+    slots: clean.slots || {},
+    groups: clean.groups || {},
+    intents: clean.intents || {},
+    states: clean.states || {},
+  };
+}
+
+function validateScriptPayload(script) {
+  if (!script || typeof script !== "object") return "Payload must be a JSON object";
+  if (!script.meta || typeof script.meta !== "object") return "Missing or invalid 'meta' in script";
+  if (!Array.isArray(script.lanes)) return "Missing or invalid 'lanes' array in script";
+  if (!script.slots || typeof script.slots !== "object") return "Missing or invalid 'slots' in script";
+  if (!script.states || typeof script.states !== "object") return "Missing or invalid 'states' in script";
+  if (Object.keys(script.states).length === 0) return "Script must contain at least one state";
+  return null;
+}
+
+async function writeStatesJsonSafely(script) {
+  const err = validateScriptPayload(script);
+  if (err) throw new Error(err);
+  const normalized = normalizeScript(script);
+  try {
+    await fs.copyFile(config.statesPath, `${config.statesPath}.bak`);
+  } catch (e) {
+    console.warn("Could not create backup of states.json:", e.message);
+  }
+  const formatted = JSON.stringify(normalized, null, 2) + "\n";
+  await fs.writeFile(config.statesPath, formatted, "utf8");
+}
+
+app.get("/api/scripts", async (req, res) => {
+  try {
+    const files = await fs.readdir(scriptsDir);
+    res.json(files.filter(f => f.endsWith(".json") && !f.endsWith(".layout.json")).map(f => f.replace(".json", "")));
+  } catch (err) { res.json([]); }
+});
+
+app.get("/api/scripts/:name", async (req, res) => {
+  try {
+    if (req.params.name === "active") {
+      const content = await fs.readFile(config.statesPath, "utf8");
+      return res.json(normalizeScript(JSON.parse(content)));
+    }
+    const content = await fs.readFile(path.join(scriptsDir, `${req.params.name}.json`), "utf8");
+    res.json(JSON.parse(content));
+  } catch (err) { bad(res, 404, "Script not found"); }
+});
+
+app.post("/api/scripts/:name", async (req, res) => {
+  try {
+    const err = validateScriptPayload(req.body);
+    if (err) return bad(res, 400, err);
+
+    const layout = req.body._layout;
+    const normalized = normalizeScript(req.body);
+
+    if (req.params.name === "active") {
+      await writeStatesJsonSafely(normalized);
+      await fs.writeFile(path.join(scriptsDir, "active.json"), JSON.stringify({ ...normalized, _layout: layout }, null, 2), "utf8");
+      return res.json({ ok: true, active: true });
+    }
+
+    await fs.writeFile(path.join(scriptsDir, `${req.params.name}.json`), JSON.stringify({ ...normalized, _layout: layout }, null, 2), "utf8");
+    res.json({ ok: true });
+  } catch (err) { bad(res, 500, err.message); }
+});
+
+app.post("/api/scripts/active/:name", async (req, res) => {
+  try {
+    const content = await fs.readFile(path.join(scriptsDir, `${req.params.name}.json`), "utf8");
+    const parsed = JSON.parse(content);
+    await writeStatesJsonSafely(parsed);
+    res.json({ ok: true });
+  } catch (err) { bad(res, 500, err.message); }
+});
 
 // idle sessions: persist whatever was captured, then drop them
 setInterval(async () => {

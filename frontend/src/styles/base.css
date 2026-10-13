@@ -1,0 +1,61 @@
+/* Shared UI primitives: buttons, inputs, nav, badges, notices. Loaded after console.css. */
+
+body { min-width: 0; }
+button { font: inherit; color: inherit; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.primary, .secondary, .ghost, .chipBtn {
+  border-radius: 9px; padding: 7px 13px; cursor: pointer; line-height: 1.2; font-size: 13px; border: 1px solid transparent;
+}
+.primary { background: #3b6ef5; border-color: #3b6ef5; color: #fff; font-weight: 600; }
+.primary:hover:not(:disabled) { background: #5282ff; }
+.secondary { background: #20283a; border-color: #39445b; color: #eef3ff; }
+.secondary:hover:not(:disabled) { background: #2a3550; }
+.ghost { background: transparent; border-color: transparent; color: #aab5cc; }
+.ghost:hover:not(:disabled) { background: #1c2436; color: #fff; }
+.danger { color: #ff8e9a; }
+.small { font-size: 12px; }
+.muted { color: #7f899e; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.builderBody code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #151c2b; padding: 1px 5px; border-radius: 5px; font-size: 11.5px; color: #c3cde3; }
+.spacer { flex: 1; }
+.chipBtn { background: #141b2a; border-color: #303a51; display: inline-flex; gap: 8px; }
+.chipBtn .ok { color: #8ff0b4; } .chipBtn .bad { color: #ff8e9a; } .chipBtn .warn { color: #ffcf7a; }
+
+/* section navigation */
+.nav { display: flex; gap: 4px; padding: 3px; background: #0d121c; border: 1px solid #252d3e; border-radius: 11px; }
+.nav button { background: none; border: 0; padding: 6px 14px; border-radius: 8px; color: #8993a8; cursor: pointer; font-size: 13px; }
+.nav button.active { background: #20283a; color: #fff; }
+.nav button:hover:not(.active) { color: #fff; }
+
+/* form controls */
+input, select, textarea {
+  background: #0a0f17; border: 1px solid #30394d; border-radius: 8px; color: #edf2fb; padding: 7px 10px; font: inherit; font-size: 13px; outline: none; min-width: 0;
+}
+input:focus, select:focus, textarea:focus { border-color: #5f6e8c; }
+textarea { width: 100%; resize: vertical; line-height: 1.45; }
+input.invalid, textarea.invalid { border-color: #e53e3e; }
+input[type="checkbox"], input[type="radio"] { width: auto; accent-color: #3b6ef5; }
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.fieldLabel { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8a95ac; }
+.fieldLabel em { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; color: #66738b; margin-left: 7px; }
+.fieldError { color: #ff8e9a; font-size: 12px; margin-top: 3px; }
+.toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: #cdd6e8; cursor: pointer; }
+.toggles { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 6px 0 12px; }
+
+.badge { font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 999px; background: #222b3c; color: #aab5cc; text-transform: uppercase; }
+.badge.ok { background: rgba(46, 157, 98, 0.18); color: #8ff0b4; }
+.badge.bad { background: rgba(229, 62, 62, 0.18); color: #ff8e9a; }
+.badge.info { background: rgba(59, 110, 245, 0.18); color: #9cb7ff; }
+
+.notice.bad { border-color: #e53e3e; background: rgba(229, 62, 62, 0.12); }
+.linkBtn { background: none; border: 0; padding: 0; color: #9cb7ff; cursor: pointer; font-size: inherit; text-decoration: underline dotted; }
+
+/* script library */
+.libraryGrid { flex: 1; min-height: 0; overflow: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; align-content: start; padding: 4px 2px 20px; }
+.libraryCard { padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.libraryCard h3 { margin: 0; font-size: 16px; }
+.libraryCard p { margin: 0 0 8px; font-size: 13px; }
+.activeCard { border-color: #2e9d62; }
+.cardActions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.libraryGrid > .empty { grid-column: 1 / -1; }
