@@ -1,6 +1,7 @@
 import { useActiveScript } from './hooks/useActiveScript';
 import { useRoute } from './hooks/useRoute';
 import FlowBuilder from './views/builder/FlowBuilder';
+import CallReviewPage from './views/calls/CallReviewPage';
 import TestConsole from './views/console/TestConsole';
 import ScriptLibrary from './views/scripts/ScriptLibrary';
 
@@ -8,6 +9,7 @@ export default function App() {
   const { path, query } = useRoute();
   const { script, reload } = useActiveScript();
 
+  if (path.startsWith('/calls')) return <CallReviewPage path={path} />;
   if (path.startsWith('/scripts')) return <ScriptLibrary path={path} script={script} reloadActive={reload} />;
   if (path.startsWith('/builder')) {
     const raw = path.split('/')[2];

@@ -1,6 +1,10 @@
+@import "tailwindcss";
+
 /* Shared UI primitives: buttons, inputs, nav, badges, notices. Loaded after console.css. */
 
-body { min-width: 0; }
+:root { color-scheme: light; }
+html, body, #root { min-height: 100%; }
+body { min-width: 0; margin: 0; background: #f3f4f6; color: #0f172a; }
 button { font: inherit; color: inherit; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 

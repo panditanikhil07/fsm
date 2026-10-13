@@ -1,2 +1,3017 @@
 [
+  {
+    "call_id": "35c42d55-fce4-4099-8481-97f801894b40",
+    "caller_number": "9540923207",
+    "service_number": "9540923207",
+    "started_at": "2026-10-13T06:41:19.847Z",
+    "ended_at": "2026-10-13T06:43:01.005Z",
+    "outcome": "completed",
+    "ended_by": "terminal",
+    "language": "english",
+    "final_state": "CLOSING",
+    "ticket_id": "T-1001",
+    "rating": "right",
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {
+      "language": "english",
+      "service_number_choice": "same",
+      "final_service_number": "9540923207",
+      "caller_type": "homeowner",
+      "first_name": "Nikhil",
+      "last_name": "Pandita",
+      "product": "mixer",
+      "brand": "grohe",
+      "street": "Ph-10",
+      "area": "Ug-8",
+      "city": "Ghaziabad",
+      "state": "Uttar Pradesh",
+      "pin_code": "201012",
+      "address_confirmed": true,
+      "address_type": "residential",
+      "contact_person_at_site": "Nikhil Pandita",
+      "site_contact_number": "9540923207",
+      "ticket_id": "T-1001",
+      "call_rating": "4"
+    },
+    "path": [
+      "OPENING",
+      "LANGUAGE_LOCK",
+      "SERVICE_NUMBER_CHOICE",
+      "CAPTURE_CALLER_TYPE",
+      "CAPTURE_FIRST_NAME",
+      "CAPTURE_LAST_NAME",
+      "CAPTURE_PRODUCT",
+      "CAPTURE_BRAND",
+      "ADDRESS_ROUTER",
+      "ADDRESS_COLLECT",
+      "ADDRESS_CONFIRM_NEW",
+      "AREA_MAPPING",
+      "ADDRESS_TYPE",
+      "CONTACT_PERSON",
+      "CONTACT_NUMBER",
+      "REGISTRATION_READINESS_GATE",
+      "REGISTER_COMPLAINT",
+      "CLOSING"
+    ],
+    "metrics": {
+      "turns": 14,
+      "total_ms": 22900.99,
+      "last_turn_ms": 1663.78,
+      "classify_ms": 551.14,
+      "capture_ms": 1111.06,
+      "fsm_ms": 1.15,
+      "tool_ms": 0
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_NOT_FOUND",
+        "at": "2026-10-13T06:41:19.847Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-13T06:41:29.021Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-13T06:41:53.091Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-13T06:42:34.888Z"
+      },
+      {
+        "name": "fetch_nearest_areas",
+        "status": "NO_EXACT_MATCH",
+        "at": "2026-10-13T06:42:34.889Z"
+      },
+      {
+        "name": "create_ticket",
+        "status": "CREATED",
+        "at": "2026-10-13T06:42:55.233Z"
+      }
+    ],
+    "transcript": [
+      {
+        "turn": 1,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. Is this complaint for the number you are calling from, or for a different number?",
+        "state": "SERVICE_NUMBER_CHOICE",
+        "lane": "IDENTITY",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [
+          "LANGUAGE_LOCK",
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "latency_ms": 2093.25,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": "english",
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 877.99
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1175.8
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "SERVICE_NUMBER_CHOICE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "language": "english"
+        }
+      },
+      {
+        "turn": 2,
+        "user": "same number",
+        "assistant": "Are you an end customer, a dealer, or someone else?",
+        "state": "CAPTURE_CALLER_TYPE",
+        "lane": "NEW_CUSTOMER",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "IDENTITY",
+        "path": [
+          "CAPTURE_CALLER_TYPE"
+        ],
+        "latency_ms": 1558.17,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 600.29
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 955.29
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "NEW_CUSTOMER",
+            "state": "CAPTURE_CALLER_TYPE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_CALLER_TYPE",
+            "lane": "NEW_CUSTOMER"
+          }
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        }
+      },
+      {
+        "turn": 3,
+        "user": "end customer",
+        "assistant": "May I have your full name, please?",
+        "state": "CAPTURE_FIRST_NAME",
+        "lane": "NEW_CUSTOMER",
+        "from_state": "CAPTURE_CALLER_TYPE",
+        "lane_from": "NEW_CUSTOMER",
+        "path": [
+          "CAPTURE_FIRST_NAME"
+        ],
+        "latency_ms": 1468.88,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 515.19
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "caller_type": "end customer"
+          },
+          "ms": 952.7
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "caller_type",
+            "value": "homeowner",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_FIRST_NAME",
+            "lane": "NEW_CUSTOMER"
+          }
+        ],
+        "extracted": {
+          "caller_type": "homeowner"
+        }
+      },
+      {
+        "turn": 4,
+        "user": "nikhil pandita",
+        "assistant": "Which product is the complaint about?",
+        "state": "CAPTURE_PRODUCT",
+        "lane": "PRODUCT",
+        "from_state": "CAPTURE_FIRST_NAME",
+        "lane_from": "NEW_CUSTOMER",
+        "path": [
+          "CAPTURE_LAST_NAME",
+          "CAPTURE_PRODUCT"
+        ],
+        "latency_ms": 1657.39,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 550.08
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "first_name": "nikhil",
+            "last_name": "pandita"
+          },
+          "ms": 1103.02
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "first_name",
+            "value": "Nikhil",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "last_name",
+            "value": "Pandita",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_LAST_NAME",
+            "lane": "NEW_CUSTOMER"
+          },
+          {
+            "type": "state_skipped",
+            "state": "CAPTURE_LAST_NAME"
+          },
+          {
+            "type": "lane_switch",
+            "from": "NEW_CUSTOMER",
+            "to": "PRODUCT",
+            "state": "CAPTURE_PRODUCT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_PRODUCT",
+            "lane": "PRODUCT"
+          }
+        ],
+        "extracted": {
+          "first_name": "Nikhil",
+          "last_name": "Pandita"
+        }
+      },
+      {
+        "turn": 5,
+        "user": "mixer",
+        "assistant": "Which brand is this product?",
+        "state": "CAPTURE_BRAND",
+        "lane": "PRODUCT",
+        "from_state": "CAPTURE_PRODUCT",
+        "lane_from": "PRODUCT",
+        "path": [
+          "CAPTURE_BRAND"
+        ],
+        "latency_ms": 1566.49,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 568.75
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "product": "mixer"
+          },
+          "ms": 996.14
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "product",
+            "value": "mixer",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_BRAND",
+            "lane": "PRODUCT"
+          }
+        ],
+        "extracted": {
+          "product": "mixer"
+        }
+      },
+      {
+        "turn": 6,
+        "user": "grohe",
+        "assistant": "Please tell me your complete address, including street, area, city, state and six digit pin code.",
+        "state": "ADDRESS_COLLECT",
+        "lane": "ADDRESS",
+        "from_state": "CAPTURE_BRAND",
+        "lane_from": "PRODUCT",
+        "path": [
+          "ADDRESS_ROUTER",
+          "ADDRESS_COLLECT"
+        ],
+        "latency_ms": 1572.79,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 585.15
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "brand": "grohe"
+          },
+          "ms": 986.72
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "brand",
+            "value": "grohe",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "PRODUCT",
+            "to": "ADDRESS",
+            "state": "ADDRESS_ROUTER"
+          },
+          {
+            "type": "router",
+            "state": "ADDRESS_ROUTER",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_COLLECT",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          }
+        ],
+        "extracted": {
+          "brand": "grohe"
+        }
+      },
+      {
+        "turn": 7,
+        "user": "ph-10 ug-8 vasundhara sec 4",
+        "assistant": "Which city is this?",
+        "state": "ADDRESS_COLLECT",
+        "lane": "ADDRESS",
+        "from_state": "ADDRESS_COLLECT",
+        "lane_from": "ADDRESS",
+        "path": [],
+        "latency_ms": 2114.15,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 553.26
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I need the city, state, and six-digit pin code to complete your address.",
+          "slots": {
+            "street": "ph-10",
+            "area": "ug-8"
+          },
+          "ms": 1393.9
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "city",
+              "state",
+              "pin_code"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "street",
+            "value": "Ph-10",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "area",
+            "value": "Ug-8",
+            "via": "asked"
+          }
+        ],
+        "extracted": {
+          "street": "Ph-10",
+          "area": "Ug-8",
+          "_digits": "1084"
+        }
+      },
+      {
+        "turn": 8,
+        "user": "ghaziabad",
+        "assistant": "Please tell me the complete six digit pin code.",
+        "state": "ADDRESS_COLLECT",
+        "lane": "ADDRESS",
+        "from_state": "ADDRESS_COLLECT",
+        "lane_from": "ADDRESS",
+        "path": [],
+        "latency_ms": 1796.38,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 525.99
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "city": "Ghaziabad",
+            "state": "Uttar Pradesh"
+          },
+          "ms": 1213.83
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "city",
+            "value": "Ghaziabad",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "state",
+            "value": "Uttar Pradesh",
+            "via": "asked"
+          }
+        ],
+        "extracted": {
+          "city": "Ghaziabad",
+          "state": "Uttar Pradesh"
+        }
+      },
+      {
+        "turn": 9,
+        "user": "201012",
+        "assistant": "Let me confirm your address: Ph-10, Ug-8, Ghaziabad, Uttar Pradesh, pin code 2 0 1 0 1 2. Is that correct?",
+        "state": "ADDRESS_CONFIRM_NEW",
+        "lane": "ADDRESS",
+        "from_state": "ADDRESS_COLLECT",
+        "lane_from": "ADDRESS",
+        "path": [
+          "ADDRESS_CONFIRM_NEW"
+        ],
+        "latency_ms": 1603.8,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 587.23
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "pin_code": "201012"
+          },
+          "ms": 951.18
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "pin_code",
+            "value": "201012",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_CONFIRM_NEW",
+            "lane": "ADDRESS"
+          }
+        ],
+        "extracted": {
+          "pin_code": "201012",
+          "_digits": "201012"
+        }
+      },
+      {
+        "turn": 10,
+        "user": "yes",
+        "assistant": "Is this address residential, commercial, or a residential project site?",
+        "state": "ADDRESS_TYPE",
+        "lane": "ADDRESS",
+        "from_state": "ADDRESS_CONFIRM_NEW",
+        "lane_from": "ADDRESS",
+        "path": [
+          "AREA_MAPPING",
+          "ADDRESS_TYPE"
+        ],
+        "latency_ms": 1569.65,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 556.3
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "address_confirmed": true
+          },
+          "ms": 1010.74
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "address_confirmed",
+            "value": true,
+            "via": "asked"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "router",
+            "state": "AREA_MAPPING",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "tool",
+            "name": "fetch_nearest_areas",
+            "status": "NO_EXACT_MATCH"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_TYPE",
+            "lane": "ADDRESS"
+          }
+        ],
+        "extracted": {
+          "address_confirmed": true,
+          "_yn": "yes"
+        }
+      },
+      {
+        "turn": 11,
+        "user": "residential",
+        "assistant": "Who will be the contact person at the site?",
+        "state": "CONTACT_PERSON",
+        "lane": "CONTACT",
+        "from_state": "ADDRESS_TYPE",
+        "lane_from": "ADDRESS",
+        "path": [
+          "CONTACT_PERSON"
+        ],
+        "latency_ms": 1651.43,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 520.79
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "address_type": "residential"
+          },
+          "ms": 1129.21
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "address_type",
+            "value": "residential",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "ADDRESS",
+            "to": "CONTACT",
+            "state": "CONTACT_PERSON"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONTACT_PERSON",
+            "lane": "CONTACT"
+          }
+        ],
+        "extracted": {
+          "address_type": "residential"
+        }
+      },
+      {
+        "turn": 12,
+        "user": "me",
+        "assistant": "Should the technician use this same number to reach you?",
+        "state": "CONTACT_NUMBER",
+        "lane": "CONTACT",
+        "from_state": "CONTACT_PERSON",
+        "lane_from": "CONTACT",
+        "path": [
+          "CONTACT_NUMBER"
+        ],
+        "latency_ms": 1959.34,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 627.05
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I have noted your name as the contact person at the site. Let's proceed with your request.",
+          "slots": {
+            "contact_person_at_site": "Nikhil Pandita"
+          },
+          "ms": 1292.11
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "contact_person_at_site",
+            "value": "Nikhil Pandita",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONTACT_NUMBER",
+            "lane": "CONTACT"
+          }
+        ],
+        "extracted": {
+          "contact_person_at_site": "Nikhil Pandita"
+        }
+      },
+      {
+        "turn": 13,
+        "user": "yes",
+        "assistant": "Your complaint has been registered and escalated to the service team. The technician will contact you to confirm the visit. Please show the invoice during the visit. Warranty eligibility and any applicable charges will be confirmed after the inspection. Before we end the call, how would you rate this conversation on a scale of zero to five, where zero means extremely poor and five means excellent?",
+        "state": "REGISTER_COMPLAINT",
+        "lane": "REGISTRATION",
+        "from_state": "CONTACT_NUMBER",
+        "lane_from": "CONTACT",
+        "path": [
+          "REGISTRATION_READINESS_GATE",
+          "REGISTER_COMPLAINT"
+        ],
+        "latency_ms": 625.49,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 624.25
+        },
+        "capture": {
+          "source": "skipped",
+          "lead": "",
+          "slots": {},
+          "ms": 0
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "lane_switch",
+            "from": "CONTACT",
+            "to": "REGISTRATION",
+            "state": "REGISTRATION_READINESS_GATE"
+          },
+          {
+            "type": "gate",
+            "state": "REGISTRATION_READINESS_GATE",
+            "lane": "REGISTRATION"
+          },
+          {
+            "type": "customer_facing",
+            "state": "REGISTER_COMPLAINT",
+            "lane": "REGISTRATION"
+          },
+          {
+            "type": "tool",
+            "name": "create_ticket",
+            "status": "CREATED"
+          }
+        ],
+        "extracted": {
+          "_yn": "yes"
+        }
+      },
+      {
+        "turn": 14,
+        "user": "4",
+        "assistant": "Thank you for calling American Standard. You'll receive the details by SMS and, after your complaint is closed, a feedback link by SMS or WhatsApp. Goodbye.",
+        "state": "CLOSING",
+        "lane": "CLOSURE",
+        "from_state": "REGISTER_COMPLAINT",
+        "lane_from": "REGISTRATION",
+        "path": [
+          "CLOSING"
+        ],
+        "latency_ms": 1663.78,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 551.14
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "call_rating": "4"
+          },
+          "ms": 1111.06
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "call_rating",
+            "value": "4",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "REGISTRATION",
+            "to": "CLOSURE",
+            "state": "CLOSING"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CLOSING",
+            "lane": "CLOSURE"
+          }
+        ],
+        "extracted": {
+          "call_rating": "4",
+          "_digits": "4"
+        }
+      }
+    ],
+    "history": [
+      {
+        "turn": 1,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. Is this complaint for the number you are calling from, or for a different number?",
+        "from_state": "OPENING",
+        "to_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "STARTUP",
+        "lane": "IDENTITY",
+        "lane_changed": true,
+        "path": [
+          "LANGUAGE_LOCK",
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "extracted": {
+          "language": "english"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "SERVICE_NUMBER_CHOICE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": "english",
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 877.99
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1175.8
+        },
+        "retry": {
+          "state": "SERVICE_NUMBER_CHOICE",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2093.25
+      },
+      {
+        "turn": 2,
+        "user": "same number",
+        "assistant": "Are you an end customer, a dealer, or someone else?",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "to_state": "CAPTURE_CALLER_TYPE",
+        "lane_from": "IDENTITY",
+        "lane": "NEW_CUSTOMER",
+        "lane_changed": true,
+        "path": [
+          "CAPTURE_CALLER_TYPE"
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "NEW_CUSTOMER",
+            "state": "CAPTURE_CALLER_TYPE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_CALLER_TYPE",
+            "lane": "NEW_CUSTOMER"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 600.29
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 955.29
+        },
+        "retry": {
+          "state": "CAPTURE_CALLER_TYPE",
+          "used": 0,
+          "max": 1
+        },
+        "jump": null,
+        "latency_ms": 1558.17
+      },
+      {
+        "turn": 3,
+        "user": "end customer",
+        "assistant": "May I have your full name, please?",
+        "from_state": "CAPTURE_CALLER_TYPE",
+        "to_state": "CAPTURE_FIRST_NAME",
+        "lane_from": "NEW_CUSTOMER",
+        "lane": "NEW_CUSTOMER",
+        "lane_changed": false,
+        "path": [
+          "CAPTURE_FIRST_NAME"
+        ],
+        "extracted": {
+          "caller_type": "homeowner"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "caller_type",
+            "value": "homeowner",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_FIRST_NAME",
+            "lane": "NEW_CUSTOMER"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 515.19
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "caller_type": "end customer"
+          },
+          "ms": 952.7
+        },
+        "retry": {
+          "state": "CAPTURE_FIRST_NAME",
+          "used": 0,
+          "max": 1
+        },
+        "jump": null,
+        "latency_ms": 1468.88
+      },
+      {
+        "turn": 4,
+        "user": "nikhil pandita",
+        "assistant": "Which product is the complaint about?",
+        "from_state": "CAPTURE_FIRST_NAME",
+        "to_state": "CAPTURE_PRODUCT",
+        "lane_from": "NEW_CUSTOMER",
+        "lane": "PRODUCT",
+        "lane_changed": true,
+        "path": [
+          "CAPTURE_LAST_NAME",
+          "CAPTURE_PRODUCT"
+        ],
+        "extracted": {
+          "first_name": "Nikhil",
+          "last_name": "Pandita"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "first_name",
+            "value": "Nikhil",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "last_name",
+            "value": "Pandita",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_LAST_NAME",
+            "lane": "NEW_CUSTOMER"
+          },
+          {
+            "type": "state_skipped",
+            "state": "CAPTURE_LAST_NAME"
+          },
+          {
+            "type": "lane_switch",
+            "from": "NEW_CUSTOMER",
+            "to": "PRODUCT",
+            "state": "CAPTURE_PRODUCT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_PRODUCT",
+            "lane": "PRODUCT"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 550.08
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "first_name": "nikhil",
+            "last_name": "pandita"
+          },
+          "ms": 1103.02
+        },
+        "retry": {
+          "state": "CAPTURE_PRODUCT",
+          "used": 0,
+          "max": 0
+        },
+        "jump": null,
+        "latency_ms": 1657.39
+      },
+      {
+        "turn": 5,
+        "user": "mixer",
+        "assistant": "Which brand is this product?",
+        "from_state": "CAPTURE_PRODUCT",
+        "to_state": "CAPTURE_BRAND",
+        "lane_from": "PRODUCT",
+        "lane": "PRODUCT",
+        "lane_changed": false,
+        "path": [
+          "CAPTURE_BRAND"
+        ],
+        "extracted": {
+          "product": "mixer"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "product",
+            "value": "mixer",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CAPTURE_BRAND",
+            "lane": "PRODUCT"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 568.75
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "product": "mixer"
+          },
+          "ms": 996.14
+        },
+        "retry": {
+          "state": "CAPTURE_BRAND",
+          "used": 0,
+          "max": 0
+        },
+        "jump": null,
+        "latency_ms": 1566.49
+      },
+      {
+        "turn": 6,
+        "user": "grohe",
+        "assistant": "Please tell me your complete address, including street, area, city, state and six digit pin code.",
+        "from_state": "CAPTURE_BRAND",
+        "to_state": "ADDRESS_COLLECT",
+        "lane_from": "PRODUCT",
+        "lane": "ADDRESS",
+        "lane_changed": true,
+        "path": [
+          "ADDRESS_ROUTER",
+          "ADDRESS_COLLECT"
+        ],
+        "extracted": {
+          "brand": "grohe"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "brand",
+            "value": "grohe",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "PRODUCT",
+            "to": "ADDRESS",
+            "state": "ADDRESS_ROUTER"
+          },
+          {
+            "type": "router",
+            "state": "ADDRESS_ROUTER",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_COLLECT",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 585.15
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "brand": "grohe"
+          },
+          "ms": 986.72
+        },
+        "retry": {
+          "state": "ADDRESS_COLLECT",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1572.79
+      },
+      {
+        "turn": 7,
+        "user": "ph-10 ug-8 vasundhara sec 4",
+        "assistant": "Which city is this?",
+        "from_state": "ADDRESS_COLLECT",
+        "to_state": "ADDRESS_COLLECT",
+        "lane_from": "ADDRESS",
+        "lane": "ADDRESS",
+        "lane_changed": false,
+        "path": [],
+        "extracted": {
+          "street": "Ph-10",
+          "area": "Ug-8",
+          "_digits": "1084"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "city",
+              "state",
+              "pin_code"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "street",
+            "value": "Ph-10",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "area",
+            "value": "Ug-8",
+            "via": "asked"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 553.26
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I need the city, state, and six-digit pin code to complete your address.",
+          "slots": {
+            "street": "ph-10",
+            "area": "ug-8"
+          },
+          "ms": 1393.9
+        },
+        "retry": {
+          "state": "ADDRESS_COLLECT",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2114.15
+      },
+      {
+        "turn": 8,
+        "user": "ghaziabad",
+        "assistant": "Please tell me the complete six digit pin code.",
+        "from_state": "ADDRESS_COLLECT",
+        "to_state": "ADDRESS_COLLECT",
+        "lane_from": "ADDRESS",
+        "lane": "ADDRESS",
+        "lane_changed": false,
+        "path": [],
+        "extracted": {
+          "city": "Ghaziabad",
+          "state": "Uttar Pradesh"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "city",
+            "value": "Ghaziabad",
+            "via": "asked"
+          },
+          {
+            "type": "slot_set",
+            "slot": "state",
+            "value": "Uttar Pradesh",
+            "via": "asked"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 525.99
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "city": "Ghaziabad",
+            "state": "Uttar Pradesh"
+          },
+          "ms": 1213.83
+        },
+        "retry": {
+          "state": "ADDRESS_COLLECT",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1796.38
+      },
+      {
+        "turn": 9,
+        "user": "201012",
+        "assistant": "Let me confirm your address: Ph-10, Ug-8, Ghaziabad, Uttar Pradesh, pin code 2 0 1 0 1 2. Is that correct?",
+        "from_state": "ADDRESS_COLLECT",
+        "to_state": "ADDRESS_CONFIRM_NEW",
+        "lane_from": "ADDRESS",
+        "lane": "ADDRESS",
+        "lane_changed": false,
+        "path": [
+          "ADDRESS_CONFIRM_NEW"
+        ],
+        "extracted": {
+          "pin_code": "201012",
+          "_digits": "201012"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "pin_code",
+            "value": "201012",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_CONFIRM_NEW",
+            "lane": "ADDRESS"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 587.23
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "pin_code": "201012"
+          },
+          "ms": 951.18
+        },
+        "retry": {
+          "state": "ADDRESS_CONFIRM_NEW",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1603.8
+      },
+      {
+        "turn": 10,
+        "user": "yes",
+        "assistant": "Is this address residential, commercial, or a residential project site?",
+        "from_state": "ADDRESS_CONFIRM_NEW",
+        "to_state": "ADDRESS_TYPE",
+        "lane_from": "ADDRESS",
+        "lane": "ADDRESS",
+        "lane_changed": false,
+        "path": [
+          "AREA_MAPPING",
+          "ADDRESS_TYPE"
+        ],
+        "extracted": {
+          "address_confirmed": true,
+          "_yn": "yes"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "address_confirmed",
+            "value": true,
+            "via": "asked"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "router",
+            "state": "AREA_MAPPING",
+            "lane": "ADDRESS"
+          },
+          {
+            "type": "tool",
+            "name": "fetch_nearest_areas",
+            "status": "NO_EXACT_MATCH"
+          },
+          {
+            "type": "customer_facing",
+            "state": "ADDRESS_TYPE",
+            "lane": "ADDRESS"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 556.3
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "address_confirmed": true
+          },
+          "ms": 1010.74
+        },
+        "retry": {
+          "state": "ADDRESS_TYPE",
+          "used": 0,
+          "max": 1
+        },
+        "jump": null,
+        "latency_ms": 1569.65
+      },
+      {
+        "turn": 11,
+        "user": "residential",
+        "assistant": "Who will be the contact person at the site?",
+        "from_state": "ADDRESS_TYPE",
+        "to_state": "CONTACT_PERSON",
+        "lane_from": "ADDRESS",
+        "lane": "CONTACT",
+        "lane_changed": true,
+        "path": [
+          "CONTACT_PERSON"
+        ],
+        "extracted": {
+          "address_type": "residential"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "address_type",
+            "value": "residential",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "ADDRESS",
+            "to": "CONTACT",
+            "state": "CONTACT_PERSON"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONTACT_PERSON",
+            "lane": "CONTACT"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 520.79
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "address_type": "residential"
+          },
+          "ms": 1129.21
+        },
+        "retry": {
+          "state": "CONTACT_PERSON",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1651.43
+      },
+      {
+        "turn": 12,
+        "user": "me",
+        "assistant": "Should the technician use this same number to reach you?",
+        "from_state": "CONTACT_PERSON",
+        "to_state": "CONTACT_NUMBER",
+        "lane_from": "CONTACT",
+        "lane": "CONTACT",
+        "lane_changed": false,
+        "path": [
+          "CONTACT_NUMBER"
+        ],
+        "extracted": {
+          "contact_person_at_site": "Nikhil Pandita"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "contact_person_at_site",
+            "value": "Nikhil Pandita",
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONTACT_NUMBER",
+            "lane": "CONTACT"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 627.05
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I have noted your name as the contact person at the site. Let's proceed with your request.",
+          "slots": {
+            "contact_person_at_site": "Nikhil Pandita"
+          },
+          "ms": 1292.11
+        },
+        "retry": {
+          "state": "CONTACT_NUMBER",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1959.34
+      },
+      {
+        "turn": 13,
+        "user": "yes",
+        "assistant": "Your complaint has been registered and escalated to the service team. The technician will contact you to confirm the visit. Please show the invoice during the visit. Warranty eligibility and any applicable charges will be confirmed after the inspection. Before we end the call, how would you rate this conversation on a scale of zero to five, where zero means extremely poor and five means excellent?",
+        "from_state": "CONTACT_NUMBER",
+        "to_state": "REGISTER_COMPLAINT",
+        "lane_from": "CONTACT",
+        "lane": "REGISTRATION",
+        "lane_changed": true,
+        "path": [
+          "REGISTRATION_READINESS_GATE",
+          "REGISTER_COMPLAINT"
+        ],
+        "extracted": {
+          "_yn": "yes"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "lane_switch",
+            "from": "CONTACT",
+            "to": "REGISTRATION",
+            "state": "REGISTRATION_READINESS_GATE"
+          },
+          {
+            "type": "gate",
+            "state": "REGISTRATION_READINESS_GATE",
+            "lane": "REGISTRATION"
+          },
+          {
+            "type": "customer_facing",
+            "state": "REGISTER_COMPLAINT",
+            "lane": "REGISTRATION"
+          },
+          {
+            "type": "tool",
+            "name": "create_ticket",
+            "status": "CREATED"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 624.25
+        },
+        "capture": {
+          "source": "skipped",
+          "lead": "",
+          "slots": {},
+          "ms": 0
+        },
+        "retry": {
+          "state": "REGISTER_COMPLAINT",
+          "used": 0,
+          "max": 1
+        },
+        "jump": null,
+        "latency_ms": 625.49
+      },
+      {
+        "turn": 14,
+        "user": "4",
+        "assistant": "Thank you for calling American Standard. You'll receive the details by SMS and, after your complaint is closed, a feedback link by SMS or WhatsApp. Goodbye.",
+        "from_state": "REGISTER_COMPLAINT",
+        "to_state": "CLOSING",
+        "lane_from": "REGISTRATION",
+        "lane": "CLOSURE",
+        "lane_changed": true,
+        "path": [
+          "CLOSING"
+        ],
+        "extracted": {
+          "call_rating": "4",
+          "_digits": "4"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "call_rating",
+            "value": "4",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "REGISTRATION",
+            "to": "CLOSURE",
+            "state": "CLOSING"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CLOSING",
+            "lane": "CLOSURE"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 551.14
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "call_rating": "4"
+          },
+          "ms": 1111.06
+        },
+        "retry": {
+          "state": "CLOSING",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1663.78
+      }
+    ],
+    "review": {
+      "result": "right",
+      "note": "everything look good",
+      "reviewed_at": "2026-10-13T06:57:01.851Z"
+    }
+  },
+  {
+    "call_id": "ecd23ab5-9b63-48ad-9abb-d6b0a5d1d1df",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:04:04.745Z",
+    "ended_at": "2026-10-13T07:04:11.858Z",
+    "outcome": "dropped",
+    "ended_by": "hangup",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.04
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:04:04.745Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "9941ef5a-f33a-49a7-a678-e0e75bf6202d",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:14:50.700Z",
+    "ended_at": "2026-10-13T07:19:11.684Z",
+    "outcome": "dropped",
+    "ended_by": "reset",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.22
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:14:50.701Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "1caed8c1-6841-4cb7-87ea-ac3a2cc2ce62",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:19:11.693Z",
+    "ended_at": "2026-10-13T07:19:24.399Z",
+    "outcome": "dropped",
+    "ended_by": "reset",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.22
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:19:11.694Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "6c90d649-a51a-4bcd-a8ba-000f6a8d3048",
+    "caller_number": "9540923207",
+    "service_number": "9540923207",
+    "started_at": "2026-10-13T07:22:48.661Z",
+    "ended_at": "2026-10-13T07:23:33.373Z",
+    "outcome": "transferred",
+    "ended_by": "terminal",
+    "language": "english",
+    "final_state": "TRANSFER_COMPLETE",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": "open_ticket",
+    "resumed_previous": false,
+    "slots": {
+      "identity_confirmed": true,
+      "language": "english",
+      "service_number_choice": "same",
+      "final_service_number": "9540923207"
+    },
+    "path": [
+      "OPENING",
+      "LANGUAGE_LOCK",
+      "SERVICE_NUMBER_CHOICE",
+      "TICKET_CHECK",
+      "TRANSFER_TO_AGENT",
+      "TRANSFER_COMPLETE"
+    ],
+    "metrics": {
+      "turns": 3,
+      "total_ms": 7339.78,
+      "last_turn_ms": 1850,
+      "classify_ms": 616.04,
+      "capture_ms": 1229.17,
+      "fsm_ms": 4.38,
+      "tool_ms": 0.36
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:22:48.661Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-13T07:23:23.259Z"
+      },
+      {
+        "name": "initiate_warm_transfer",
+        "status": "success",
+        "at": "2026-10-13T07:23:33.371Z"
+      }
+    ],
+    "transcript": [
+      {
+        "turn": 1,
+        "user": "yes i am",
+        "assistant": "Are you comfortable in Hindi or English?",
+        "state": "OPENING",
+        "lane": "STARTUP",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [],
+        "latency_ms": 2986.95,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 1268.55
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I see you're confirming your identity. Please let me know if you prefer Hindi or English.",
+          "slots": {},
+          "ms": 1680.89
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "identity_confirmed",
+            "value": true,
+            "via": "asked"
+          }
+        ],
+        "extracted": {
+          "identity_confirmed": true,
+          "_yn": "yes"
+        }
+      },
+      {
+        "turn": 2,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. Is this complaint for the number you are calling from, or for a different number?",
+        "state": "SERVICE_NUMBER_CHOICE",
+        "lane": "IDENTITY",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [
+          "LANGUAGE_LOCK",
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "latency_ms": 2502.83,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": "english",
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 574.45
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1921
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "identity_confirmed"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "SERVICE_NUMBER_CHOICE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "language": "english"
+        }
+      },
+      {
+        "turn": 3,
+        "user": "same",
+        "assistant": "I can see there is already an open service request for you. Let me connect you to a Senior Executive.",
+        "state": "TRANSFER_COMPLETE",
+        "lane": "TRANSFER",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "IDENTITY",
+        "path": [
+          "TICKET_CHECK",
+          "TRANSFER_TO_AGENT",
+          "TRANSFER_COMPLETE"
+        ],
+        "latency_ms": 1850,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 616.04
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "Thank you for confirming that this complaint is for the same number you are calling from. Let's proceed with your complaint.",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 1229.17
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "TICKET",
+            "state": "TICKET_CHECK"
+          },
+          {
+            "type": "router",
+            "state": "TICKET_CHECK",
+            "lane": "TICKET"
+          },
+          {
+            "type": "lane_switch",
+            "from": "TICKET",
+            "to": "TRANSFER",
+            "state": "TRANSFER_TO_AGENT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_TO_AGENT",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "tool",
+            "name": "initiate_warm_transfer",
+            "status": "success"
+          },
+          {
+            "type": "transfer",
+            "reason": "open_ticket",
+            "result": "success"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_COMPLETE",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "persisted",
+            "outcome": "transferred",
+            "files": [
+              "customers.json",
+              "calls.json"
+            ]
+          }
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        }
+      }
+    ],
+    "history": [
+      {
+        "turn": 1,
+        "user": "yes i am",
+        "assistant": "Are you comfortable in Hindi or English?",
+        "from_state": "OPENING",
+        "to_state": "OPENING",
+        "lane_from": "STARTUP",
+        "lane": "STARTUP",
+        "lane_changed": false,
+        "path": [],
+        "extracted": {
+          "identity_confirmed": true,
+          "_yn": "yes"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "identity_confirmed",
+            "value": true,
+            "via": "asked"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 1268.55
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "I see you're confirming your identity. Please let me know if you prefer Hindi or English.",
+          "slots": {},
+          "ms": 1680.89
+        },
+        "retry": {
+          "state": "OPENING",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2986.95
+      },
+      {
+        "turn": 2,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. Is this complaint for the number you are calling from, or for a different number?",
+        "from_state": "OPENING",
+        "to_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "STARTUP",
+        "lane": "IDENTITY",
+        "lane_changed": true,
+        "path": [
+          "LANGUAGE_LOCK",
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "extracted": {
+          "language": "english"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "identity_confirmed"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "SERVICE_NUMBER_CHOICE"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": "english",
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 574.45
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1921
+        },
+        "retry": {
+          "state": "SERVICE_NUMBER_CHOICE",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2502.83
+      },
+      {
+        "turn": 3,
+        "user": "same",
+        "assistant": "I can see there is already an open service request for you. Let me connect you to a Senior Executive.",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "to_state": "TRANSFER_COMPLETE",
+        "lane_from": "IDENTITY",
+        "lane": "TRANSFER",
+        "lane_changed": true,
+        "path": [
+          "TICKET_CHECK",
+          "TRANSFER_TO_AGENT",
+          "TRANSFER_COMPLETE"
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "TICKET",
+            "state": "TICKET_CHECK"
+          },
+          {
+            "type": "router",
+            "state": "TICKET_CHECK",
+            "lane": "TICKET"
+          },
+          {
+            "type": "lane_switch",
+            "from": "TICKET",
+            "to": "TRANSFER",
+            "state": "TRANSFER_TO_AGENT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_TO_AGENT",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "tool",
+            "name": "initiate_warm_transfer",
+            "status": "success"
+          },
+          {
+            "type": "transfer",
+            "reason": "open_ticket",
+            "result": "success"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_COMPLETE",
+            "lane": "TRANSFER"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "JEV lane: continue",
+          "source": "jev",
+          "error": null,
+          "ms": 616.04
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "Thank you for confirming that this complaint is for the same number you are calling from. Let's proceed with your complaint.",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 1229.17
+        },
+        "retry": {
+          "state": "TRANSFER_COMPLETE",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1850
+      }
+    ],
+    "review": null
+  },
+  {
+    "call_id": "37d3b8eb-1f2a-4cfb-a2df-dfc9a4ec4912",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:07:52.682Z",
+    "ended_at": "2026-10-13T07:23:47.031Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.19
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:07:52.682Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "1808f7c1-2f65-48a0-b40d-e09f76d19145",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:07:52.690Z",
+    "ended_at": "2026-10-13T07:23:47.033Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.04
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:07:52.690Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "f43a8e00-baee-4fc7-b0c7-e4b28908a78a",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:00.783Z",
+    "ended_at": "2026-10-13T07:23:47.036Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.06
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:00.783Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "2387d0b2-ca68-47d6-8471-78b43aab2313",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:00.784Z",
+    "ended_at": "2026-10-13T07:23:47.039Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.03
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:00.784Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "66438624-8846-4763-b9c1-ac67eaa599c3",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:03.268Z",
+    "ended_at": "2026-10-13T07:23:47.041Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.07
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:03.268Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "438564b8-0752-4d39-915c-11a99255b8e8",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:03.270Z",
+    "ended_at": "2026-10-13T07:23:47.043Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.07
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:03.270Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "65c4e41b-81fb-4cbd-a513-120f6d60879a",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:06.256Z",
+    "ended_at": "2026-10-13T07:23:47.045Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.04
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:06.256Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "8f8698b3-1a8f-4f21-a64e-1e85f1cbf0a6",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:08:06.257Z",
+    "ended_at": "2026-10-13T07:23:47.048Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.07
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:08:06.258Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "652ef42b-09db-4e97-8b10-d5a89e33ec32",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-13T07:14:50.699Z",
+    "ended_at": "2026-10-13T07:30:47.151Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.05
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-13T07:14:50.699Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  }
 ]

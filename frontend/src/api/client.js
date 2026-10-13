@@ -38,6 +38,11 @@ export const api = {
   turn: (body) => post('/turn', body),
   endSession: (sessionId) => post('/session/end', { session_id: sessionId }),
 
+  // call history + review
+  listCalls: (limit = 20) => get(`/calls?limit=${limit}`),
+  getCall: (id) => get(`/calls/${enc(id)}`),
+  reviewCall: (id, patch) => request(`/calls/${enc(id)}/review`, { method: 'PATCH', body: patch }),
+
   // script library
   listScripts: () => get('/scripts'),
   getScript: (name) => get(`/scripts/${enc(name)}`),

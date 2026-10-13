@@ -7,7 +7,7 @@ import { config } from "./config.js";
 import { publicScript } from "./script/index.js";
 import { createSession, snapshot } from "./engine/session.js";
 import { handleTurn } from "./engine/turn.js";
-import { initStore, finalizeCall, listCustomers, getCustomer, listCalls, patchTicket, deleteCustomer } from "./store/customerStore.js";
+import { initStore, finalizeCall, listCustomers, getCustomer, listCalls, getCall, patchCallReview, deleteCall, patchTicket, deleteCustomer } from "./store/customerStore.js";
 import { llmEnabled } from "./llm/client.js";
 import { validMobile } from "./utils/digits.js";
 
@@ -76,7 +76,32 @@ app.patch("/api/customers/:phone/tickets/:ticket", async (req, res) => {
   const t = await patchTicket(req.params.phone, req.params.ticket, { status: req.body?.status });
   return t ? res.json(t) : bad(res, 404, "Ticket not found");
 });
-app.get("/api/calls", (req, res) => res.json(listCalls(Number(req.query.limit) || 50)));
+app.get("/api/calls", (req, res) => res.json(listCalls(Number(req.query.limit) || 100)));
+app.get("/api/calls/:id", (req, res) => {
+  const c = getCall(req.params.id);
+  if (c) return res.json(c);
+  const s = sessions.get(req.params.id);
+  if (s) return res.json({ ...snapshot(s), call_id: s.id, review: s.review || null });
+  return bad(res, 404, "Call not found");
+});
+app.patch("/api/calls/:id/review", async (req, res) => {
+  const s = sessions.get(req.params.id);
+  if (s) {
+    s.review = req.body?.result ? {
+      result: req.body.result,
+      note: req.body.note || "",
+      reviewed_at: new Date().toISOString(),
+    } : null;
+  }
+  const c = await patchCallReview(req.params.id, req.body || {});
+  if (c) return res.json(c);
+  if (s) return res.json({ call_id: s.id, review: s.review, status: "active" });
+  return bad(res, 404, "Call not found");
+});
+app.delete("/api/calls/:id", async (req, res) => {
+  const ok = await deleteCall(req.params.id);
+  return res.json({ deleted: ok });
+});
 
 // ---- scripts (debug / admin) ----
 const scriptsDir = path.join(config.dataDir, "scripts");

@@ -63,7 +63,8 @@ export function lookupCustomer(phone) {
 }
 export const listCustomers = () => [...customers.values()].map(clone);
 export const getCustomer = (phone) => clone(customers.get(digits(phone)));
-export const listCalls = (limit = 50) => clone(calls.slice(-limit).reverse());
+export const listCalls = (limit = 100) => clone(calls.slice(-limit).reverse());
+export const getCall = (id) => clone(calls.find((c) => c.call_id === id));
 
 const cityKey = (c) => String(c || "").toLowerCase().replace(/^new\s+/, "").replace(/[^a-z]/g, "");
 export function mapArea({ pin_code, city, area }) {
@@ -149,7 +150,13 @@ export function finalizeCall(s, endedBy = "terminal") {
       transfer_reason: s.flags.transfer_reason || null, resumed_previous: !!s.flags.resumed_previous,
       slots: clone(s.slots), path: [...s.path], metrics: clone(s.metrics),
       tool_calls: s.tool_calls.map((t) => ({ name: t.name, status: t.result?.status ?? null, at: t.at })),
-      transcript: s.history.map((h) => ({ turn: h.turn, user: h.user, assistant: h.assistant, state: h.to_state, lane: h.lane })),
+      transcript: s.history.map((h) => ({
+        turn: h.turn, user: h.user, assistant: h.assistant, state: h.to_state, lane: h.lane,
+        from_state: h.from_state, lane_from: h.lane_from, path: h.path, latency_ms: h.latency_ms,
+        classification: h.classification, capture: h.capture, intents: h.intents, events: h.events, extracted: h.extracted,
+      })),
+      history: clone(s.history),
+      review: s.review || null,
     });
     await flushCustomers(); await flushCalls();
     final.saved = ["customers.json", "calls.json"];
@@ -159,6 +166,41 @@ export function finalizeCall(s, endedBy = "terminal") {
 }
 
 // ------------------------------------------------------------ admin helpers --
+export function patchCallReview(callId, patch) {
+  return withLock("store", async () => {
+    const call = calls.find((c) => c.call_id === callId);
+    if (!call) return null;
+
+    const result = patch?.result ?? patch?.rating ?? null;
+    const note = patch?.note ?? patch?.review_note ?? "";
+    const cleanResult = typeof result === "string" ? result.trim() : "";
+
+    if (cleanResult) {
+      call.review = {
+        result: cleanResult,
+        note: String(note || ""),
+        reviewed_at: new Date().toISOString(),
+      };
+      call.rating = cleanResult;
+    } else {
+      call.review = null;
+    }
+
+    await flushCalls();
+    return clone(call);
+  });
+}
+
+export function deleteCall(callId) {
+  return withLock("store", async () => {
+    const idx = calls.findIndex((c) => c.call_id === callId);
+    if (idx === -1) return false;
+    calls.splice(idx, 1);
+    await flushCalls();
+    return true;
+  });
+}
+
 export function patchTicket(phone, ticketId, patch) {
   return withLock("store", async () => {
     const rec = customers.get(digits(phone));
