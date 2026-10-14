@@ -32,12 +32,12 @@
       }
     ],
     "last_call": {
-      "call_id": "652ef42b-09db-4e97-8b10-d5a89e33ec32",
+      "call_id": "49357473-0d09-4ad5-b7fa-d775ee6f06d4",
       "status": "dropped",
-      "ended_at": "2026-10-13T07:30:47.151Z",
+      "ended_at": "2026-10-14T07:53:17.499Z",
       "last_state": "OPENING",
       "slots": {}
     },
-    "updated_at": "2026-10-13T07:30:47.151Z"
+    "updated_at": "2026-10-14T07:53:17.499Z"
   }
 ]

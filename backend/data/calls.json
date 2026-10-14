@@ -3013,5 +3013,1573 @@
     "transcript": [],
     "history": [],
     "review": null
+  },
+  {
+    "call_id": "e20f35be-070e-4ad2-9b24-ee987628bcb5",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:01:37.997Z",
+    "ended_at": "2026-10-14T06:17:04.823Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.2
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:01:37.998Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "60762cc4-9ee9-4e25-8f86-c20d68d65304",
+    "caller_number": "9540923207",
+    "service_number": "9540923207",
+    "started_at": "2026-10-14T06:39:03.253Z",
+    "ended_at": "2026-10-14T06:39:42.772Z",
+    "outcome": "transferred",
+    "ended_by": "terminal",
+    "language": "english",
+    "final_state": "TRANSFER_COMPLETE",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": "open_ticket",
+    "resumed_previous": false,
+    "slots": {
+      "language": "english",
+      "identity_confirmed": true,
+      "service_number_choice": "same",
+      "final_service_number": "9540923207"
+    },
+    "path": [
+      "OPENING",
+      "LANGUAGE_LOCK",
+      "CONFIRM_CALLING_NUMBER_IDENTITY",
+      "SERVICE_NUMBER_CHOICE",
+      "TICKET_CHECK",
+      "TRANSFER_TO_AGENT",
+      "TRANSFER_COMPLETE"
+    ],
+    "metrics": {
+      "turns": 3,
+      "total_ms": 4891.94,
+      "last_turn_ms": 2047.17,
+      "classify_ms": 0.49,
+      "capture_ms": 2044.88,
+      "fsm_ms": 1.56,
+      "tool_ms": 0.19
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:39:03.253Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-14T06:39:11.559Z"
+      },
+      {
+        "name": "initiate_warm_transfer",
+        "status": "success",
+        "at": "2026-10-14T06:39:42.772Z"
+      }
+    ],
+    "transcript": [
+      {
+        "turn": 1,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. I can see this number is registered under Nikhil Pandita. Is that correct?",
+        "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane": "IDENTITY",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "latency_ms": 1658.96,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 22.67
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1635.1
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "language": "english"
+        }
+      },
+      {
+        "turn": 2,
+        "user": "yes",
+        "assistant": "Is this complaint for the number you are calling from, or for a different number?",
+        "state": "SERVICE_NUMBER_CHOICE",
+        "lane": "IDENTITY",
+        "from_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane_from": "IDENTITY",
+        "path": [
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "latency_ms": 1185.81,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 0.28
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "identity_confirmed": true
+          },
+          "ms": 1184.36
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "identity_confirmed",
+            "value": true,
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "identity_confirmed": true,
+          "_yn": "yes"
+        }
+      },
+      {
+        "turn": 3,
+        "user": "same",
+        "assistant": "I can see there is already an open service request for you. Let me connect you to a Senior Executive.",
+        "state": "TRANSFER_COMPLETE",
+        "lane": "TRANSFER",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "IDENTITY",
+        "path": [
+          "TICKET_CHECK",
+          "TRANSFER_TO_AGENT",
+          "TRANSFER_COMPLETE"
+        ],
+        "latency_ms": 2047.17,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 0.49
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 2044.88
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "TICKET",
+            "state": "TICKET_CHECK"
+          },
+          {
+            "type": "router",
+            "state": "TICKET_CHECK",
+            "lane": "TICKET"
+          },
+          {
+            "type": "lane_switch",
+            "from": "TICKET",
+            "to": "TRANSFER",
+            "state": "TRANSFER_TO_AGENT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_TO_AGENT",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "tool",
+            "name": "initiate_warm_transfer",
+            "status": "success"
+          },
+          {
+            "type": "transfer",
+            "reason": "open_ticket",
+            "result": "success"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_COMPLETE",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "persisted",
+            "outcome": "transferred",
+            "files": [
+              "customers.json",
+              "calls.json"
+            ]
+          }
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        }
+      }
+    ],
+    "history": [
+      {
+        "turn": 1,
+        "user": "english",
+        "assistant": "Thank you. We will continue in English. I can see this number is registered under Nikhil Pandita. Is that correct?",
+        "from_state": "OPENING",
+        "to_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane_from": "STARTUP",
+        "lane": "IDENTITY",
+        "lane_changed": true,
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "extracted": {
+          "language": "english"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "english",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 22.67
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "english"
+          },
+          "ms": 1635.1
+        },
+        "retry": {
+          "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1658.96
+      },
+      {
+        "turn": 2,
+        "user": "yes",
+        "assistant": "Is this complaint for the number you are calling from, or for a different number?",
+        "from_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "to_state": "SERVICE_NUMBER_CHOICE",
+        "lane_from": "IDENTITY",
+        "lane": "IDENTITY",
+        "lane_changed": false,
+        "path": [
+          "SERVICE_NUMBER_CHOICE"
+        ],
+        "extracted": {
+          "identity_confirmed": true,
+          "_yn": "yes"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "identity_confirmed",
+            "value": true,
+            "via": "asked"
+          },
+          {
+            "type": "customer_facing",
+            "state": "SERVICE_NUMBER_CHOICE",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": "yes",
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 0.28
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "identity_confirmed": true
+          },
+          "ms": 1184.36
+        },
+        "retry": {
+          "state": "SERVICE_NUMBER_CHOICE",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1185.81
+      },
+      {
+        "turn": 3,
+        "user": "same",
+        "assistant": "I can see there is already an open service request for you. Let me connect you to a Senior Executive.",
+        "from_state": "SERVICE_NUMBER_CHOICE",
+        "to_state": "TRANSFER_COMPLETE",
+        "lane_from": "IDENTITY",
+        "lane": "TRANSFER",
+        "lane_changed": true,
+        "path": [
+          "TICKET_CHECK",
+          "TRANSFER_TO_AGENT",
+          "TRANSFER_COMPLETE"
+        ],
+        "extracted": {
+          "service_number_choice": "same"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slots_rejected",
+            "slots": [
+              "first_name",
+              "last_name"
+            ]
+          },
+          {
+            "type": "slot_set",
+            "slot": "service_number_choice",
+            "value": "same",
+            "via": "asked"
+          },
+          {
+            "type": "lane_switch",
+            "from": "IDENTITY",
+            "to": "TICKET",
+            "state": "TICKET_CHECK"
+          },
+          {
+            "type": "router",
+            "state": "TICKET_CHECK",
+            "lane": "TICKET"
+          },
+          {
+            "type": "lane_switch",
+            "from": "TICKET",
+            "to": "TRANSFER",
+            "state": "TRANSFER_TO_AGENT"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_TO_AGENT",
+            "lane": "TRANSFER"
+          },
+          {
+            "type": "tool",
+            "name": "initiate_warm_transfer",
+            "status": "success"
+          },
+          {
+            "type": "transfer",
+            "reason": "open_ticket",
+            "result": "success"
+          },
+          {
+            "type": "customer_facing",
+            "state": "TRANSFER_COMPLETE",
+            "lane": "TRANSFER"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 0.49
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "service_number_choice": "same"
+          },
+          "ms": 2044.88
+        },
+        "retry": {
+          "state": "TRANSFER_COMPLETE",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2047.17
+      }
+    ],
+    "review": null
+  },
+  {
+    "call_id": "d8fdb6d1-9770-47ec-81cc-e96dac2c69a6",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:31:40.847Z",
+    "ended_at": "2026-10-14T06:47:28.326Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.23
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:31:40.848Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "66da9cb1-3425-455d-a146-dfca7a3ddccb",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:31:40.860Z",
+    "ended_at": "2026-10-14T06:47:28.337Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "hindi",
+    "final_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {
+      "language": "hindi"
+    },
+    "path": [
+      "OPENING",
+      "LANGUAGE_LOCK",
+      "CONFIRM_CALLING_NUMBER_IDENTITY"
+    ],
+    "metrics": {
+      "turns": 1,
+      "total_ms": 1797.76,
+      "last_turn_ms": 1797.76,
+      "classify_ms": 55.08,
+      "capture_ms": 1730.25,
+      "fsm_ms": 11.14,
+      "tool_ms": 0.04
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:31:40.860Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-14T06:31:48.690Z"
+      }
+    ],
+    "transcript": [
+      {
+        "turn": 1,
+        "user": "hindi",
+        "assistant": "Theek hai, hum Hindi mein baat karenge. Mujhe dikh raha hai ki yeh number Nikhil Pandita ke naam par registered hai. Kya yeh sahi hai?",
+        "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane": "IDENTITY",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "latency_ms": 1797.76,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 55.08
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "hindi"
+          },
+          "ms": 1730.25
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "hindi",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "language": "hindi"
+        }
+      }
+    ],
+    "history": [
+      {
+        "turn": 1,
+        "user": "hindi",
+        "assistant": "Theek hai, hum Hindi mein baat karenge. Mujhe dikh raha hai ki yeh number Nikhil Pandita ke naam par registered hai. Kya yeh sahi hai?",
+        "from_state": "OPENING",
+        "to_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane_from": "STARTUP",
+        "lane": "IDENTITY",
+        "lane_changed": true,
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "extracted": {
+          "language": "hindi"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "hindi",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 55.08
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "hindi"
+          },
+          "ms": 1730.25
+        },
+        "retry": {
+          "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 1797.76
+      }
+    ],
+    "review": null
+  },
+  {
+    "call_id": "8f57a770-4e2a-405f-b3f0-44c986d70740",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:38:45.215Z",
+    "ended_at": "2026-10-14T06:54:28.384Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.13
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:38:45.216Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "c25df45c-3767-4ef9-a3f1-1991d6336f0d",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:38:45.220Z",
+    "ended_at": "2026-10-14T06:54:28.394Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.09
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:38:45.220Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "d692180c-3e38-46fa-a91a-6b6c050d1740",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T06:39:03.249Z",
+    "ended_at": "2026-10-14T06:54:28.402Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.09
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T06:39:03.249Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "0a858fd8-f89c-416b-8589-763698c26c69",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:02:57.243Z",
+    "ended_at": "2026-10-14T07:18:17.261Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.97
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:02:57.245Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "c99547b9-9b80-4e0c-86e4-745888ee1492",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:02:57.258Z",
+    "ended_at": "2026-10-14T07:18:17.272Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "hindi",
+    "final_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {
+      "language": "hindi"
+    },
+    "path": [
+      "OPENING",
+      "LANGUAGE_LOCK",
+      "CONFIRM_CALLING_NUMBER_IDENTITY"
+    ],
+    "metrics": {
+      "turns": 1,
+      "total_ms": 2511.72,
+      "last_turn_ms": 2511.72,
+      "classify_ms": 82.75,
+      "capture_ms": 2402.38,
+      "fsm_ms": 23.63,
+      "tool_ms": 0.08
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:02:57.258Z"
+      },
+      {
+        "name": "manage_call_settings",
+        "status": "OK",
+        "at": "2026-10-14T07:03:08.514Z"
+      }
+    ],
+    "transcript": [
+      {
+        "turn": 1,
+        "user": "hindi",
+        "assistant": "Theek hai, hum Hindi mein baat karenge. Mujhe dikh raha hai ki yeh number Nikhil Pandita ke naam par registered hai. Kya yeh sahi hai?",
+        "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane": "IDENTITY",
+        "from_state": "OPENING",
+        "lane_from": "STARTUP",
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "latency_ms": 2511.72,
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 82.75
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "hindi"
+          },
+          "ms": 2402.38
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "hindi",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "extracted": {
+          "language": "hindi"
+        }
+      }
+    ],
+    "history": [
+      {
+        "turn": 1,
+        "user": "hindi",
+        "assistant": "Theek hai, hum Hindi mein baat karenge. Mujhe dikh raha hai ki yeh number Nikhil Pandita ke naam par registered hai. Kya yeh sahi hai?",
+        "from_state": "OPENING",
+        "to_state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+        "lane_from": "STARTUP",
+        "lane": "IDENTITY",
+        "lane_changed": true,
+        "path": [
+          "LANGUAGE_LOCK",
+          "CONFIRM_CALLING_NUMBER_IDENTITY"
+        ],
+        "extracted": {
+          "language": "hindi"
+        },
+        "intents": [
+          "answer"
+        ],
+        "events": [
+          {
+            "type": "llm_fallback",
+            "call": "classifier",
+            "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification"
+          },
+          {
+            "type": "answer",
+            "id": "answer"
+          },
+          {
+            "type": "slot_set",
+            "slot": "language",
+            "value": "hindi",
+            "via": "asked"
+          },
+          {
+            "type": "router",
+            "state": "LANGUAGE_LOCK",
+            "lane": "STARTUP"
+          },
+          {
+            "type": "tool",
+            "name": "manage_call_settings",
+            "status": "OK"
+          },
+          {
+            "type": "lane_switch",
+            "from": "STARTUP",
+            "to": "IDENTITY",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY"
+          },
+          {
+            "type": "customer_facing",
+            "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+            "lane": "IDENTITY"
+          }
+        ],
+        "classification": {
+          "intents": [
+            "answer"
+          ],
+          "update_targets": [],
+          "recall_targets": [],
+          "yes_no": null,
+          "language": null,
+          "reason": "keyword fallback",
+          "source": "fallback",
+          "error": "Missing OPENROUTER_API_KEY (or JEV_API_KEY) for JEV classification",
+          "ms": 82.75
+        },
+        "capture": {
+          "source": "llm",
+          "lead": "",
+          "slots": {
+            "language": "hindi"
+          },
+          "ms": 2402.38
+        },
+        "retry": {
+          "state": "CONFIRM_CALLING_NUMBER_IDENTITY",
+          "used": 0,
+          "max": 3
+        },
+        "jump": null,
+        "latency_ms": 2511.72
+      }
+    ],
+    "review": null
+  },
+  {
+    "call_id": "5f951319-338d-4757-8b85-e94f2dabbbb8",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:04:27.243Z",
+    "ended_at": "2026-10-14T07:20:17.262Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.26
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:04:27.243Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "e14555a0-102c-45d8-b4d8-39f7cf81fc4f",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:04:27.247Z",
+    "ended_at": "2026-10-14T07:20:17.272Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.11
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:04:27.247Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "47f77f3f-d62f-415e-b9fc-d407e70e636e",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:05:01.862Z",
+    "ended_at": "2026-10-14T07:20:17.280Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.19
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:05:01.863Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "a77ae8be-fd57-4fc6-8ab3-7b5fe6a792b4",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:05:01.867Z",
+    "ended_at": "2026-10-14T07:20:17.286Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.17
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:05:01.867Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "b11c920b-cf0e-4b17-87e1-cd77c85b04b5",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:06:12.341Z",
+    "ended_at": "2026-10-14T07:21:17.271Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.11
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:06:12.341Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "70d7d6c8-6fb8-462a-9d4b-e6d8e004c85b",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:06:12.343Z",
+    "ended_at": "2026-10-14T07:21:17.281Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.12
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:06:12.344Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "93693211-1b01-4337-b912-9362830183fc",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:37:55.682Z",
+    "ended_at": "2026-10-14T07:53:17.491Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.12
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:37:55.683Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
+  },
+  {
+    "call_id": "49357473-0d09-4ad5-b7fa-d775ee6f06d4",
+    "caller_number": "9540923207",
+    "service_number": null,
+    "started_at": "2026-10-14T07:37:55.686Z",
+    "ended_at": "2026-10-14T07:53:17.499Z",
+    "outcome": "dropped",
+    "ended_by": "idle_timeout",
+    "language": "english",
+    "final_state": "OPENING",
+    "ticket_id": null,
+    "rating": null,
+    "transfer_reason": null,
+    "resumed_previous": false,
+    "slots": {},
+    "path": [
+      "OPENING"
+    ],
+    "metrics": {
+      "turns": 0,
+      "total_ms": 0,
+      "last_turn_ms": 0,
+      "classify_ms": 0,
+      "capture_ms": 0,
+      "fsm_ms": 0,
+      "tool_ms": 0.07
+    },
+    "tool_calls": [
+      {
+        "name": "fetch_customer_details_by_phone_number",
+        "status": "CUSTOMER_FOUND",
+        "at": "2026-10-14T07:37:55.686Z"
+      }
+    ],
+    "transcript": [],
+    "history": [],
+    "review": null
   }
 ]
