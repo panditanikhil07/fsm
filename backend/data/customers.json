@@ -1,8 +1,8 @@
 [
   {
     "phone_number": "9540923207",
-    "first_name": "Nikhil",
-    "last_name": "Pandita",
+    "first_name": "Ayush",
+    "last_name": "Dash",
     "customer_type": "Residential",
     "caller_type": "homeowner",
     "addresses": [
@@ -17,6 +17,54 @@
         "area_name": null,
         "city_type": null,
         "address_type": "residential"
+      },
+      {
+        "id": "ADDR-2",
+        "street": "Flat 123, Abc Apt",
+        "area": "Sector 142",
+        "city": "Noida",
+        "state": "Uttar Pradesh",
+        "pin_code": "201987",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      },
+      {
+        "id": "ADDR-3",
+        "street": "Flat 657",
+        "area": "Rida Society",
+        "city": "Bhagalpur",
+        "state": "Bihar",
+        "pin_code": "800023",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "commercial"
+      },
+      {
+        "id": "ADDR-4",
+        "street": "Tulli House, 43/12",
+        "area": "Nirman Vihar",
+        "city": "Delhi",
+        "state": "Delhi",
+        "pin_code": "789876",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "commercial"
+      },
+      {
+        "id": "ADDR-5",
+        "street": "78",
+        "area": "Bhapur",
+        "city": "Nayagarh",
+        "state": "Odisha",
+        "pin_code": "752099",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": null
       }
     ],
     "tickets": [
@@ -29,9 +77,40 @@
         "created_at": "2026-10-13T06:43:01.005Z",
         "call_id": "35c42d55-fce4-4099-8481-97f801894b40",
         "call_rating": "4"
+      },
+      {
+        "ticket_id": "T-1004",
+        "status": "open",
+        "product": "shower",
+        "brand": "grohe",
+        "address_id": "ADDR-2",
+        "created_at": "2026-10-13T12:12:10.165Z",
+        "call_id": "1f6f347e-37e8-4375-8961-edbf507307df",
+        "call_rating": "0"
+      },
+      {
+        "ticket_id": "T-1006",
+        "status": "open",
+        "product": "tap",
+        "brand": "NA",
+        "address_id": "ADDR-3",
+        "created_at": "2026-10-14T05:32:14.505Z",
+        "call_id": "4d48c41c-6d3e-4174-9471-c325e7cf501e",
+        "call_rating": "2"
+      },
+      {
+        "ticket_id": "T-1007",
+        "status": "open",
+        "product": "faucet",
+        "brand": "american_standard",
+        "address_id": "ADDR-4",
+        "created_at": "2026-10-14T05:36:15.856Z",
+        "call_id": "e141e87e-e8de-45a4-a3a5-ca34f5ac3caa",
+        "call_rating": "0"
       }
     ],
     "last_call": {
+<<<<<<< Updated upstream
       "call_id": "49357473-0d09-4ad5-b7fa-d775ee6f06d4",
       "status": "dropped",
       "ended_at": "2026-10-14T07:53:17.499Z",
@@ -39,5 +118,233 @@
       "slots": {}
     },
     "updated_at": "2026-10-14T07:53:17.499Z"
+=======
+      "call_id": "09327be9-b826-4300-8693-b1b961fa45cd",
+      "status": "dropped",
+      "ended_at": "2026-10-14T12:22:49.278Z",
+      "last_state": "OPENING",
+      "slots": {}
+    },
+    "updated_at": "2026-10-14T12:22:49.278Z"
+  },
+  {
+    "phone_number": "8860383620",
+    "first_name": "Tb",
+    "last_name": "Bh",
+    "customer_type": "Residential",
+    "caller_type": "homeowner",
+    "addresses": [
+      {
+        "id": "ADDR-1",
+        "street": "P2",
+        "area": "Block",
+        "city": "Noida",
+        "state": "Uttar Pradesh",
+        "pin_code": "203207",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      }
+    ],
+    "tickets": [
+      {
+        "ticket_id": "T-1002",
+        "status": "open",
+        "product": "faucet",
+        "brand": "american_standard",
+        "address_id": "ADDR-1",
+        "created_at": "2026-10-13T11:36:43.362Z",
+        "call_id": "50e48ff5-ad44-4a9b-ad2c-394b1450eb8c",
+        "call_rating": "5"
+      }
+    ],
+    "last_call": {
+      "call_id": "50e48ff5-ad44-4a9b-ad2c-394b1450eb8c",
+      "status": "completed",
+      "ended_at": "2026-10-13T11:36:43.362Z",
+      "last_state": "CLOSING"
+    },
+    "updated_at": "2026-10-13T11:36:43.362Z"
+  },
+  {
+    "phone_number": "8340475478",
+    "first_name": "Ananya",
+    "last_name": "Anaya",
+    "customer_type": "Residential",
+    "caller_type": "other",
+    "addresses": [
+      {
+        "id": "ADDR-1",
+        "street": "123",
+        "area": "Sector 98",
+        "city": "Noida",
+        "state": "Uttar Pradesh",
+        "pin_code": "987654",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      }
+    ],
+    "tickets": [
+      {
+        "ticket_id": "T-1003",
+        "status": "open",
+        "product": "faucet",
+        "brand": "american_standard",
+        "address_id": "ADDR-1",
+        "created_at": "2026-10-13T11:59:23.917Z",
+        "call_id": "4f503b94-dfdf-4f82-a353-abe9d1eeae65",
+        "call_rating": "0"
+      }
+    ],
+    "last_call": {
+      "call_id": "8264504a-5ca9-4ff1-b299-0cf8b93c3add",
+      "status": "transferred",
+      "ended_at": "2026-10-14T05:47:59.763Z",
+      "last_state": "TRANSFER_COMPLETE"
+    },
+    "updated_at": "2026-10-14T05:47:59.763Z"
+  },
+  {
+    "phone_number": "9876543210",
+    "first_name": "Ananya",
+    "last_name": "Ananya",
+    "customer_type": "Residential",
+    "caller_type": "homeowner",
+    "addresses": [
+      {
+        "id": "ADDR-1",
+        "street": "House No. 987",
+        "area": "Sector 45",
+        "city": "New Delhi",
+        "state": "Delhi",
+        "pin_code": "678906",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      }
+    ],
+    "tickets": [
+      {
+        "ticket_id": "T-1005",
+        "status": "open",
+        "product": "shower",
+        "brand": "american_standard",
+        "address_id": "ADDR-1",
+        "created_at": "2026-10-14T05:16:44.704Z",
+        "call_id": "a29dee43-266d-418f-af6a-8b2bcff943c1",
+        "call_rating": "not_given"
+      }
+    ],
+    "last_call": {
+      "call_id": "a29dee43-266d-418f-af6a-8b2bcff943c1",
+      "status": "completed",
+      "ended_at": "2026-10-14T05:16:44.704Z",
+      "last_state": "CLOSING"
+    },
+    "updated_at": "2026-10-14T05:16:44.704Z"
+  },
+  {
+    "phone_number": "7897897898",
+    "first_name": "",
+    "last_name": "",
+    "customer_type": "",
+    "caller_type": "",
+    "addresses": [],
+    "tickets": [],
+    "last_call": {
+      "call_id": "90a856b6-5812-47a2-9fca-731b5b41a4eb",
+      "status": "dropped",
+      "ended_at": "2026-10-14T06:11:41.544Z",
+      "last_state": "CAPTURE_FIRST_NAME",
+      "slots": {
+        "caller_type": "other"
+      }
+    },
+    "updated_at": "2026-10-14T06:11:41.544Z"
+  },
+  {
+    "phone_number": "7878787878",
+    "first_name": "Isha",
+    "last_name": "Misgraa",
+    "customer_type": "Residential",
+    "caller_type": "other",
+    "addresses": [
+      {
+        "id": "ADDR-1",
+        "street": "123 Flat",
+        "area": "Isha Society",
+        "city": "Mohali",
+        "state": "Haryana",
+        "pin_code": "786788",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      }
+    ],
+    "tickets": [
+      {
+        "ticket_id": "T-1008",
+        "status": "open",
+        "product": "cistern",
+        "brand": "grohe",
+        "address_id": "ADDR-1",
+        "created_at": "2026-10-14T05:52:45.619Z",
+        "call_id": "418d8829-b2fc-4523-8bf7-cdef540d82e7",
+        "call_rating": "not_given"
+      }
+    ],
+    "last_call": {
+      "call_id": "418d8829-b2fc-4523-8bf7-cdef540d82e7",
+      "status": "completed",
+      "ended_at": "2026-10-14T05:52:45.619Z",
+      "last_state": "CLOSING"
+    },
+    "updated_at": "2026-10-14T05:52:45.619Z"
+  },
+  {
+    "phone_number": "8765876590",
+    "first_name": "Ananya",
+    "last_name": "Singh",
+    "customer_type": "Residential",
+    "caller_type": "homeowner",
+    "addresses": [
+      {
+        "id": "ADDR-1",
+        "street": "123, Subeki Apartment",
+        "area": "Sector 28",
+        "city": "Faridabad",
+        "state": "Haryana",
+        "pin_code": "678901",
+        "area_id": null,
+        "area_name": null,
+        "city_type": null,
+        "address_type": "residential"
+      }
+    ],
+    "tickets": [
+      {
+        "ticket_id": "T-1009",
+        "status": "open",
+        "product": "shower",
+        "brand": "american_standard",
+        "address_id": "ADDR-1",
+        "created_at": "2026-10-14T06:37:52.774Z",
+        "call_id": "bbe5477c-77ff-47f3-ab86-4e1156b7ee52",
+        "call_rating": "not_given"
+      }
+    ],
+    "last_call": {
+      "call_id": "bbe5477c-77ff-47f3-ab86-4e1156b7ee52",
+      "status": "completed",
+      "ended_at": "2026-10-14T06:37:52.774Z",
+      "last_state": "CLOSING"
+    },
+    "updated_at": "2026-10-14T06:37:52.774Z"
+>>>>>>> Stashed changes
   }
 ]
