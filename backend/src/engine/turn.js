@@ -164,7 +164,7 @@ async function runTurn(s, rawText) {
     && ![...wantNow].some((k) => SLOTS[k]?.type === "boolean")
     && expectedNonDigit.some((k) => ["enum", "choice"].includes(SLOTS[k].type))
     && !cls.intents.some((i) => ["transfer", "info", "recall", "update", "repeat", "wait", "end_call"].includes(actionOf(i).type));
-  let cap = { slots: {}, lead: "", source: "skipped", ms: 0 };
+  let cap = { slots: {}, lead: "", source: "skipped", ms: 0, usage: null };
   if (choiceQuestion) { ev(s, "yes_no_to_choice", { state: s.state }); cap.source = "rule"; }
   else if (expectedNonDigit.length || tasks.length) {
     cap = await captureAndRespond({ text, ctx: { ...ctx2, asking_slot: s.asking_slot }, specs: slotSpecs(expectedNonDigit, ctx2), tasks, classification: cls, language: s.language });
@@ -196,7 +196,7 @@ async function runTurn(s, rawText) {
     if (diff.length) {
       ev(s, "implicit_update", { slots: diff });
       const plan = planJumps(s, diff);
-      if (plan.transfer && triggerTransfer(s, plan.transfer, out)) { s.metrics.fsm_ms = round(performance.now() - f0); return finish(dedupe(out).join(" "), { intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms } }); }
+      if (plan.transfer && triggerTransfer(s, plan.transfer, out)) { s.metrics.fsm_ms = round(performance.now() - f0); return finish(dedupe(out).join(" "), { intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null } }); }
       if (plan.specs.length) { beginJump(s, plan.specs[0], s.jump?.resume ?? s.state, plan.specs.slice(1)); cfg = STATES[s.state]; }
     }
   }
@@ -252,7 +252,7 @@ async function runTurn(s, rawText) {
 
   let assistant = dedupe([lead, ...info, ...sceneOut]).join(" ").trim();
   if (assistant && assistant === lastReply && !s.flags.terminal && STATES[s.state].recovery_template) assistant = loc(s.language, STATES[s.state].recovery_template);
-  return finish(assistant, { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms } });
+  return finish(assistant, { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null } });
 }
 
 export const handleTurn = (s, text) => withLock(s.id, () => runTurn(s, text));

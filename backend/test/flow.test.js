@@ -154,6 +154,58 @@ test("two LLM calls per turn (classifier + capture/response) when a key is confi
   } finally { globalThis.fetch = realFetch; config.llm.apiKey = ""; }
 });
 
+test("LLM prompt, response, and token usage are captured in call history", async () => {
+  process.env.LLM_API_KEY = "x";
+  const { config } = await import("../src/config.js");
+  config.llm.apiKey = "x";
+  const realFetch = globalThis.fetch;
+
+  globalThis.fetch = async (url, init) => {
+    const body = JSON.parse(init.body);
+    const isJev = body.state && body.questions;
+
+    if (isJev) {
+      return {
+        ok: true,
+        json: async () => ({
+          answers: { lane: { choice: "continue" } },
+          usage: { prompt_tokens: 121, completion_tokens: 29, total_tokens: 150 },
+        }),
+      };
+    }
+
+    const sys = body.messages[0].content;
+    const kind = sys.includes("You are") && sys.includes("voice agent") ? "capture" : "classifier";
+    const content = kind === "capture"
+      ? { slots: { language: { value: "english", evidence: "English" } }, lead: "Great, lets continue." }
+      : { intents: ["answer"], update_targets: [], recall_targets: [], yes_no: null, language: "english", reason: "t" };
+
+    return {
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: JSON.stringify(content), usage: { prompt_tokens: 333, completion_tokens: 44, total_tokens: 377 } } }],
+      }),
+    };
+  };
+
+  try {
+    const s = createSession("t13", "9777000002");
+    const item = await say(s, "English");
+    assert.equal(item.classification.usage.prompt_tokens, 121);
+    assert.equal(item.classification.usage.output_tokens, 29);
+    assert.equal(item.classification.usage.input_prompt.includes("caller utterance"), true);
+    assert.equal(item.capture.usage.prompt_tokens, 333);
+    assert.equal(item.capture.usage.output_tokens, 44);
+    assert.equal(item.capture.usage.output_response.includes("Great, lets continue."), true);
+    const saved = JSON.parse(readFileSync(path.join(dir, "calls.json"), "utf8")).at(-1);
+    assert.equal(saved.history.at(-1).classification.usage.total_tokens, 150);
+    assert.equal(saved.history.at(-1).capture.usage.total_tokens, 377);
+  } finally {
+    globalThis.fetch = realFetch;
+    config.llm.apiKey = "";
+  }
+});
+
 test("regression: a question is not treated as an answer; language request switches language without advancing", async () => {
   const { config } = await import("../src/config.js");
   config.llm.apiKey = "x";

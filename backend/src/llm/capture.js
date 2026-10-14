@@ -2,7 +2,7 @@
 // said and the conversational "lead" (acknowledgement / answer / polite redirect). The engine then
 // runs the FSM with the captured slots and appends the scripted next question from states.json.
 import { META, SLOTS } from "../script/index.js";
-import { chat, parseJson, llmEnabled } from "./client.js";
+import { chatWithMeta, parseJson, llmEnabled } from "./client.js";
 import { fallbackCapture } from "./fallback.js";
 
 const SYSTEM = (language) => `You are ${META.bot_name}, a voice agent for ${META.company}. ${META.persona}
@@ -84,16 +84,30 @@ export async function captureAndRespond({ text, ctx, specs, tasks, classificatio
   let slots = null, lead = null, source = "llm", error = null, rejected = [];
   if (llmEnabled()) {
     try {
-      const out = parseJson(await chat({
+      const meta = await chatWithMeta({
         tier: "main", temperature: 0.3, maxTokens: 380, system: SYSTEM(language),
         user: { utterance: text, classification: { intents: classification.intents, yes_no: classification.yes_no }, ...ctx, slot_specs: specs, tasks },
-      }));
+      });
+      const out = parseJson(meta.output_response || meta.text || "");
       if (out) {
         const g = groundSlots(out.slots && typeof out.slots === "object" && !Array.isArray(out.slots) ? out.slots : {}, text);
         slots = g.accepted; rejected = g.rejected; lead = cleanLead(out.lead);
+        const usage = meta.usage || null;
+        if (usage) {
+          const normalized = {
+            provider: usage.provider || meta.provider || "llm",
+            model: usage.model || meta.model || null,
+            input_tokens: usage.input_tokens ?? usage.prompt_tokens ?? null,
+            output_tokens: usage.output_tokens ?? usage.completion_tokens ?? null,
+            total_tokens: usage.total_tokens ?? null,
+            input_prompt: usage.input_prompt ?? meta.input_prompt ?? null,
+            output_response: usage.output_response ?? meta.output_response ?? null,
+          };
+          return { slots, lead, source, error, rejected, ms: Number((performance.now() - t0).toFixed(2)), usage: normalized };
+        }
       }
     } catch (e) { error = e.message; }
   }
   if (slots === null) { slots = fallbackCapture(text, { ...ctx, answerless: !classification.intents.includes("answer") }, specs); lead = null; source = "fallback"; }
-  return { slots, lead, source, error, rejected, ms: Number((performance.now() - t0).toFixed(2)) };
+  return { slots, lead, source, error, rejected, ms: Number((performance.now() - t0).toFixed(2)), usage: null };
 }

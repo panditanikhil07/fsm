@@ -29,6 +29,16 @@ export function createGemini(cfg, { timeoutMs }) {
       maxTokens = 400,
     }) {
       const budget = thinkingBudget(model);
+      const request = {
+        systemInstruction: { parts: [{ text: system }] },
+        contents: [{ role: "user", parts: [{ text: asText(user) }] }],
+        generationConfig: {
+          temperature,
+          maxOutputTokens: maxTokens,
+          ...(json ? { responseMimeType: "application/json" } : {}),
+          ...(budget !== undefined ? { thinkingConfig: { thinkingBudget: budget } } : {}),
+        },
+      };
       try {
         const data = await postJson(
           `${baseUrl}/models/${encodeURIComponent(model)}:generateContent`,
@@ -36,27 +46,31 @@ export function createGemini(cfg, { timeoutMs }) {
             label: "Gemini",
             timeoutMs,
             headers: { "x-goog-api-key": cfg.apiKey },
-            body: {
-              systemInstruction: { parts: [{ text: system }] },
-              contents: [{ role: "user", parts: [{ text: asText(user) }] }],
-              generationConfig: {
-                temperature,
-                maxOutputTokens: maxTokens,
-                ...(json ? { responseMimeType: "application/json" } : {}),
-                ...(budget !== undefined
-                  ? { thinkingConfig: { thinkingBudget: budget } }
-                  : {}),
-              },
-            },
+            body: request,
           },
         );
         if (data?.promptFeedback?.blockReason)
           throw new Error(`Gemini blocked: ${data.promptFeedback.blockReason}`);
         const parts = data?.candidates?.[0]?.content?.parts || [];
-        return parts
+        const text = parts
           .filter((p) => typeof p.text === "string" && !p.thought)
           .map((p) => p.text)
           .join("");
+        const usage = data?.usageMetadata || {};
+        return {
+          text,
+          output_response: text,
+          input_prompt: JSON.stringify({ model, system, user, request }, null, 2),
+          usage: {
+            provider: "gemini",
+            model,
+            input_tokens: usage.promptTokenCount ?? null,
+            output_tokens: usage.candidatesTokenCount ?? null,
+            total_tokens: usage.totalTokenCount ?? null,
+            input_prompt: JSON.stringify({ model, system, user, request }, null, 2),
+            output_response: text,
+          },
+        };
       } catch (err) {
         throw new Error(`Gemini error: ${err.message}`);
       }

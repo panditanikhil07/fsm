@@ -60,6 +60,7 @@ export async function classify(text, ctx) {
 import { INTENTS, GROUPS, SLOTS, META } from "../script/index.js";
 import { fallbackClassify } from "./fallback.js";
 import { hasWord, norm } from "../utils/text.js";
+import { chatWithMeta } from "./client.js";
 
 const JEV_URL =
   process.env.JEV_URL ||
@@ -373,6 +374,21 @@ async function callJev(text, ctx) {
     15000
   );
 
+  const prompt = JSON.stringify({
+    model: JEV_MODEL,
+    state: {
+      utterance: text,
+      context: ctx,
+    },
+    questions: {
+      lane: {
+        type: "choice",
+        instructions: JEV_INSTRUCTIONS,
+        criteria: LANE_CRITERIA,
+      },
+    },
+  }, null, 2);
+
   try {
     const response = await fetch(JEV_URL, {
       method: "POST",
@@ -382,22 +398,7 @@ async function callJev(text, ctx) {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({
-        model: JEV_MODEL,
-
-        state: {
-          utterance: text,
-          context: ctx,
-        },
-
-        questions: {
-          lane: {
-            type: "choice",
-            instructions: JEV_INSTRUCTIONS,
-            criteria: LANE_CRITERIA,
-          },
-        },
-      }),
+      body: prompt,
 
       signal: controller.signal,
     });
@@ -434,9 +435,29 @@ async function callJev(text, ctx) {
       );
     }
 
+    const outputResponse = JSON.stringify(body, null, 2);
+    const usage = body?.usage || {
+      provider: "jev",
+      model: JEV_MODEL,
+      input_tokens: body?.usage?.prompt_tokens ?? null,
+      output_tokens: body?.usage?.completion_tokens ?? null,
+      total_tokens: body?.usage?.total_tokens ?? null,
+      input_prompt: prompt,
+      output_response: outputResponse,
+    };
+
     return {
       lane,
       raw: body,
+      usage: {
+        provider: "jev",
+        model: JEV_MODEL,
+        input_tokens: usage.prompt_tokens ?? usage.input_tokens ?? null,
+        output_tokens: usage.completion_tokens ?? usage.output_tokens ?? null,
+        total_tokens: usage.total_tokens ?? null,
+        input_prompt: prompt,
+        output_response: outputResponse,
+      },
     };
 
   } finally {
@@ -462,9 +483,10 @@ export async function classify(text, ctx) {
   let error = null;
 
   try {
-    const { lane } = await callJev(text, ctx || {});
+    const { lane, usage } = await callJev(text, ctx || {});
 
     result = mapLane(lane, text, ctx || {});
+    result.usage = usage || null;
 
   } catch (e) {
     error = e?.message || String(e);
