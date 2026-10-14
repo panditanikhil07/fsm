@@ -110,15 +110,6 @@
       }
     ],
     "last_call": {
-<<<<<<< Updated upstream
-      "call_id": "49357473-0d09-4ad5-b7fa-d775ee6f06d4",
-      "status": "dropped",
-      "ended_at": "2026-10-14T07:53:17.499Z",
-      "last_state": "OPENING",
-      "slots": {}
-    },
-    "updated_at": "2026-10-14T07:53:17.499Z"
-=======
       "call_id": "09327be9-b826-4300-8693-b1b961fa45cd",
       "status": "dropped",
       "ended_at": "2026-10-14T12:22:49.278Z",
@@ -345,6 +336,5 @@
       "last_state": "CLOSING"
     },
     "updated_at": "2026-10-14T06:37:52.774Z"
->>>>>>> Stashed changes
   }
 ]
