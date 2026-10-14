@@ -10,6 +10,9 @@ import { handleTurn } from "./engine/turn.js";
 import { initStore, finalizeCall, listCustomers, getCustomer, listCalls, getCall, patchCallReview, deleteCall, patchTicket, deleteCustomer } from "./store/customerStore.js";
 import { llmEnabled } from "./llm/client.js";
 import { validMobile } from "./utils/digits.js";
+import { readPromptConfig, writePromptConfig } from "./llm/promptStore.js";
+import { getClassifierPrompt, getClassifierTemplate } from "./llm/classifier.js";
+import { getCapturePrompt, getCaptureTemplate } from "./llm/capture.js";
 
 await initStore();
 const app = express();
@@ -81,8 +84,44 @@ app.get("/api/calls/:id", (req, res) => {
   const c = getCall(req.params.id);
   if (c) return res.json(c);
   const s = sessions.get(req.params.id);
-  if (s) return res.json({ ...snapshot(s), call_id: s.id, review: s.review || null });
+  if (s) {
+    return res.json({
+      ...snapshot(s),
+      call_id: s.id,
+      prompt_template: {
+        classifier: getClassifierTemplate(),
+        response_builder: getCaptureTemplate(s.language),
+      },
+      review: s.review || null,
+    });
+  }
   return bad(res, 404, "Call not found");
+});
+
+// ---- prompts (debug / admin) ----
+app.get("/api/prompts", (req, res) => {
+  const cfg = readPromptConfig();
+  if (cfg) return res.json(cfg);
+  return res.json({
+    classifier: getClassifierPrompt(),
+    response_builder: {
+      system_english: getCapturePrompt("english"),
+      system_hindi: getCapturePrompt("hindi"),
+    },
+  });
+});
+
+app.post("/api/prompts", async (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload || typeof payload !== "object") {
+      return bad(res, 400, "Payload must be a JSON object");
+    }
+    writePromptConfig(payload);
+    res.json({ ok: true, prompt: payload });
+  } catch (err) {
+    bad(res, 500, err.message);
+  }
 });
 app.patch("/api/calls/:id/review", async (req, res) => {
   const s = sessions.get(req.params.id);

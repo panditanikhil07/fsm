@@ -11,6 +11,7 @@ const provider = (env.LLM_PROVIDER || (env.GEMINI_API_KEY && !(env.LLM_API_KEY |
 export const config = {
   port: Number(env.PORT || 8000),
   dataDir: path.resolve(root, env.DATA_DIR || "data"),
+  promptPath: env.PROMPT_PATH ? path.resolve(root, env.PROMPT_PATH) : path.join(path.resolve(root, env.DATA_DIR || "data"), "prompt.json"),
   statesPath: env.STATES_PATH ? path.resolve(root, env.STATES_PATH) : path.join(root, "src/script/states.json"),
   sessionIdleMs: Number(env.SESSION_IDLE_MINUTES || 15) * 60_000,
   maxInputChars: 600,

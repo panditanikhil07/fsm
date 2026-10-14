@@ -106,6 +106,10 @@ async function runTurn(s, rawText) {
       extracted: extra.extracted || {}, intents: extra.intents || [], events: s.events, classification: extra.classification || null,
       capture: extra.capture || null, retry: { state: s.state, used: Math.min(s.retries[s.state] || 0, STATES[s.state].max_retries ?? META.default_max_retries), max: STATES[s.state].max_retries ?? META.default_max_retries },
       jump: s.jump ? { group: s.jump.group, resume: s.jump.resume } : null, latency_ms: round(ms),
+      prompt_input: {
+        classifier: extra.classification?.prompt_input ?? null,
+        response_builder: extra.capture?.prompt_input ?? null,
+      },
     };
     s.history.push(item);
     if (s.flags.terminal) await finalizeCall(s, "terminal").then((p) => { ev(s, "persisted", { outcome: p.outcome, files: p.saved }); });
@@ -196,7 +200,7 @@ async function runTurn(s, rawText) {
     if (diff.length) {
       ev(s, "implicit_update", { slots: diff });
       const plan = planJumps(s, diff);
-      if (plan.transfer && triggerTransfer(s, plan.transfer, out)) { s.metrics.fsm_ms = round(performance.now() - f0); return finish(dedupe(out).join(" "), { intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null } }); }
+      if (plan.transfer && triggerTransfer(s, plan.transfer, out)) { s.metrics.fsm_ms = round(performance.now() - f0); return finish(dedupe(out).join(" "), { intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null, prompt_input: cap.prompt_input ?? null } }); }
       if (plan.specs.length) { beginJump(s, plan.specs[0], s.jump?.resume ?? s.state, plan.specs.slice(1)); cfg = STATES[s.state]; }
     }
   }
@@ -252,7 +256,7 @@ async function runTurn(s, rawText) {
 
   let assistant = dedupe([lead, ...info, ...sceneOut]).join(" ").trim();
   if (assistant && assistant === lastReply && !s.flags.terminal && STATES[s.state].recovery_template) assistant = loc(s.language, STATES[s.state].recovery_template);
-  return finish(assistant, { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null } });
+  return finish(assistant, { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null, prompt_input: cap.prompt_input ?? null } });
 }
 
 export const handleTurn = (s, text) => withLock(s.id, () => runTurn(s, text));

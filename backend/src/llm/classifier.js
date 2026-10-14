@@ -60,7 +60,7 @@ export async function classify(text, ctx) {
 import { INTENTS, GROUPS, SLOTS, META } from "../script/index.js";
 import { fallbackClassify } from "./fallback.js";
 import { hasWord, norm } from "../utils/text.js";
-import { chatWithMeta } from "./client.js";
+import { readPromptConfig } from "./promptStore.js";
 
 const JEV_URL =
   process.env.JEV_URL ||
@@ -135,6 +135,24 @@ Important rules:
 - For very short replies to the pending question, prefer
   continue unless another lane clearly fits.
 `;
+
+export function getClassifierPrompt() {
+  const cfg = readPromptConfig();
+  return {
+    instructions: cfg?.classifier?.instructions || JEV_INSTRUCTIONS.trim(),
+    criteria: cfg?.classifier?.criteria || LANE_CRITERIA,
+  };
+}
+
+export function getClassifierTemplate() {
+  const { instructions, criteria } = getClassifierPrompt();
+  return {
+    type: "jev",
+    model: JEV_MODEL,
+    instructions,
+    criteria,
+  };
+}
 
 const normalizeLane = (value) => {
   const s = String(value ?? "").toLowerCase().trim();
@@ -367,6 +385,7 @@ async function callJev(text, ctx) {
     );
   }
 
+  const promptObj = getClassifierPrompt();
   const controller = new AbortController();
 
   const timeout = setTimeout(
@@ -383,8 +402,8 @@ async function callJev(text, ctx) {
     questions: {
       lane: {
         type: "choice",
-        instructions: JEV_INSTRUCTIONS,
-        criteria: LANE_CRITERIA,
+        instructions: promptObj.instructions,
+        criteria: promptObj.criteria,
       },
     },
   }, null, 2);
@@ -475,8 +494,14 @@ export async function classify(text, ctx) {
       source: "rule",
       error: null,
       ms: 0,
+      prompt_input: null,
     };
   }
+
+  const prompt_input = {
+    utterance: text,
+    context: ctx || {},
+  };
 
   let result = null;
   let source = "jev";
@@ -509,5 +534,6 @@ export async function classify(text, ctx) {
     ms: Number(
       (performance.now() - t0).toFixed(2)
     ),
+    prompt_input,
   };
 }

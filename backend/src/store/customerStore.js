@@ -6,6 +6,8 @@ import { META, SLOTS } from "../script/index.js";
 import { readJson, writeJsonAtomic } from "../utils/atomicJson.js";
 import { withLock } from "../utils/mutex.js";
 import { isFilled } from "../utils/text.js";
+import { getClassifierTemplate } from "../llm/classifier.js";
+import { getCaptureTemplate } from "../llm/capture.js";
 
 const CUSTOMERS_FILE = path.join(config.dataDir, "customers.json");
 const CALLS_FILE = path.join(config.dataDir, "calls.json");
@@ -150,10 +152,15 @@ export function finalizeCall(s, endedBy = "terminal") {
       transfer_reason: s.flags.transfer_reason || null, resumed_previous: !!s.flags.resumed_previous,
       slots: clone(s.slots), path: [...s.path], metrics: clone(s.metrics),
       tool_calls: s.tool_calls.map((t) => ({ name: t.name, status: t.result?.status ?? null, at: t.at })),
+      prompt_template: {
+        classifier: getClassifierTemplate(),
+        response_builder: getCaptureTemplate(s.language),
+      },
       transcript: s.history.map((h) => ({
         turn: h.turn, user: h.user, assistant: h.assistant, state: h.to_state, lane: h.lane,
         from_state: h.from_state, lane_from: h.lane_from, path: h.path, latency_ms: h.latency_ms,
         classification: h.classification, capture: h.capture, intents: h.intents, events: h.events, extracted: h.extracted,
+        prompt_input: h.prompt_input,
       })),
       history: clone(s.history),
       review: s.review || null,
