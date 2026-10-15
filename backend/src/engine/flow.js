@@ -352,7 +352,14 @@ function confirmDictation(s, name, ex, out) {
 // ---- resolving the caller's reply against the current state ---------------------------
 function isResolved(s, name, ex) {
   const cfg = STATES[name];
-  if (cfg.resolves_on_any_reply) return isFilled(ex.slots.call_rating) || ex.yn === "no" || !!ex.declined;
+  if (cfg.resolves_on_any_reply) {
+    const validRating = ["0", "1", "2", "3", "4", "5", "declined"].includes(String(ex.slots.call_rating ?? ""));
+    const explicitDecline = !!ex.declined || /\b(skip|decline|pass|no rating|not now)\b/i.test(String(ex.raw || ""));
+    // Rating states must not close on generic acknowledgements like "ok", "thikk hai", or a bare yes/no.
+    // Only a real numeric rating or explicit decline ends the rating gate.
+    if (["REGISTER_COMPLAINT", "RATING_GATE"].includes(name)) return validRating || explicitDecline;
+    return validRating || explicitDecline || ex.yn === "no";
+  }
   return cfg.required_slots.every((k) => isFilled(s.slots[k]));
 }
 

@@ -13,7 +13,7 @@ import { yesNo, isBareYesNo } from "../utils/yesno.js";
 import { repairAddress, ADDRESS_KEYS } from "../utils/address.js";
 import { isFilled, round } from "../utils/text.js";
 import { addressOptions } from "./render.js";
-import { enter, ask, wants, resolveCurrent, triggerTransfer, beginJump, becomeNewCustomer } from "./flow.js";
+import { enter, ask, leave, wants, resolveCurrent, triggerTransfer, beginJump, becomeNewCustomer } from "./flow.js";
 import { planJumps } from "./jump.js";
 import { buildTasks, fallbackLead, infoReplies, actionOf } from "./intents.js";
 import { ev } from "./events.js";
@@ -72,7 +72,38 @@ function applySlots(s, captured, ex) {
   }
 }
 
-const dedupe = (parts) => { const seen = new Set(); return parts.filter((x) => x && !seen.has(x) && seen.add(x)); };
+const normalizeSentence = (s) => {
+  const canon = String(s || "").toLowerCase()
+    .replace(/[\p{P}\p{S}]/gu, " ")
+    .replace(/\b(?:zaroor|theek|hai|hum|mein|baat|karenge|karenge|okay|ok|sure|jo|ki|yeh|aap|mujhe|hota|huyi|kiya|bas|toh)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return canon;
+};
+const dedupe = (parts) => {
+  const seen = new Set();
+  return parts.filter((x) => {
+    if (!x) return false;
+    const norm = normalizeSentence(x);
+    if (!norm || seen.has(norm)) return false;
+    seen.add(norm);
+    return true;
+  });
+};
+
+function clarificationLead(text) {
+  const t = String(text || "").toLowerCase();
+  if (!/(i|we|you)\s+(?:also\s+)?(?:told|have\s+told|already\s+told|said)\s+(?:you|me|them)\s+(?:the\s+)?(?:apartment|flat|house|building|floor|block|area|street)\s+(?:name|number)/i.test(t)) return "";
+  if (/(apartment|flat|house|building|tower|villa)/i.test(t)) return "Got it, I heard the apartment name too.";
+  if (/(floor|block|sector|area)/i.test(t)) return "Got it, I heard that detail too.";
+  return "Got it, I heard that detail too.";
+}
+
+function noLastNameResponse(text) {
+  const t = String(text || "").toLowerCase();
+  return /i\s+(?:don.*t\s+have|do\s+not\s+have|have\s+no)\s+(?:any\s+)?(?:last\s+name|surname|family\s+name)/u.test(t)
+    || /(?:^|\s)(?:just|only)\s+\p{L}+/u.test(t);
+}
 
 // A language claim from the classifier only counts if the caller actually names that language.
 // (Models over-detect "other" on short address fragments like "ph-4 ug-6 sec2a vasundhara".)
@@ -82,10 +113,15 @@ function languageNamed(text, language) {
 }
 
 function endCall(s, out) {
+  const resolvedRating = ["0", "1", "2", "3", "4", "5", "declined"].includes(String(s.slots.call_rating ?? ""));
   if (s.flags.Rating_Asked || s.flags.Rating_Resolved) {
-    s.flags.Rating_Resolved = true;
-    if (!isFilled(s.slots.call_rating)) s.slots.call_rating = "not_given";
-    return enter(s, "CLOSING", out);
+    if (resolvedRating || s.slots.call_rating === "declined") {
+      s.flags.Rating_Resolved = true;
+      return enter(s, "CLOSING", out);
+    }
+    // A rating prompt must not turn into a closing message without a valid score.
+    s.flags.Rating_Resolved = false;
+    return enter(s, "RATING_GATE", out);
   }
   return enter(s, "RATING_GATE", out);          // ask the rating once, then close
 }
@@ -241,6 +277,13 @@ async function runTurn(s, rawText) {
 
   const lastReply = s.last_reply;
   const sceneOut = [];
+  if (s.state === "CAPTURE_LAST_NAME" && noLastNameResponse(text)) {
+    delete s.slots.last_name;
+    const skipped = leave(s, s.state, sceneOut);
+    s.metrics.fsm_ms = round(performance.now() - f0 - cap.ms);
+    const assistant = dedupe([cap.lead || "", ...info, ...sceneOut]).join(" ").trim();
+    return finish(assistant || (skipped ? "" : ""), { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null, prompt_input: cap.prompt_input ?? null } });
+  }
   resolveCurrent(s, ex, sceneOut);
   s.metrics.fsm_ms = round(performance.now() - f0 - cap.ms);
 
@@ -254,7 +297,12 @@ async function runTurn(s, rawText) {
   else if (!lead && (retried || (conditional.length && !ex.progress && !ex.soft && !ex.fresh)))
     lead = fallbackLead(s, [{ type: "invalid", reason: ex.invalidReason || "nonsense" }], cls);
 
+  const clarification = clarificationLead(text);
   let assistant = dedupe([lead, ...info, ...sceneOut]).join(" ").trim();
+  if (clarification) {
+    const replaced = assistant.replace(/^let me put that another way\.?\s*/i, "");
+    assistant = dedupe([clarification, replaced || assistant]).join(" ").trim();
+  }
   if (assistant && assistant === lastReply && !s.flags.terminal && STATES[s.state].recovery_template) assistant = loc(s.language, STATES[s.state].recovery_template);
   return finish(assistant, { extracted: { ...ex.slots, ...(ex.yn ? { _yn: ex.yn } : {}), ...(ex.digits ? { _digits: ex.digits } : {}) }, intents: cls.intents, classification: cls, capture: { source: cap.source, lead: cap.lead, slots: cap.slots, ms: cap.ms, usage: cap.usage || null, prompt_input: cap.prompt_input ?? null } });
 }

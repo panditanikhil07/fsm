@@ -33,7 +33,13 @@
         "theek",
         "thik",
         "bilkul",
-        "exactly"
+        "exactly",
+        "hasn",
+        "hanji",
+        "haanji",
+        "thikk",
+        "achha",
+        "accha"
       ],
       "no": [
         "no",
@@ -444,9 +450,13 @@
           "someone else",
           "another number",
           "other number",
+          "dusre number",
+          "dusra number",
+          "doosra number",
           "alag",
           "doosra",
           "dusra",
+          "dusre",
           "kisi aur",
           "not this number"
         ],
@@ -454,9 +464,12 @@
           "same",
           "calling from",
           "this number",
+          "same number",
           "isi number",
           "usi number",
-          "my number"
+          "my number",
+          "yeh number",
+          "yehi number"
         ]
       },
       "group": "service_number",
@@ -1124,7 +1137,16 @@
         "how long",
         "what time",
         "how soon",
-        "timing"
+        "timing",
+        "kab aaega",
+        "kab aega",
+        "kab aayegi",
+        "kab ayegi",
+        "technician kab",
+        "engineer kab",
+        "when will the technician come",
+        "when will someone come",
+        "when will they come"
       ]
     },
     "ticket_number": {
@@ -1918,7 +1940,13 @@
       "resolves_on_any_reply": true,
       "reask_state": "RATING_GATE",
       "max_retries": 1,
-      "on_exhausted": "skip_and_continue"
+      "on_exhausted": "skip_and_continue",
+      "reask_template": {
+        "ENGLISH": "Before we end the call, please rate your overall experience from zero to five.",
+        "HINDI": "Call khatam karne se pehle, kripya apne overall experience ko zero se five tak rate kijiye."
+      },
+      "ack_resolves": true,
+      "suppress_lead_on_exhaust": true
     },
     "TECHNICIAN_TIMING": {
       "prompt": "Only if the customer asks about timing.",
@@ -1963,7 +1991,9 @@
       "on_leave": "resolve_rating",
       "resolves_on_any_reply": true,
       "max_retries": 1,
-      "on_exhausted": "skip_and_continue"
+      "on_exhausted": "skip_and_continue",
+      "ack_resolves": true,
+      "suppress_lead_on_exhaust": true
     },
     "CLOSING": {
       "prompt": "Close once, after the rating is resolved.",

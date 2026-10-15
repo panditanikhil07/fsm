@@ -246,19 +246,9 @@ function targetsFromFallback(text, ctx) {
 
 function languageFromText(text) {
   const t = String(text || "").toLowerCase();
-
-  if (
-    /\b(hindi|हिंदी|hinglish)\b|hindi mein|हिंदी में/.test(t)
-  ) {
-    return "hindi";
-  }
-
-  if (
-    /\b(english|अंग्रेज़ी|अंग्रेजी)\b|english mein/.test(t)
-  ) {
-    return "english";
-  }
-
+  if (t.split(/\s+/).filter(Boolean).length > 6) return null;   // "Hindi Bhawan, sector 5 ..." is an address, not a switch
+  if (/(^|[^\p{L}])(hindi|hinglish|हिंदी|हिन्दी)($|[^\p{L}])/u.test(t)) return "hindi";
+  if (/(^|[^\p{L}])(english|अंग्रेज़ी|अंग्रेजी)($|[^\p{L}])/u.test(t)) return "english";
   return null;
 }
 
@@ -284,19 +274,17 @@ function mapLane(lane, text, ctx) {
     recall_targets = local.recall_targets;
 
   } else if (lane === "knowledge") {
-    const id = [
-      "info",
-      "faq",
-      "knowledge",
-      "smalltalk",
-    ].find((x) => hasIntent(x)) ||
-      intentForAction("info", ["info", "faq"]);
-
-    intents = id
-      ? [id]
-      : hasIntent("smalltalk")
-        ? ["smalltalk"]
-        : [];
+    // The old code picked the first of ["info","faq","knowledge","smalltalk"] that exists as an intent id. This script has
+    // no such ids, so every knowledge question ("technician kab aaega") became generic smalltalk and the real info intents
+    // (timing, charges, warranty, ticket_number, technician_details) never fired.
+    const t = norm(text);
+    const infoHits = Object.entries(INTENTS)
+      .filter(([, it]) => it?.action?.type === "info" && (it.keywords || []).some((k) => {
+        const key = norm(k);
+        return key && (key.includes(" ") ? t.includes(key) : hasWord(t, key));
+      }))
+      .map(([id]) => id);
+    intents = infoHits.length ? infoHits : hasIntent("smalltalk") ? ["smalltalk"] : [];
 
   } else if (lane === "jump") {
     const id = hasIntent("update")
@@ -390,14 +378,14 @@ async function callJev(text, ctx) {
 
   const timeout = setTimeout(
     () => controller.abort(),
-    15000
+    Number(process.env.JEV_TIMEOUT_MS) || 4000
   );
 
   const prompt = JSON.stringify({
     model: JEV_MODEL,
     state: {
       utterance: text,
-      context: ctx,
+      context: { ...ctx, filled_slots: Object.fromEntries(Object.keys(ctx?.filled_slots || {}).map((k) => [k, true])) },
     },
     questions: {
       lane: {

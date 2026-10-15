@@ -2,6 +2,8 @@
 // said and the conversational "lead" (acknowledgement / answer / polite redirect). The engine then
 // runs the FSM with the captured slots and appends the scripted next question from states.json.
 import { META, SLOTS } from "../script/index.js";
+import { yesNo, isBareYesNo } from "../utils/yesno.js";
+import { hasWord } from "../utils/text.js";
 import { chatWithMeta, parseJson, llmEnabled } from "./client.js";
 import { fallbackCapture } from "./fallback.js";
 import { readPromptConfig } from "./promptStore.js";
@@ -74,11 +76,104 @@ const squash = (s) => String(s || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, 
 const words = (s) => squash(s).split(" ").filter(Boolean);
 const TEXTY = new Set(["name", "text", "pin"]);
 
-// A slot is accepted only if it is grounded in the utterance:
-//  - its quoted evidence is a phrase of the utterance (or every evidence word appears in it), or
-//  - for name/text/pin slots, the value itself is made of words the caller said.
-// Everything else (e.g. "same" quoted from words that were never said) is dropped as hallucinated.
-function grounded(def, value, evidence, hay, haySet) {
+const normalizeAlias = (s) => String(s || "").toLowerCase().replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+const hasAny = (text, list) => list.some((w) => hasWord(text, w));
+const explicitYesNo = (text) => {
+  const t = String(text || "").toLowerCase();
+  const yes = ["yes", "yeah", "yep", "correct", "right", "sure", "ok", "okay", "haan", "sahi", "theek"];
+  const no = ["no", "nope", "nah", "nahi", "nahin", "wrong", "galat", "incorrect"];
+  if (hasAny(t, yes)) return "yes";
+  if (hasAny(t, no)) return "no";
+  return null;
+};
+const explicitNoLastName = (text) => {
+  const t = String(text || "").toLowerCase();
+  return hasAny(t, [
+    "no last name",
+    "no surname",
+    "no family name",
+    "don't have a last name",
+    "do not have a last name",
+    "don't have any last name",
+    "do not have any last name",
+    "have no last name",
+    "have no surname",
+    "have no family name",
+    "i have no surname",
+    "i don't have any last name",
+    "i do not have any last name",
+    "i don't have a last name",
+    "i do not have a last name",
+    "no lastname",
+    "no family name"
+  ]) || /(?:^|\s)(?:just|only)\s+\p{L}+/u.test(t) || /i\s+(?:don.*t|do\s+not|have\s+no)\s+(?:any\s+)?(?:last\s+name|surname|family\s+name)/u.test(t);
+};
+
+
+// ---- enum / rating grounding -------------------------------------------------------------------------------------
+const digitWords = () => META.lexicon?.digit_words || {};
+const RATING_DECLINE = /\b(skip|decline|pass|no rating|not now|rehne do|nahi dunga|nahi dungi|nahi dena|koi rating nahi)\b/i;
+// "paanch", "five", "5" -> "0".."5"; skip/decline -> "declined"; anything else -> null
+export function ratingFrom(text) {
+  const toks = String(text || "").toLowerCase().match(/[\p{L}\p{N}]+/gu) || [];
+  for (const w of toks) {
+    if (/^[0-5]$/.test(w)) return w;
+    const n = digitWords()[w];
+    if (Number.isInteger(n) && n >= 0 && n <= 5) return String(n);
+  }
+  return RATING_DECLINE.test(String(text || "")) ? "declined" : null;
+}
+// canonical legal value of an enum slot, or null (so "thikk hai" can never become a call_rating)
+function canonicalEnum(def, value) {
+  const v = String(value ?? "").trim().toLowerCase();
+  if (!v) return null;
+  if ((def.values || []).map(String).includes(v)) return v;
+  for (const [val, words] of Object.entries(def.synonyms || {}))
+    if ((words || []).some((w) => normalizeAlias(w) === normalizeAlias(v))) return val;
+  return null;
+}
+
+// LLM is the primary source of truth. These checks are a narrow safety net for obvious contradictions,
+// not a replacement for the model's interpretation of the caller's real wording.
+function grounded(def, slotName, value, evidence, hay, haySet) {
+  if (def.type === "boolean") {
+    const e = String(evidence || "").trim();
+    if (!e) return false;
+    const direct = yesNo(e) ?? (isBareYesNo(e) ? (e.toLowerCase().includes("no") ? "no" : "yes") : null);
+    const pol = direct ?? explicitYesNo(e);
+    if (!pol) return false;
+    const asBool = value === true || String(value).toLowerCase() === "true";
+    return asBool === (pol === "yes");           // evidence "nahi" must not ground value:true
+  }
+  if (slotName === "last_name") {
+    if (explicitNoLastName(evidence || "")) return false;
+  }
+  if (["enum", "choice"].includes(def.type)) {
+    const e = String(evidence || "").trim();
+    if (def.type === "enum") {
+      const canon = canonicalEnum(def, value);
+      if (!canon) return false;                                              // not a legal value for this slot
+      if (slotName === "call_rating") return ratingFrom(e || hay) === canon; // must be what was actually said
+      if (!e) {                                                              // bare scalar from the LLM: accept only if the caller said it
+        const opts = [normalizeAlias(canon.replace(/_/g, " ")), ...(def.synonyms?.[canon] || []).map(normalizeAlias)];
+        return opts.some((o) => o && hay.includes(` ${o} `));
+      }
+    }
+    if (!e) return false;
+    const lower = normalizeAlias(e);
+    const sameMarkers = /(same number|this number|my number|calling from this number|isi number|usi number|yehi number|same as this)/i;
+    const differentMarkers = /(different number|another number|other number|someone else|koi aur|dusre number|dusra number|doosra number|not this number|not this one|other than this)/i;
+    if (slotName === "service_number_choice") {
+      if (String(value).toLowerCase() === "same" && differentMarkers.test(e)) return false;
+      if (String(value).toLowerCase() === "different" && sameMarkers.test(e)) return false;
+      return true;
+    }
+    if (slotName === "brand") {
+      const options = [normalizeAlias(value), ...(def.synonyms?.[String(value)] || []).map(normalizeAlias)];
+      return options.some((opt) => opt && lower.includes(opt));
+    }
+    return true;
+  }
   const ev = words(evidence);
   if (ev.length && (hay.includes(` ${ev.join(" ")} `) || ev.every((w) => haySet.has(w)))) return true;
   if (TEXTY.has(def.type)) { const v = words(String(value)); return v.length > 0 && v.every((w) => haySet.has(w)); }
@@ -91,15 +186,26 @@ export function groundSlots(raw, text) {
     if (!def) continue;
     const obj = v && typeof v === "object" && !Array.isArray(v);
     const value = obj ? v.value : v;
-    if (grounded(def, value, obj ? v.evidence : "", hay, haySet)) accepted[k] = value; else rejected.push(k);
+    const evidence = obj ? v.evidence : "";
+    const lastNameDenial = k === "last_name" && explicitNoLastName(String(evidence || ""));
+    if (lastNameDenial) { continue; }
+    if (grounded(def, k, value, evidence, hay, haySet)) accepted[k] = def.type === "enum" ? canonicalEnum(def, value) : value; else rejected.push(k);
   }
   return { accepted, rejected };
 }
 
-const cleanLead = (s) => String(s || "").replace(/[`*_#>]/g, "").replace(/\s+/g, " ").trim()
-  .split(/(?<=[.!?।])\s+/).filter((x) => x && !x.includes("?")).join(" ").slice(0, 320);
+// A lead may acknowledge / answer / redirect, but must never ASK. The "?" test alone misses imperative asks
+// ("kripya rating batayein", "please rate ..."), which then doubled up with the scripted question or the goodbye.
+const REQUEST_RE = /\b(please (tell|give|rate|share|provide|confirm|say)|kripya|batayein|bataiye|batayiye|bataiyega|rate kijiye|rating (dijiye|chahiye|denge)|zero se five|zero to five)\b/i;
+const cleanLead = (s) => {
+  const sentences = String(s || "").replace(/[`*_#>]/g, "").replace(/\s+/g, " ").trim()
+    .split(/(?<=[.!?।])\s+/).filter((x) => x && !x.includes("?") && !REQUEST_RE.test(x));
+  let out = "";
+  for (const x of sentences) { if ((out + " " + x).trim().length > 320) break; out = (out + " " + x).trim(); }
+  return out;
+};
 
-export async function captureAndRespond({ text, ctx, specs, tasks, classification, language }) {
+export async function captureAndRespond({ text, ctx, specs, tasks, classification, language, suppressLead = false }) {
   const t0 = performance.now();
   let slots = null, lead = null, source = "llm", error = null, rejected = [];
   const prompt_input = {
@@ -116,13 +222,15 @@ export async function captureAndRespond({ text, ctx, specs, tasks, classificatio
   if (llmEnabled()) {
     try {
       const meta = await chatWithMeta({
-        tier: "main", temperature: 0.3, maxTokens: 380, system: SYSTEM(language),
-        user: { utterance: text, classification: { intents: classification.intents, yes_no: classification.yes_no }, ...ctx, slot_specs: specs, tasks },
+        tier: "main", temperature: 0.3, maxTokens: 380, system: systemPrompt,
+        user: prompt_input,
       });
       const out = parseJson(meta.output_response || meta.text || "");
       if (out) {
         const g = groundSlots(out.slots && typeof out.slots === "object" && !Array.isArray(out.slots) ? out.slots : {}, text);
-        slots = g.accepted; rejected = g.rejected; lead = cleanLead(out.lead);
+        slots = g.accepted; rejected = g.rejected;
+        if (rejected.includes("call_rating") && !Object.prototype.hasOwnProperty.call(slots, "call_rating")) lead = "";
+        else lead = suppressLead ? "" : cleanLead(out.lead);
         const usage = meta.usage || null;
         if (usage) {
           const normalized = {

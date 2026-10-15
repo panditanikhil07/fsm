@@ -27,10 +27,11 @@ const CITIES = ["new delhi", "delhi", "noida", "greater noida", "ghaziabad", "gu
   .sort((a, b) => b.length - a.length);
 
 const HOUSE = /^(?:house|flat|plot|shop|building|bldg|tower|floor|room|villa|unit|h|hno|no|number|apartment|apt|door|office)$/i;
+const BUILDING = /^(?:apartment|apt|flat|villa|tower|building|bldg|residence|suite|unit|complex)$/i;
 const ROAD = /^(?:road|rd|street|st|marg|lane|path|gali|chowk|avenue|ave|highway|bypass|colony road)$/i;
 const START_LOCALITY = /^(?:sector|sec|phase|ph|block|pocket|ward|zone)$/i;
 const END_LOCALITY = /^(?:nagar|vihar|enclave|extension|ext|puram|city|society|heights|apartments|residency|garden|gardens|park|layout|hills|market|bazaar|town|gram|colony|estate|township|kunj|bagh|ganj|pur|tola|mohalla)$/i;
-const FILLER_HEAD = /^(?:(?:my|mera|meri|our|the)\s+)?(?:(?:complete|full|current|service|site)\s+)?(?:address|pata|ghar\s+ka\s+pata)\s*(?:is|hai|:)?\s*|^(?:it\s*(?:is|'s)|its|i\s+live\s+(?:at|in)|i\s+am\s+(?:at|in)|we\s+live\s+(?:at|in)|mera\s+ghar|ye|yeh|this\s+is)\s+/i;
+const FILLER_HEAD = /^(?:(?:my|mera|meri|our|the)\s+)?(?:(?:complete|full|current|service|site)\s+)?(?:address|pata|ghar\s+ka\s+pata)\s*(?:is|hai|:)?\s*|^(?:it\s*(?:is|'s)|its|i\s+live\s+(?:at|in)|i\s+am\s+(?:at|in)|we\s+live\s+(?:at|in)|mera\s+ghar|ye|yeh|this\s+is)\s+|^(?:i|we|you)\s+(?:also\s+)?(?:told|have\s+told|already\s+told|said)\s+(?:you|me|them)\s+(?:the\s+)?(?:apartment|flat|house|building|address|street)\s+(?:name|number)\s*(?:is|was|:)?(?:[\s,;:.]|$)/i;
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const spanRe = (word) => new RegExp(`(^|[^\\p{L}\\p{N}])(${esc(word)})(?=[^\\p{L}\\p{N}]|$)`, "iu");
@@ -63,17 +64,25 @@ export function cleanStreet(s) {
   return String(s || "").replace(/^(?:my|mera|meri|the|our)\s+/i, "").replace(/\b(number|no\.?)\s+(?:is|hai)\s+/i, "$1 ").replace(/\s+/g, " ").trim();
 }
 
-const LEAD_JUNK = /^(?:(?:no|not|nope|nahi|actually|sorry|wrong|incorrect|galat|instead|please|the|my|it|its|it's|is|hai|and|aur|yes|haan|ok|okay|should|be|change|update|correct)\b[\s,.-]*)+/i;
+const LEAD_JUNK = /^(?:(?:no|not|nope|nahi|actually|sorry|wrong|incorrect|galat|instead|please|the|my|it|its|it's|is|hai|and|aur|yes|haan|ok|okay|should|be|change|update|correct|also|told|said|you|we|i)\b[\s,.-]*)+/i;
+function stripNarrativeRestatement(chunk) {
+  return String(chunk || "").replace(/^(?:i|we|you)\s+(?:also\s+)?(?:told|have\s+told|already\s+told|said)\s+(?:you|me|them)\s+(?:the\s+)?(?:apartment|flat|house|building|address|street)\s+(?:name|number)\s*[,;:.]?(?:\s+|$)/i, "").trim();
+}
 const ONLY_JUNK = /^(?:(?:city|state|area|locality|street|pin|code|pincode|address|is|hai|the|a|an|my|to|ka|ki|ke|number|no|not)\b[\s,.-]*)*$/i;
-function stripJunk(chunk) { const c = String(chunk).replace(LEAD_JUNK, "").trim(); return ONLY_JUNK.test(c) ? "" : c; }
+function stripJunk(chunk) {
+  let c = String(chunk).replace(LEAD_JUNK, "").trim();
+  c = stripNarrativeRestatement(c);
+  return ONLY_JUNK.test(c) ? "" : c;
+}
 
 function classify(chunk) {
   const toks = chunk.split(/\s+/).filter(Boolean);
   const hasRoad = toks.some((t) => ROAD.test(t));
-  const hasHouse = /^[a-z]?[-/]?\d/i.test(toks[0] || "") || (toks.some((t) => HOUSE.test(t)) && /\d/.test(chunk));   // "office" / "shop" alone is not a house number
+  const hasBuilding = toks.some((t) => BUILDING.test(t));
+  const hasHouse = /^[a-z]?[-/]?\d/i.test(toks[0] || "") || hasBuilding || (toks.some((t) => HOUSE.test(t)) && /\d/.test(chunk));   // "office" / "shop" alone is not a house number
   const hasStartLoc = toks.some((t) => START_LOCALITY.test(t));
   const hasEndLoc = toks.some((t, i) => i > 0 && END_LOCALITY.test(t));
-  return { toks, hasRoad, hasHouse, hasStartLoc, hasEndLoc };
+  return { toks, hasRoad, hasHouse, hasBuilding, hasStartLoc, hasEndLoc };
 }
 
 // "45 sector 62" -> { street: "45", area: "sector 62" };  "12 mg road sector 15" -> street "12 mg road", area "sector 15"
@@ -171,7 +180,9 @@ export function parseAddress(text, { asking = null, wanted = ADDRESS_KEYS, stric
   for (const k of classified) {
     if (k.hasHouse || k.hasRoad) {
       if (k.hasStartLoc || k.hasEndLoc || k.hasRoad) { const sp = splitStreetArea(k.c); if (!street && sp.street) street = sp.street; if (!area && sp.area) area = sp.area; if (sp.tail) leftovers.push(sp.tail); }
-      else if (!street) street = k.c; else leftovers.push(k.c);
+      else if (!street) street = k.c;
+      else if (k.hasBuilding && !area) street = [street, k.c].filter(Boolean).join(", ");
+      else leftovers.push(k.c);
     } else if (k.hasStartLoc || k.hasEndLoc) {
       const sp = splitStreetArea(k.c);
       if (!area) area = sp.area || k.c; else leftovers.push(k.c);

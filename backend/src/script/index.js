@@ -52,7 +52,10 @@ export const groupOf = (slot) => SLOTS[slot]?.group || null;
   for (const [name, st] of Object.entries(STATES)) {
     if (!LANE_IDS.includes(st.lane)) bad.push(`${name}: unknown lane ${st.lane}`);
     const targets = [st.next, ...(st.transitions || []).map((t) => t.goto)];
-    if (st.on_exhausted && STATES[st.on_exhausted] !== undefined) targets.push(st.on_exhausted);
+    // on_exhausted is a behaviour keyword (skip_and_continue, store_as_heard_and_lock, ...) or a state name.
+    // The old test only looked at names that already existed, so a typo was never reported.
+    if (st.on_exhausted && !/^(skip_and_continue|store_|map_closest)/.test(st.on_exhausted)) targets.push(st.on_exhausted);
+    if (st.reask_state && !STATES[st.reask_state]) bad.push(`${name}: reask_state ${st.reask_state}`);
     for (const t of targets) if (t && !String(t).includes("{") && !STATES[t]) bad.push(`${name} -> ${t}`);
     for (const k of [...st.required_slots, ...st.optional_slots]) if (!SLOTS[k]) bad.push(`${name}: slot ${k} missing from registry`);
   }

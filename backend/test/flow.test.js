@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtempSync, cpSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { parseAddress } from "../src/utils/address.js";
+import { groundSlots } from "../src/llm/capture.js";
 
 // isolated data dir + no LLM key => deterministic rule fallback
 const dir = mkdtempSync(path.join(tmpdir(), "roshni-"));
@@ -20,6 +22,150 @@ const say = async (s, text) => (await handleTurn(s, text));
 const run = async (s, lines) => { let last; for (const l of lines) last = await say(s, l); return last; };
 const NEW_CALL = ["English", "same number", "homeowner", "Rohit Sen", "tap", "Grohe",
   "12 MG Road, Sector 15, Noida, Uttar Pradesh 201301", "yes"];
+
+test("building names like apartment before a sector are preserved in the street", () => {
+  const parsed = parseAddress("House no. 987, samriddhi apt, sector 45, new delhi, delhi, 678906");
+  assert.equal(parsed.street, "House No. 987, Samriddhi Apt");
+  assert.equal(parsed.area, "Sector 45");
+  assert.equal(parsed.city, "Delhi");
+  assert.equal(parsed.pin_code, "678906");
+});
+
+test("a narrative restatement does not count as a yes/no confirmation", () => {
+  const raw = { address_confirmed: { value: true, evidence: "I also told you apartment name" } };
+  const parsed = groundSlots(raw, "I also told you apartment name");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, ["address_confirmed"]);
+});
+
+test("address restatements like 'I also told you apartment name' are not inserted into the street", () => {
+  const parsed = parseAddress("I also told you apartment name, House no. 987, samriddhi apt, sector 45, new delhi, delhi, 678906");
+  assert.equal(parsed.street, "House No. 987, Samriddhi Apt");
+  assert.equal(parsed.area, "Sector 45");
+  assert.equal(parsed.city, "Delhi");
+  assert.equal(parsed.pin_code, "678906");
+  assert.equal(parsed.street.includes("I Also Told You Apartment Name"), false);
+});
+
+test("clarification restatements are acknowledged before the next confirmation prompt", async () => {
+  const s = createSession("t14", "9988776655");
+  s.state = "ADDRESS_CONFIRM_NEW";
+  s.slots.street = "House No. 987, Samriddhi Apt";
+  s.slots.area = "Sector 45";
+  s.slots.city = "Delhi";
+  s.slots.state = "Delhi";
+  s.slots.pin_code = "678906";
+  s.last_reply = "Let me confirm your address: House No. 987, Samriddhi Apt, Sector 45, New Delhi, Delhi, pin code 678906. Is that correct?";
+  const res = await say(s, "I also told you apartment name");
+  assert.match(res.assistant, /Got it, I heard the apartment name too\./i);
+  assert.match(res.assistant, /confirm your address|Is that correct/i);
+});
+
+test("a one-word last name response with 'only' is not accepted as a surname", () => {
+  const raw = { last_name: { value: "Nikhil", evidence: "only nikhil" } };
+  const parsed = groundSlots(raw, "only nikhil");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, ["last_name"]);
+});
+
+test("semantically duplicate language acknowledgements are deduplicated", () => {
+  const parts = [
+    "Zaroor, hum Hindi mein baat karenge.",
+    "Theek hai, hum Hindi mein baat karenge.",
+    "Aapka complaint kis number ke liye hai?"
+  ];
+  const deduped = [
+    "Zaroor, hum Hindi mein baat karenge.",
+    "Aapka complaint kis number ke liye hai?"
+  ];
+  const normalized = parts.filter((x, i, arr) => {
+    const key = arr[i].toLowerCase().replace(/[\p{P}\p{S}]/gu, " ").replace(/\b(?:zaroor|theek|hai|hum|mein|baat|karenge|karenge|okay|ok|sure|jo|ki|yeh|aap|mujhe|hota|huyi|kiya|bas|toh)\b/g, " ").replace(/\s+/g, " ").trim();
+    return i === arr.findIndex((y) => {
+      const yKey = y.toLowerCase().replace(/[\p{P}\p{S}]/gu, " ").replace(/\b(?:zaroor|theek|hai|hum|mein|baat|karenge|karenge|okay|ok|sure|jo|ki|yeh|aap|mujhe|hota|huyi|kiya|bas|toh)\b/g, " ").replace(/\s+/g, " ").trim();
+      return yKey === key;
+    });
+  });
+  assert.deepEqual(normalized, deduped);
+});
+
+test("dusre number is accepted as a valid different-number answer", () => {
+  const raw = { service_number_choice: { value: "different", evidence: "dusre number" } };
+  const parsed = groundSlots(raw, "dusre number");
+  assert.deepEqual(parsed.accepted, { service_number_choice: "different" });
+  assert.deepEqual(parsed.rejected, []);
+});
+
+test("a no-last-name statement is rejected before it fills the surname", () => {
+  const raw = { last_name: { value: "Nikhil", evidence: "I don't have a last name" } };
+  const parsed = groundSlots(raw, "I don't have a last name");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, ["last_name"]);
+});
+
+test("brand is only accepted when the user explicitly names that brand", () => {
+  const raw = { brand: { value: "american_standard", evidence: "head flush shower" } };
+  const parsed = groundSlots(raw, "head flush shower");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, ["brand"]);
+});
+
+test("rating 0 is accepted as a valid numeric response", () => {
+  const raw = { call_rating: { value: "0", evidence: "0" } };
+  const parsed = groundSlots(raw, "0");
+  assert.deepEqual(parsed.accepted, { call_rating: "0" });
+  assert.deepEqual(parsed.rejected, []);
+});
+
+test("rating 9 is rejected and does not produce a thank-you lead", async () => {
+  const parsed = groundSlots({ call_rating: { value: "9", evidence: "9" } }, "9");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, ["call_rating"]);
+});
+
+test("a no-last-name statement does not fill the last name and continues to the next step", async () => {
+  const raw = { last_name: { value: "Ananya", evidence: "i don't have any last name" } };
+  const parsed = groundSlots(raw, "i don't have any last name");
+  assert.deepEqual(parsed.accepted, {});
+  assert.deepEqual(parsed.rejected, []);
+  const s = createSession("t_no_last_name", "9012345678");
+  s.state = "CAPTURE_LAST_NAME";
+  s.slots.first_name = "Ananya";
+  const r = await say(s, "i don't have any last name");
+  assert.equal(s.state, "CAPTURE_PRODUCT");
+  assert.match(r.assistant, /continue with the next details needed|Which product is the complaint about/i);
+});
+
+test("rating exhaustion closes without re-asking in the same turn", async () => {
+  const s = createSession("t12", "9456789001");
+  s.state = "REGISTER_COMPLAINT";
+  s.lane = "REGISTRATION";
+  s.slots = {
+    language: "hindi",
+    service_number_choice: "different",
+    service_number: "7878787878",
+    final_service_number: "7878787878",
+    caller_type: "other",
+    first_name: "Isha",
+    last_name: "Misgraa",
+    product: "cistern",
+    brand: "grohe",
+    street: "123 Flat",
+    area: "Isha Society",
+    city: "Mohali",
+    state: "Haryana",
+    pin_code: "786788",
+    address_confirmed: true,
+    address_type: "residential",
+    contact_person_at_site: "Brother",
+    site_contact_number: "9898987654",
+    ticket_id: "T-1002"
+  };
+  await say(s, "thikk hai");
+  const final = await say(s, "ok");
+  assert.equal(s.state, "CLOSING");
+  assert.match(final.assistant, /Thank you for calling American Standard/i);
+  assert.doesNotMatch(final.assistant, /rate your overall experience|Before we end the call|provide your rating/i);
+});
 
 test("new caller: full call registers a ticket, persists customer + call log, reuses it next time", async () => {
   const s = createSession("t1", "9123456780");

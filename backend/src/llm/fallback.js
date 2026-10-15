@@ -1,6 +1,6 @@
 // Offline / LLM-failure fallbacks. 100% schema-driven (keywords, synonyms, lexicons all come from
 // states.json) so the bot still works without an API key, just less smartly.
-import { INTENTS, GROUPS, SLOTS } from "../script/index.js";
+import { INTENTS, GROUPS, SLOTS, META } from "../script/index.js";
 import { digitsFrom } from "../utils/digits.js";
 import { yesNo, isBareYesNo } from "../utils/yesno.js";
 import { hasWord, norm, titleCase } from "../utils/text.js";
@@ -60,7 +60,11 @@ export function fallbackCapture(text, ctx, specs) {
           }
         }
         if (best) out[s.name] = best.value;
-        if (!out[s.name] && s.name === "call_rating") { const m = t.match(/\b([0-5])\b/) || []; if (m[1]) out.call_rating = m[1]; else if (/\b(skip|decline|no rating|pass)\b/.test(t)) out.call_rating = "declined"; }
+        if (!out[s.name] && s.name === "call_rating") {
+          const dw = META.lexicon?.digit_words || {};
+          const num = (t.match(/[\p{L}\p{N}]+/gu) || []).map((w) => (/^[0-5]$/.test(w) ? Number(w) : dw[w])).find((n) => Number.isInteger(n) && n >= 0 && n <= 5);
+          if (num !== undefined) out.call_rating = String(num); else if (/\b(skip|decline|no rating|pass|rehne do)\b/.test(t)) out.call_rating = "declined";
+        }
         // NOTE: a bare yes/no is deliberately NOT mapped onto an either/or enum (same/different number, residential/commercial...).
         break;
       }
