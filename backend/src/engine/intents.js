@@ -38,12 +38,25 @@ export function buildTasks(s, cls, { expectsAnswer }) {
       tasks.push({ type: "recall", ...r, note: "Read these facts back naturally. Mention anything in 'missing' is not noted yet." });
     } else if (a.type === "info" && a.handler === "llm") tasks.push({ type: "answer_question", topic: id, guidance: STATES[a.state]?.prompt, note: "Answer briefly from guidance only." });
   }
-  if (!tasks.length && expectsAnswer && cls.intents.includes("answer"))
-    tasks.push({ type: "if_no_usable_answer", note: "ONLY if you captured no slot from the utterance, react briefly to what they said and steer back, naming the detail needed (never say 'I didn't hear/catch'); otherwise lead must be empty." });
+  // NOTE: the "answer" task depends on what capture found, so it is built AFTER capture by postCaptureTasks().
   return tasks;
 }
 
-// scripted fallback when the LLM produced no lead
+/** Tasks that depend on the capture / FSM outcome. Called after resolveCurrent, with the real progress. */
+export function postCaptureTasks(ex, awaitingAnswer, invalid) {
+  if (!awaitingAnswer) return [];
+  if (ex.progress > 0) return [{
+    type: "ack_saved",
+    note: "The caller's answer was understood. Open with at most a 2-4 word acknowledgement (vary it, no apology; check slot_guide and never address the caller by a value that describes someone or something else), then say the must_say content.",
+  }];
+  if (!ex.soft && !ex.fresh && !invalid) return [{
+    type: "unusable_answer",
+    note: "No usable detail was captured. React in a few words to what the caller actually said, then steer back by naming the detail needed (never say 'I didn't hear/catch'), then ask the must_say question.",
+  }];
+  return [];
+}
+
+// scripted wording handed to the reply writer as optional_wording (and spoken only if the writer fails)
 export function fallbackLead(s, tasks, cls) {
   const parts = [];
   for (const t of tasks) {
@@ -75,7 +88,7 @@ function chargeText(s) {
   return render(s, cfg.reply_template, { charge_cash: row.cash, charge_online: row.online });
 }
 
-/** Scripted answers for info intents. `llmAnswered` = the writer already answered the warranty-style question. */
+/** Scripted answers for info intents (become must_say). `llmAnswered` = the writer answers the warranty-style question itself. */
 export function infoReplies(s, cls, llmAnswered) {
   const out = [];
   const infos = cls.intents.filter((i) => actionOf(i).type === "info");

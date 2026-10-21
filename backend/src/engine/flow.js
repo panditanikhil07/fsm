@@ -277,7 +277,7 @@ function giveUp(s, out) {
 const STRATEGIES = {
   store_as_Other(s, name, out) { s.slots.caller_type = "other"; return leave(s, name, out); },
   store_best_plausible_and_continue(s, name, out, ctx) {
-    if (ctx.missing === "last_name") s.slots.last_name = s.slots.first_name || "NA";
+    if (ctx.missing === "last_name") s.slots.last_name = SLOTS.last_name?.exhaust_default ?? "NA";   // never copy first_name (gave "Nikhil Nikhil")
     else if (ctx.missing) s.slots[ctx.missing] = nameTokens(ctx.raw)[0] || "NA";
     return leave(s, name, out);
   },
@@ -383,10 +383,13 @@ export function resolveCurrent(s, ex, out) {
     const ok = s.slots[cfg.required_slots[0]];
     if (ok === true && !changed) { ON_LEAVE[cfg.on_leave]?.(s, cfg); return leave(s, name, out); }
     if (ok === false || changed) {
-      const used = (s.retries[name] = (s.retries[name] || 0) + 1);
-      ev(s, "retry", { state: name, used: Math.min(used, maxRetries(cfg)), max: maxRetries(cfg), reason: "address_rejected" });
-      if (used > maxRetries(cfg)) return exhaust(s, name, out);
       const complete = STATES.ADDRESS_COLLECT.required_slots.every((k) => isFilled(s.slots[k]));
+      // A complete correction is progress, not a failure: only a bare "no" / partial fix costs a retry.
+      if (!(changed && complete)) {
+        const used = (s.retries[name] = (s.retries[name] || 0) + 1);
+        ev(s, "retry", { state: name, used: Math.min(used, maxRetries(cfg)), max: maxRetries(cfg), reason: "address_rejected" });
+        if (used > maxRetries(cfg)) return exhaust(s, name, out);
+      }
       delete s.slots[cfg.required_slots[0]];
       if (changed && complete) return ask(s, name, out);                 // correction supplied: read back once more
       for (const k of STATES.ADDRESS_COLLECT.required_slots) if (!changed) delete s.slots[k];   // bare "no": re-collect

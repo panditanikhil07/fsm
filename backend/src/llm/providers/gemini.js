@@ -36,7 +36,7 @@ export function createGemini(cfg, { timeoutMs }) {
           temperature,
           maxOutputTokens: maxTokens,
           ...(json ? { responseMimeType: "application/json" } : {}),
-          ...(budget !== undefined ? { thinkingConfig: { thinkingBudget: budget } } : {}),
+          // ...(budget !== undefined ? { thinkingConfig: { thinkingBudget: budget } } : {}),
         },
       };
       try {
